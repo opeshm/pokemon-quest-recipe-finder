@@ -1,0 +1,56 @@
+<article class="recipe-list-panel">
+  <header>
+    <h2>Recipes</h2>
+    <p>{{ vm().cards.length }} matching probability groups</p>
+  </header>
+
+  @if (vm().cards.length) {
+    <ul class="recipe-list">
+      @for (card of vm().cards; track card.recipe.id) {
+        <li>
+          <button
+            type="button"
+            [class.active]="vm().selectedRecipeId === card.recipe.id"
+            (click)="selectRecipe(card.recipe.id)"
+          >
+            <div class="recipe-title-row">
+              <span
+                class="dish-icon"
+                [ngStyle]="assets().getDishSpriteStyle(card.recipe.dishSlug, 110)"
+                [attr.aria-label]="card.recipe.recipeName"
+              ></span>
+              <strong>{{ card.recipe.recipeName }}</strong>
+              <span class="quality-badge">{{ card.recipe.quality }}</span>
+            </div>
+            <p>{{ card.recipe.typeName }}</p>
+            <p>{{ card.ingredientSummary }}</p>
+            <div class="pokemon-mini-strip" aria-label="Top attracted Pokemon">
+              @for (pokemon of card.recipe.pokemonResults.slice(0, 6); track pokemon.name) {
+                <span
+                  class="pokemon-icon mini"
+                  [ngStyle]="assets().getPokemonSpriteStyle(pokemon.name, 24)"
+                  [title]="pokemon.name"
+                  [attr.aria-label]="pokemon.name"
+                ></span>
+              }
+            </div>
+            @if (card.firstVariant; as variant) {
+              <div class="ingredient-mini-strip" aria-label="Ingredient pattern example">
+                @for (code of variant.ingredientPattern; track $index) {
+                  <span class="ingredient-token">
+                    <img [src]="assets().ingredientIconPath(code)" [alt]="assets().ingredientLabel(code)" loading="lazy" />
+                  </span>
+                }
+                @if (card.visibleVariantCount > 1) {
+                  <span class="config-count-chip">+{{ card.visibleVariantCount - 1 }} more</span>
+                }
+              </div>
+            }
+          </button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-state">No recipes match the current filters.</p>
+  }
+</article>

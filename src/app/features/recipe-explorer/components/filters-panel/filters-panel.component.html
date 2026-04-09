@@ -1,0 +1,102 @@
+<section class="controls" aria-label="search and filters">
+  <label class="field search-field">
+    <span>Search</span>
+    <input
+      type="search"
+      [ngModel]="vm().searchTerm"
+      (ngModelChange)="searchTermChange.emit($event)"
+      placeholder="Dish, ingredient, or Pokemon"
+    />
+  </label>
+  <button type="button" class="clear-button" (click)="clearFilters.emit()">Clear filters</button>
+</section>
+
+<section class="interactive-filters" aria-label="interactive type, quality and pokemon filters">
+  <div class="filter-block">
+    <h3>Quality</h3>
+    <div class="pill-toggle-row">
+      @for (quality of vm().qualityOptions; track quality) {
+        <button
+          type="button"
+          class="pill-toggle"
+          [class.active]="vm().selectedQuality === quality"
+          (click)="onToggleQuality(quality)"
+          [attr.aria-pressed]="vm().selectedQuality === quality"
+        >
+          {{ quality }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filter-block">
+    <h3>Type</h3>
+    <div class="type-chip-grid">
+      @for (typeName of vm().typeOptions; track typeName) {
+        <button
+          type="button"
+          class="type-chip"
+          [class.active]="vm().selectedType === typeName"
+          (click)="onToggleType(typeName)"
+          [attr.aria-pressed]="vm().selectedType === typeName"
+        >
+          <img [src]="assets().typeIconPath(typeName)" [alt]="typeName" loading="lazy" />
+          <span>{{ typeName }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filter-block">
+    <h3>Pokemon</h3>
+    <label class="field pokemon-search-field">
+      <span>Quick search</span>
+      <input
+        type="search"
+        [ngModel]="vm().pokemonFilterQuery"
+        (ngModelChange)="pokemonFilterQueryChange.emit($event)"
+        placeholder="Find Pokemon"
+      />
+    </label>
+    <div class="pokemon-chip-grid">
+      @for (pokemon of vm().visiblePokemonOptions; track pokemon) {
+        <button
+          type="button"
+          class="pokemon-chip"
+          [class.active]="vm().selectedPokemon === pokemon"
+          (click)="onTogglePokemon(pokemon)"
+          [attr.aria-pressed]="vm().selectedPokemon === pokemon"
+        >
+          <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(pokemon, 24)"></span>
+          <span>{{ pokemon }}</span>
+        </button>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="inventory-filter" aria-label="inventory ingredient filter">
+  <div class="inventory-header-row">
+    <h3>Inventory Ingredients</h3>
+    @if (vm().hasInventoryFilter) {
+      <button type="button" class="clear-mini-button" (click)="clearInventory.emit()">Clear inventory filter</button>
+    }
+  </div>
+  <p>Select ingredients you currently have. Only configurations that can be cooked with these ingredients are shown.</p>
+  <div class="inventory-chip-grid">
+    @for (ingredient of vm().ingredients; track ingredient.code) {
+      <button
+        type="button"
+        class="inventory-chip"
+        [class.active]="isInventoryIngredientSelected(ingredient.code)"
+        (click)="toggleInventoryIngredient.emit(ingredient.code)"
+        [attr.aria-pressed]="isInventoryIngredientSelected(ingredient.code)"
+      >
+        <span class="ingredient-token big">
+          <img [src]="assets().ingredientIconPath(ingredient.code)" [alt]="ingredient.name" loading="lazy" />
+        </span>
+        <span>{{ ingredient.name }}</span>
+      </button>
+    }
+  </div>
+</section>

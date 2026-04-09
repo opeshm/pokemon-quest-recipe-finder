@@ -1,0 +1,42 @@
+<main class="page-shell">
+  <app-hero-section [dataset]="facade.dataset()"></app-hero-section>
+
+  @if (facade.loadError(); as errorMessage) {
+    <section class="status-panel error" aria-live="polite">
+      <h2>Recipe data unavailable</h2>
+      <p>{{ errorMessage }}</p>
+      <button type="button" class="retry-button" (click)="facade.retryLoad()">Retry loading data</button>
+    </section>
+  } @else if (facade.dataset()) {
+    <app-filters-panel
+      [vm]="filtersVm()"
+      [assets]="assetBindings"
+      (searchTermChange)="facade.setSearchTerm($event)"
+      (selectedQualityChange)="facade.setSelectedQuality($event)"
+      (selectedTypeChange)="facade.setSelectedType($event)"
+      (selectedPokemonChange)="facade.setSelectedPokemon($event)"
+      (pokemonFilterQueryChange)="facade.setPokemonFilterQuery($event)"
+      (clearFilters)="facade.clearFilters()"
+      (clearInventory)="facade.clearInventoryIngredients()"
+      (toggleInventoryIngredient)="facade.toggleInventoryIngredient($event)"
+    ></app-filters-panel>
+
+    <section class="content-grid" aria-label="recipe results and details">
+      <app-recipe-list-panel
+        [vm]="recipeListVm()"
+        [assets]="assetBindings"
+        (selectedRecipeIdChange)="facade.selectRecipe($event)"
+      ></app-recipe-list-panel>
+
+      <app-recipe-detail-panel
+        [vm]="recipeDetailVm()"
+        [assets]="assetBindings"
+      ></app-recipe-detail-panel>
+    </section>
+  } @else {
+    <section class="status-panel loading" aria-live="polite">
+      <h2>Loading recipe dataset...</h2>
+      <p>Preparing recipes, ingredients, and attraction rates.</p>
+    </section>
+  }
+</main>

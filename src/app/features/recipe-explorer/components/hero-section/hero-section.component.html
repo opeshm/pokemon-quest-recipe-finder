@@ -1,0 +1,15 @@
+<section class="hero">
+  <p class="kicker">Pokemon Quest Recipe Finder</p>
+  <h1>Discover every recipe, ingredient combo, and attraction rate</h1>
+  <p class="hero-copy">
+    Data extracted from pokequestrecipes.me and normalized into a local dataset for fast recipe search.
+  </p>
+  @if (dataset(); as data) {
+    <div class="meta-row" aria-label="dataset statistics">
+      <span>{{ data.metadata.totalRecipes }} recipes</span>
+      <span>{{ data.metadata.totalDishes }} dishes</span>
+      <span>{{ data.metadata.totalPokemon }} Pokemon</span>
+      <span>Updated {{ data.metadata.generatedAt | date: 'medium' }}</span>
+    </div>
+  }
+</section>

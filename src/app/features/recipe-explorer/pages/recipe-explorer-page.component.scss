@@ -1,0 +1,52 @@
+.page-shell {
+  min-height: 100dvh;
+  padding: clamp(1rem, 1.5vw, 2rem);
+  background:
+    radial-gradient(circle at 15% 10%, #fff8e8 0%, rgba(255, 248, 232, 0) 35%),
+    radial-gradient(circle at 90% 10%, #f4d68f 0%, rgba(244, 214, 143, 0) 35%),
+    linear-gradient(150deg, #f6e3b4 0%, #efc272 48%, #dd9342 100%);
+  color: var(--ink-900);
+}
+
+.content-grid {
+  max-width: 70rem;
+  margin: 1rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1rem;
+}
+
+.status-panel {
+  margin: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.loading {
+  border: 2px dashed #c29a5f;
+  background: #ffefcb;
+  color: #5f4c35;
+}
+
+.error {
+  border: 2px solid #be4a2f;
+  background: #ffe6dc;
+  color: #6c2618;
+}
+
+.retry-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  background: #be4a2f;
+  color: #fff8e8;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 70rem) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}

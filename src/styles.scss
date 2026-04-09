@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+}
+
+:root {
+  --sand-50: #fff8e8;
+  --sand-100: #fbe7ba;
+  --sand-300: #f4c97b;
+  --amber-500: #d8861a;
+  --brick-500: #be4a2f;
+  --ink-900: #2b2016;
+  --ink-700: #5c4b38;
+  --ink-500: #8c7558;
+  --panel: #fff7df;
+  --panel-strong: #f7dfac;
+  --accent: #e45435;
+  --accent-soft: #f6a548;
+  --border: #d1aa6e;
+  --success: #5d9b3f;
+}

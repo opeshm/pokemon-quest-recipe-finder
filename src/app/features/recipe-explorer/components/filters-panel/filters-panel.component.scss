@@ -1,0 +1,353 @@
+:host {
+  display: block;
+}
+
+.controls {
+  max-width: 70rem;
+  margin: 1rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
+
+.field span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5f4a31;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.search-field {
+  grid-column: span 1;
+}
+
+input,
+.clear-button {
+  min-height: 2.35rem;
+  border-radius: 0.68rem;
+  border: 2px solid #c99f63;
+  background: #fff9ea;
+  color: var(--ink-900);
+  font: inherit;
+}
+
+input {
+  padding: 0.45rem 0.65rem;
+}
+
+input:focus,
+.clear-button:focus-visible,
+.clear-mini-button:focus-visible,
+.inventory-chip:focus-visible {
+  outline: 3px solid #f1a53f;
+  outline-offset: 2px;
+}
+
+.clear-button {
+  align-self: end;
+  background: linear-gradient(160deg, #ffc76b 0%, #f09a40 100%);
+  border-color: #b56720;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.clear-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.interactive-filters {
+  max-width: 70rem;
+  margin: 0.85rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.filter-block {
+  border: 2px solid #d0a568;
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, #fff4d9 0%, #f8deb0 100%);
+  padding: 0.78rem;
+}
+
+.filter-block h3 {
+  margin: 0;
+  font-family: 'Bungee', 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+  color: #5b3c1f;
+}
+
+.pill-toggle-row {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.44rem;
+}
+
+.pill-toggle {
+  min-height: 2rem;
+  border-radius: 999px;
+  border: 1px solid #cd9b61;
+  background: #fff9ea;
+  color: #5e3f21;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 0.72rem;
+}
+
+.pill-toggle.active {
+  border-color: #973f21;
+  background: linear-gradient(180deg, #ffe8bf 0%, #f7ca84 100%);
+}
+
+.type-chip-grid {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.46rem;
+}
+
+.type-chip {
+  min-height: 3rem;
+  border-radius: 0.7rem;
+  border: 2px solid #d2a96d;
+  background: #fffaf0;
+  color: #5f4429;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.35rem;
+  text-align: center;
+}
+
+.type-chip img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.type-chip.active {
+  border-color: #8f3f20;
+  background: linear-gradient(180deg, #ffe8bf 0%, #f7ca84 100%);
+}
+
+.pokemon-search-field {
+  margin-top: 0.5rem;
+}
+
+.pokemon-chip-grid {
+  margin-top: 0.5rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.42rem;
+  padding-right: 0.2rem;
+}
+
+.pokemon-chip {
+  min-height: 2rem;
+  border-radius: 0.62rem;
+  border: 1px solid #d3ab70;
+  background: #fff9ea;
+  color: #5d4227;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  cursor: pointer;
+  padding: 0.2rem 0.38rem;
+  text-align: left;
+}
+
+.pokemon-chip.active {
+  border-color: #964122;
+  background: linear-gradient(180deg, #ffe8bf 0%, #f7ca84 100%);
+}
+
+.pokemon-chip span:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pokemon-icon {
+  display: inline-block;
+  border-radius: 0.45rem;
+  border: 2px solid #2f63ac;
+  background-color: #ffffff;
+  image-rendering: pixelated;
+  box-shadow: 0 1px 0 rgba(27, 50, 85, 0.4);
+}
+
+.pokemon-icon.mini {
+  border-width: 1px;
+  border-radius: 0.34rem;
+}
+
+.inventory-filter {
+  max-width: 70rem;
+  margin: 0.85rem auto 0;
+  border: 2px solid #d0a568;
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, #fff4d9 0%, #f8deb0 100%);
+  padding: 0.82rem;
+}
+
+.inventory-filter h3 {
+  margin: 0;
+  font-family: 'Bungee', 'Segoe UI', sans-serif;
+  font-size: 1rem;
+}
+
+.inventory-filter p {
+  margin: 0.38rem 0 0;
+  color: #6a5135;
+  font-size: 0.9rem;
+}
+
+.inventory-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.clear-mini-button {
+  min-height: 2rem;
+  border-radius: 999px;
+  border: 1px solid #ba7532;
+  background: #ffe0ab;
+  color: #5f3317;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 0.7rem;
+}
+
+.inventory-chip-grid {
+  margin-top: 0.64rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.48rem;
+}
+
+.inventory-chip {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.45rem;
+  border-radius: 0.7rem;
+  border: 2px solid #d1a767;
+  background: #fff9ea;
+  color: #5f4225;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.28rem 0.4rem;
+  text-align: left;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.inventory-chip:hover {
+  border-color: #bb7732;
+}
+
+.inventory-chip.active {
+  border-color: #8f3f20;
+  background: linear-gradient(180deg, #ffe7be 0%, #f7cb83 100%);
+  transform: translateY(-1px);
+}
+
+.ingredient-token {
+  width: 24px;
+  height: 24px;
+  border-radius: 0.44rem;
+  border: 1px solid #cc9b5f;
+  background: linear-gradient(180deg, #fff4d9 0%, #fde7b9 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.ingredient-token img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.ingredient-token.big {
+  width: 40px;
+  height: 40px;
+  border-width: 2px;
+  border-radius: 0.58rem;
+  margin-right: 0.42rem;
+}
+
+.ingredient-token.big img {
+  width: 32px;
+  height: 32px;
+}
+
+.inventory-chip .ingredient-token.big {
+  width: 36px;
+  height: 36px;
+  margin-right: 0;
+}
+
+.inventory-chip .ingredient-token.big img {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 70rem) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .type-chip-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pokemon-chip-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .inventory-chip-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .type-chip-grid,
+  .pokemon-chip-grid,
+  .inventory-chip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

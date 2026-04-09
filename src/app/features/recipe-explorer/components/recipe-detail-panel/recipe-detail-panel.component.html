@@ -1,0 +1,68 @@
+<article class="detail-panel">
+  @if (vm().selectedRecipeView; as selected) {
+    <header>
+      <p class="detail-kicker">Recipe Detail</p>
+      <div class="detail-title-row">
+        <span
+          class="dish-icon detail"
+          [ngStyle]="assets().getDishSpriteStyle(selected.recipe.dishSlug, 170)"
+          [attr.aria-label]="selected.recipe.recipeName"
+        ></span>
+        <h2>{{ selected.recipe.recipeName }}</h2>
+      </div>
+      <div class="detail-meta">
+        <span>{{ selected.recipe.quality }}</span>
+        <span>{{ selected.recipe.typeName }}</span>
+        <span>{{ selected.visibleVariantCount }} ingredient configs</span>
+        @if (selected.hiddenVariantCount > 0) {
+          <span>{{ selected.hiddenVariantCount }} hidden by inventory filter</span>
+        }
+      </div>
+    </header>
+
+    <section class="ingredients-section">
+      <h3>Ingredient Configurations</h3>
+      <ul class="config-list">
+        @for (variant of selected.visibleVariants; track variant.id; let variantIndex = $index) {
+          <li>
+            <div class="config-header-row">
+              <strong class="config-label">Config {{ variantIndex + 1 }}</strong>
+              <span class="config-text">{{ variantSummary(variant) }}</span>
+            </div>
+            <div class="ingredient-mini-strip detailed" aria-label="Ingredient pattern">
+              @for (code of variant.ingredientPattern; track $index) {
+                <span class="ingredient-token big">
+                  <img [src]="assets().ingredientIconPath(code)" [alt]="assets().ingredientLabel(code)" loading="lazy" />
+                </span>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="pokemon-section">
+      <h3>Attracted Pokemon</h3>
+      <ul>
+        @for (pokemon of selected.recipe.pokemonResults; track pokemon.name) {
+          <li>
+            <div class="pokemon-rate-row">
+              <div class="pokemon-label">
+                <span class="pokemon-icon" [ngStyle]="assets().getPokemonSpriteStyle(pokemon.name)" [attr.aria-label]="pokemon.name"></span>
+                <span>{{ pokemon.name }}</span>
+              </div>
+              <strong>{{ pokemon.attractRate | number: '1.0-2' }}%</strong>
+            </div>
+            <div class="rate-bar" [style.width.%]="getRateFill(pokemon.attractRate) * 100"></div>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <footer>
+      <a [href]="selected.recipe.source.page" target="_blank" rel="noopener">View source page</a>
+    </footer>
+  } @else {
+    <p class="empty-state">Select a recipe to view details.</p>
+  }
+</article>

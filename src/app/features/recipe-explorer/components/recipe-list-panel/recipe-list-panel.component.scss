@@ -1,0 +1,174 @@
+:host {
+  display: block;
+}
+
+.recipe-list-panel {
+  min-height: 31rem;
+  border: 3px solid #c69558;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #fff3d5 0%, #f8dfad 100%);
+  box-shadow: 0 12px 22px rgba(91, 57, 16, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-list-panel header {
+  padding: 1rem;
+  border-bottom: 2px dashed #d2ab70;
+}
+
+.recipe-list-panel h2 {
+  margin: 0;
+  font-family: 'Bungee', 'Segoe UI', sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+}
+
+.recipe-list-panel header p {
+  margin: 0.3rem 0 0;
+  color: var(--ink-700);
+}
+
+.recipe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.85rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.62rem;
+}
+
+.recipe-list button {
+  width: 100%;
+  text-align: left;
+  border-radius: 0.78rem;
+  border: 2px solid #d3ad72;
+  background: #fff8e7;
+  padding: 0.66rem 0.72rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.recipe-list button:hover {
+  border-color: #ba7730;
+}
+
+.recipe-list button:focus-visible {
+  outline: 3px solid #f1a53f;
+  outline-offset: 2px;
+}
+
+.recipe-list button.active {
+  border-color: #a55023;
+  background: linear-gradient(160deg, #ffe8b6 0%, #f8cb84 100%);
+  transform: translateY(-1px);
+}
+
+.recipe-list button p {
+  margin: 0.22rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-700);
+}
+
+.recipe-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.recipe-title-row strong {
+  flex: 1 1 auto;
+  margin-top: 0.25rem;
+  line-height: 1.2;
+}
+
+.dish-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  border-radius: 0.66rem;
+  border: 2px solid #2f63ac;
+  box-shadow: 0 2px 0 rgba(40, 64, 98, 0.35);
+  image-rendering: auto;
+  background-color: #385fa3;
+}
+
+.quality-badge {
+  margin-top: 0.22rem;
+  padding: 0.18rem 0.48rem;
+  border-radius: 999px;
+  background: #d96434;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.pokemon-mini-strip,
+.ingredient-mini-strip {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+
+.pokemon-icon {
+  display: inline-block;
+  border-radius: 0.45rem;
+  border: 2px solid #2f63ac;
+  background-color: #ffffff;
+  image-rendering: pixelated;
+  box-shadow: 0 1px 0 rgba(27, 50, 85, 0.4);
+}
+
+.pokemon-icon.mini {
+  border-width: 1px;
+  border-radius: 0.34rem;
+}
+
+.ingredient-token {
+  width: 24px;
+  height: 24px;
+  border-radius: 0.44rem;
+  border: 1px solid #cc9b5f;
+  background: linear-gradient(180deg, #fff4d9 0%, #fde7b9 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.ingredient-token img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.config-count-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.42rem;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px dashed #c0863f;
+  background: #fdebc6;
+  color: #784d1e;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.empty-state {
+  margin: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 2px dashed #c29a5f;
+  background: #ffefcb;
+  color: #5f4c35;
+}
+
+@media (max-width: 70rem) {
+  .recipe-list-panel {
+    min-height: auto;
+  }
+}
