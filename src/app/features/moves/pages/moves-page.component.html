@@ -1,0 +1,135 @@
+<main class="page-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">Pokemon Quest Moves</p>
+    <h1>All Pokemon Quest moves in one place</h1>
+    <p class="intro">
+      Browse every move listed by
+      <a href="https://www.serebii.net/quest/attacks.shtml" target="_blank" rel="noreferrer"
+        >Serebii</a
+      >, including duplicate Transform rows and original naming quirks.
+    </p>
+
+    <div class="hero-stats" aria-label="Move counts">
+      <div>
+        <span>Visible</span>
+        <strong>{{ filteredMoves().length }}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>{{ moves.length }}</strong>
+      </div>
+      <div>
+        <span>Pokemon</span>
+        <strong>{{ visiblePokemonCount() }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters-panel" aria-label="Move filters">
+    <div class="filter-grid">
+      <label class="filter-field">
+        <span>Move name</span>
+        <input
+          type="search"
+          [value]="nameFilter()"
+          placeholder="Search moves"
+          (input)="updateNameFilter($any($event.target).value)"
+        />
+      </label>
+
+      <label class="filter-field">
+        <span>Type</span>
+        <select [value]="selectedType()" (change)="updateTypeFilter($any($event.target).value)">
+          <option value="">All types</option>
+          @for (type of typeOptions(); track trackByValue($index, type)) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="filter-field">
+        <span>Stone</span>
+        <select [value]="selectedStone()" (change)="updateStoneFilter($any($event.target).value)">
+          <option value="">All stones</option>
+          @for (stone of stoneOptions(); track trackByValue($index, stone)) {
+            <option [value]="stone">{{ stone }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="filter-field">
+        <span>Pokemon</span>
+        <input
+          type="search"
+          [value]="pokemonFilter()"
+          placeholder="Search equipable Pokemon"
+          (input)="updatePokemonFilter($any($event.target).value)"
+        />
+      </label>
+    </div>
+
+    <button
+      type="button"
+      class="clear-button"
+      [disabled]="!hasActiveFilters()"
+      (click)="clearFilters()"
+    >
+      Clear filters
+    </button>
+  </section>
+
+  <section class="results-grid" aria-label="Move list">
+    @for (move of filteredMoves(); track trackByIndex($index)) {
+      <article class="move-card">
+        <div class="card-header">
+          <div class="move-heading">
+            <div class="move-title-row">
+              <img class="move-icon" [src]="moveIconPath(move.name)" [alt]="move.name + ' icon'" />
+              <h2>{{ move.name }}</h2>
+            </div>
+            <span class="type-pill">
+              <img [src]="typeIconPath(move.type)" alt="" width="16" height="16" aria-hidden="true" />
+              {{ move.type }}
+            </span>
+          </div>
+
+          <dl class="stat-grid">
+            <div>
+              <dt>Wait</dt>
+              <dd>{{ move.waitTime }}</dd>
+            </div>
+            <div>
+              <dt>Power</dt>
+              <dd>{{ move.power }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <p class="description">{{ move.description }}</p>
+
+        <div class="detail-block">
+          <h3>Compatible stones</h3>
+          <div class="chip-row" aria-label="Compatible stones">
+            @for (stone of move.stones; track trackByValue($index, stone)) {
+              <span class="chip">{{ stone }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h3>Pokemon that can equip it</h3>
+          <div class="chip-row" aria-label="Compatible Pokemon">
+            @for (pokemon of move.pokemon; track trackByValue($index, pokemon)) {
+              <span class="chip subdued">{{ pokemon }}</span>
+            }
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <article class="empty-state">
+        <h2>No moves match those filters</h2>
+        <p>Try clearing one filter to bring more of the move list back into view.</p>
+      </article>
+    }
+  </section>
+</main>

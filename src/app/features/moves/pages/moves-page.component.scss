@@ -1,0 +1,270 @@
+.page-shell {
+  min-height: 100dvh;
+  padding: clamp(1rem, 1.5vw, 2rem);
+  background:
+    radial-gradient(circle at 16% 12%, rgba(252, 244, 208, 0.92) 0%, rgba(252, 244, 208, 0) 30%),
+    radial-gradient(circle at 84% 12%, rgba(137, 221, 255, 0.24) 0%, rgba(137, 221, 255, 0) 26%),
+    linear-gradient(160deg, #efe4c0 0%, #ddc27f 45%, #be8d50 100%);
+  color: var(--ink-900);
+}
+
+.hero-panel,
+.filters-panel,
+.empty-state {
+  width: min(78rem, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(92, 75, 56, 0.12);
+  border-radius: 1.5rem;
+  background: rgba(255, 248, 232, 0.9);
+  box-shadow: 0 1.25rem 2.5rem rgba(92, 75, 56, 0.12);
+}
+
+.hero-panel {
+  padding: clamp(1.25rem, 2vw, 2rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brick-500);
+}
+
+.hero-panel h1,
+.empty-state h2,
+.move-heading h2,
+.detail-block h3 {
+  margin: 0;
+}
+
+.intro,
+.description,
+.empty-state p {
+  color: var(--ink-700);
+}
+
+.intro a {
+  color: inherit;
+  font-weight: 700;
+}
+
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.hero-stats div {
+  min-width: 7rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  background: rgba(244, 201, 123, 0.25);
+}
+
+.hero-stats span,
+.stat-grid dt,
+.detail-block h3 {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+
+.hero-stats strong,
+.stat-grid dd {
+  display: block;
+  margin: 0.25rem 0 0;
+  font-size: 1.5rem;
+}
+
+.filters-panel,
+.empty-state {
+  margin-top: 1rem;
+}
+
+.filters-panel {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.85rem;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-weight: 700;
+}
+
+.filter-field span {
+  color: var(--ink-700);
+}
+
+.filter-field input,
+.filter-field select,
+.clear-button {
+  border: 1px solid rgba(92, 75, 56, 0.16);
+  border-radius: 1rem;
+  background: #fffdf7;
+  color: var(--ink-900);
+  font: inherit;
+}
+
+.filter-field input,
+.filter-field select {
+  min-height: 3rem;
+  padding: 0.8rem 0.95rem;
+}
+
+.filter-field input:focus-visible,
+.filter-field select:focus-visible,
+.clear-button:focus-visible {
+  outline: 2px solid rgba(92, 75, 56, 0.28);
+  outline-offset: 2px;
+}
+
+.clear-button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clear-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.results-grid {
+  width: min(78rem, 100%);
+  margin: 1rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+  gap: 1rem;
+}
+
+.move-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(92, 75, 56, 0.12);
+  border-radius: 1.35rem;
+  background: rgba(255, 249, 237, 0.94);
+  box-shadow: 0 1rem 2rem rgba(92, 75, 56, 0.1);
+}
+
+.card-header,
+.move-heading,
+.stat-grid,
+.chip-row {
+  display: flex;
+}
+
+.card-header {
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.move-heading {
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.move-title-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.move-heading h2 {
+  font-size: 1.35rem;
+}
+
+.move-icon {
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 auto;
+  border-radius: 0.85rem;
+  background: rgba(92, 75, 56, 0.08);
+  padding: 0.35rem;
+  object-fit: contain;
+}
+
+.type-pill,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.type-pill {
+  padding: 0.35rem 0.65rem;
+  background: rgba(92, 75, 56, 0.08);
+}
+
+.stat-grid {
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.stat-grid div {
+  min-width: 4.75rem;
+}
+
+.stat-grid dd {
+  margin-bottom: 0;
+}
+
+.description {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.detail-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.chip-row {
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.chip {
+  padding: 0.45rem 0.75rem;
+  background: rgba(92, 75, 56, 0.08);
+}
+
+.chip.subdued {
+  background: rgba(228, 84, 53, 0.08);
+  color: var(--ink-800);
+}
+
+.empty-state {
+  padding: 1rem 1.25rem;
+}
+
+@media (max-width: 42rem) {
+  .card-header {
+    flex-direction: column;
+  }
+
+  .stat-grid {
+    width: 100%;
+  }
+}

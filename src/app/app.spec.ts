@@ -91,6 +91,7 @@ describe('App', () => {
 
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
     expect(compiled.textContent).toContain('Recipes');
+    expect(compiled.textContent).toContain('Moves');
     expect(compiled.textContent).toContain('Pokedex');
   });
 

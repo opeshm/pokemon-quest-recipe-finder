@@ -9,6 +9,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'moves',
+    loadComponent: () =>
+      import('./features/moves/pages/moves-page.component').then(
+        (module) => module.MovesPageComponent
+      )
+  },
+  {
     path: 'pokedex',
     loadComponent: () =>
       import('./features/pokedex/pages/pokedex-page.component').then(
