@@ -131,10 +131,10 @@ describe('RecipeExplorerFacade', () => {
     expect(facade.searchTerm()).toBe('bulba');
 
     facade.toggleType('Misc');
-    expect(facade.selectedType()).toBe('Misc');
+    expect(facade.selectedTypes()).toEqual(['Misc']);
 
     facade.togglePokemon('Bulbasaur');
-    expect(facade.selectedPokemon()).toBe('Bulbasaur');
+    expect(facade.selectedPokemon()).toEqual(['Bulbasaur']);
 
     facade.selectRecipe('mulligan-stew-a-la-cube|Special|Bulbasaur:66.66|Charmander:33.34');
     TestBed.flushEffects();
@@ -153,19 +153,17 @@ describe('RecipeExplorerFacade', () => {
     expect(facade.inventoryIngredients()).toEqual([]);
 
     facade.setSearchTerm('recipe');
-    facade.setSelectedQuality('Special');
-    facade.setSelectedPokemon('Bulbasaur');
-    facade.setSelectedType('Misc');
-    facade.setPokemonFilterQuery('bulb');
+    facade.setSelectedQualities(['Special']);
+    facade.setSelectedPokemon(['Bulbasaur']);
+    facade.setSelectedTypes(['Misc']);
 
     facade.clearFilters();
 
     expect(facade.filters()).toEqual({
       searchTerm: '',
-      selectedQuality: '',
-      selectedPokemon: '',
-      selectedType: '',
-      pokemonFilterQuery: '',
+      selectedQualities: [],
+      selectedPokemon: [],
+      selectedTypes: [],
       inventoryIngredients: []
     });
   });
@@ -185,9 +183,9 @@ describe('RecipeExplorerFacade', () => {
     TestBed.flushEffects();
 
     expect(facade.searchTerm()).toBe('bulba');
-    expect(facade.selectedQuality()).toBe('Special');
-    expect(facade.selectedPokemon()).toBe('Bulbasaur');
-    expect(facade.selectedType()).toBe('Misc');
+    expect(facade.selectedQualities()).toEqual(['Special']);
+    expect(facade.selectedPokemon()).toEqual(['Bulbasaur']);
+    expect(facade.selectedTypes()).toEqual(['Misc']);
     expect(facade.inventoryIngredients()).toEqual(['bm', 'br']);
     expect(facade.buildQueryParams()).toEqual({
       search: 'bulba',

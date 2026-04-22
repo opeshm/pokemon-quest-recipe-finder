@@ -197,9 +197,9 @@ describe('RecipeExplorerPageComponent', () => {
 
     const facade = TestBed.inject(RecipeExplorerFacade);
     expect(facade.searchTerm()).toBe('bulba');
-    expect(facade.selectedQuality()).toBe('Special');
-    expect(facade.selectedPokemon()).toBe('Bulbasaur');
-    expect(facade.selectedType()).toBe('Misc');
+    expect(facade.selectedQualities()).toEqual(['Special']);
+    expect(facade.selectedPokemon()).toEqual(['Bulbasaur']);
+    expect(facade.selectedTypes()).toEqual(['Misc']);
     expect(facade.inventoryIngredients()).toEqual(['bm', 'br']);
   });
 

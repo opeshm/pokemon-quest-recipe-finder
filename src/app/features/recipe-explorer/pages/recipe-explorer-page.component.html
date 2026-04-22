@@ -12,13 +12,11 @@
       [vm]="filtersVm()"
       [assets]="assetBindings"
       (searchTermChange)="facade.setSearchTerm($event)"
-      (selectedQualityChange)="facade.setSelectedQuality($event)"
-      (selectedTypeChange)="facade.setSelectedType($event)"
+      (selectedQualitiesChange)="facade.setSelectedQualities($event)"
+      (selectedTypesChange)="facade.setSelectedTypes($event)"
       (selectedPokemonChange)="facade.setSelectedPokemon($event)"
-      (pokemonFilterQueryChange)="facade.setPokemonFilterQuery($event)"
+      (selectedInventoryChange)="facade.setInventoryIngredients($event)"
       (clearFilters)="facade.clearFilters()"
-      (clearInventory)="facade.clearInventoryIngredients()"
-      (toggleInventoryIngredient)="facade.toggleInventoryIngredient($event)"
     ></app-filters-panel>
 
     <section class="content-grid" aria-label="recipe results and details">

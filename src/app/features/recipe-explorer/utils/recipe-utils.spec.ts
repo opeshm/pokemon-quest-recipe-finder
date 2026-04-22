@@ -2,8 +2,7 @@ import {
   buildVisibleVariantsByRecipeId,
   filterGroupedRecipes,
   getNormalizedSelectedRecipeId,
-  getSelectedRecipe,
-  getVisiblePokemonOptions
+  getSelectedRecipe
 } from './recipe-filtering.util';
 import { groupRecipes, getPokemonOptions, getTypeOptions } from './recipe-grouping.util';
 import { buildIngredientNameByCode, getIngredientSummary, getVariantSummary, getVisibleVariants } from './recipe-summary.util';
@@ -166,18 +165,27 @@ describe('recipe utilities', () => {
     expect(
       filterGroupedRecipes(grouped, visibleVariantsByRecipeId, {
         searchTerm: 'eevee',
-        quality: '',
-        pokemon: '',
-        type: ''
+        qualities: [],
+        pokemon: [],
+        types: []
       })
     ).toHaveLength(1);
 
     expect(
       filterGroupedRecipes(grouped, visibleVariantsByRecipeId, {
         searchTerm: '',
-        quality: 'Special',
-        pokemon: 'Bulbasaur',
-        type: 'Misc'
+        qualities: ['Special'],
+        pokemon: ['Bulbasaur'],
+        types: ['Misc']
+      })
+    ).toHaveLength(1);
+
+    expect(
+      filterGroupedRecipes(grouped, visibleVariantsByRecipeId, {
+        searchTerm: '',
+        qualities: ['Good', 'Special'],
+        pokemon: ['Eevee'],
+        types: ['Yellow']
       })
     ).toHaveLength(1);
   });
@@ -187,9 +195,9 @@ describe('recipe utilities', () => {
     const visibleVariantsByRecipeId = buildVisibleVariantsByRecipeId(grouped, []);
     const filtered = filterGroupedRecipes(grouped, visibleVariantsByRecipeId, {
       searchTerm: '',
-      quality: '',
-      pokemon: '',
-      type: ''
+      qualities: [],
+      pokemon: [],
+      types: []
     });
 
     expect(getSelectedRecipe(filtered, null)?.id).toBe(filtered[0].id);
@@ -210,12 +218,11 @@ describe('recipe utilities', () => {
     expect(selected?.hiddenVariantCount).toBe(0);
   });
 
-  it('filters pokemon options by query and builds ingredient lookup map', () => {
+  it('builds ingredient lookup map', () => {
     const grouped = groupRecipes(mockDataset.recipes);
-    const pokemonOptions = getPokemonOptions(grouped);
     const ingredientNameByCode = buildIngredientNameByCode(mockDataset.ingredients);
 
-    expect(getVisiblePokemonOptions(pokemonOptions, 'char')).toEqual(['Charmander']);
+    expect(getPokemonOptions(grouped)).toEqual(['Bulbasaur', 'Charmander', 'Eevee']);
     expect(ingredientNameByCode.get('hn')).toBe('Honey');
   });
 });

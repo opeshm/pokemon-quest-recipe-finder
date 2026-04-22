@@ -66,13 +66,12 @@ export class RecipeExplorerPageComponent {
   readonly filtersVm = () =>
     ({
       searchTerm: this.facade.searchTerm(),
-      selectedQuality: this.facade.selectedQuality(),
+      selectedQualities: this.facade.selectedQualities(),
       selectedPokemon: this.facade.selectedPokemon(),
-      selectedType: this.facade.selectedType(),
-      pokemonFilterQuery: this.facade.pokemonFilterQuery(),
+      selectedTypes: this.facade.selectedTypes(),
       qualityOptions: this.facade.qualityOptions,
       typeOptions: this.facade.typeOptions(),
-      visiblePokemonOptions: this.facade.visiblePokemonOptions(),
+      pokemonOptions: this.facade.pokemonOptions(),
       ingredients: this.facade.dataset()?.ingredients ?? [],
       hasInventoryFilter: this.facade.hasInventoryFilter(),
       selectedInventory: this.facade.inventoryIngredientSet()

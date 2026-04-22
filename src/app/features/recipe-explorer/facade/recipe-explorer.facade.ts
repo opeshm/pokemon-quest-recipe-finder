@@ -9,8 +9,7 @@ import {
   buildVisibleVariantsByRecipeId,
   filterGroupedRecipes,
   getNormalizedSelectedRecipeId,
-  getSelectedRecipe,
-  getVisiblePokemonOptions
+  getSelectedRecipe
 } from '../utils/recipe-filtering.util';
 import { getPokemonOptions, getTypeOptions, groupRecipes } from '../utils/recipe-grouping.util';
 import { buildIngredientNameByCode, getVisibleVariants } from '../utils/recipe-summary.util';
@@ -28,18 +27,16 @@ export class RecipeExplorerFacade {
   readonly dataset = toSignal(this.recipeDataService.dataset$, { initialValue: null });
 
   private readonly _searchTerm = signal('');
-  private readonly _selectedQuality = signal('');
-  private readonly _selectedPokemon = signal('');
-  private readonly _selectedType = signal('');
-  private readonly _pokemonFilterQuery = signal('');
+  private readonly _selectedQualities = signal<string[]>([]);
+  private readonly _selectedPokemon = signal<string[]>([]);
+  private readonly _selectedTypes = signal<string[]>([]);
   private readonly _inventoryIngredients = signal<string[]>([]);
   private readonly _selectedRecipeId = signal<string | null>(null);
 
   readonly searchTerm = this._searchTerm.asReadonly();
-  readonly selectedQuality = this._selectedQuality.asReadonly();
+  readonly selectedQualities = this._selectedQualities.asReadonly();
   readonly selectedPokemon = this._selectedPokemon.asReadonly();
-  readonly selectedType = this._selectedType.asReadonly();
-  readonly pokemonFilterQuery = this._pokemonFilterQuery.asReadonly();
+  readonly selectedTypes = this._selectedTypes.asReadonly();
   readonly inventoryIngredients = this._inventoryIngredients.asReadonly();
   readonly selectedRecipeId = this._selectedRecipeId.asReadonly();
 
@@ -53,19 +50,15 @@ export class RecipeExplorerFacade {
 
   readonly filters = computed<RecipeExplorerFilters>(() => ({
     searchTerm: this.searchTerm(),
-    selectedQuality: this.selectedQuality(),
+    selectedQualities: this.selectedQualities(),
     selectedPokemon: this.selectedPokemon(),
-    selectedType: this.selectedType(),
-    pokemonFilterQuery: this.pokemonFilterQuery(),
+    selectedTypes: this.selectedTypes(),
     inventoryIngredients: this.inventoryIngredients()
   }));
 
   readonly recipes = computed(() => this.dataset()?.recipes ?? []);
   readonly groupedRecipes = computed(() => groupRecipes(this.recipes()));
   readonly pokemonOptions = computed(() => getPokemonOptions(this.groupedRecipes()));
-  readonly visiblePokemonOptions = computed(() =>
-    getVisiblePokemonOptions(this.pokemonOptions(), this.pokemonFilterQuery())
-  );
   readonly typeOptions = computed(() => getTypeOptions(this.groupedRecipes()));
   readonly ingredientNameByCode = computed(() => buildIngredientNameByCode(this.dataset()?.ingredients ?? []));
   readonly inventoryIngredientSet = computed(() => new Set(this.inventoryIngredients()));
@@ -98,9 +91,9 @@ export class RecipeExplorerFacade {
   readonly filteredRecipes = computed(() =>
     filterGroupedRecipes(this.groupedRecipes(), this.visibleVariantsByRecipeId(), {
       searchTerm: this.searchTerm(),
-      quality: this.selectedQuality(),
+      qualities: this.selectedQualities(),
       pokemon: this.selectedPokemon(),
-      type: this.selectedType()
+      types: this.selectedTypes()
     })
   );
 
@@ -134,20 +127,16 @@ export class RecipeExplorerFacade {
     this._searchTerm.set(searchTerm);
   }
 
-  setSelectedQuality(quality: string): void {
-    this._selectedQuality.set(quality);
+  setSelectedQualities(qualities: string[]): void {
+    this._selectedQualities.set([...qualities]);
   }
 
-  setSelectedPokemon(pokemon: string): void {
-    this._selectedPokemon.set(pokemon);
+  setSelectedPokemon(pokemon: string[]): void {
+    this._selectedPokemon.set([...pokemon]);
   }
 
-  setSelectedType(type: string): void {
-    this._selectedType.set(type);
-  }
-
-  setPokemonFilterQuery(query: string): void {
-    this._pokemonFilterQuery.set(query);
+  setSelectedTypes(types: string[]): void {
+    this._selectedTypes.set([...types]);
   }
 
   setInventoryIngredients(ingredients: string[]): void {
@@ -164,9 +153,9 @@ export class RecipeExplorerFacade {
 
   hydrateFromQueryParams(params: Partial<Record<'search' | 'quality' | 'pokemon' | 'type' | 'inventory' | 'recipe', string>>): void {
     this._searchTerm.set(params.search ?? '');
-    this._selectedQuality.set(params.quality ?? '');
-    this._selectedPokemon.set(params.pokemon ?? '');
-    this._selectedType.set(params.type ?? '');
+    this._selectedQualities.set(this.parseListParam(params.quality));
+    this._selectedPokemon.set(this.parseListParam(params.pokemon));
+    this._selectedTypes.set(this.parseListParam(params.type));
     this._inventoryIngredients.set(this.parseInventoryParam(params.inventory));
     this._selectedRecipeId.set(params.recipe ?? null);
   }
@@ -174,9 +163,9 @@ export class RecipeExplorerFacade {
   buildQueryParams(): Record<string, string | null> {
     return {
       search: this.searchTerm() || null,
-      quality: this.selectedQuality() || null,
-      pokemon: this.selectedPokemon() || null,
-      type: this.selectedType() || null,
+      quality: this.selectedQualities().length ? this.selectedQualities().join(',') : null,
+      pokemon: this.selectedPokemon().length ? this.selectedPokemon().join(',') : null,
+      type: this.selectedTypes().length ? this.selectedTypes().join(',') : null,
       inventory: this.inventoryIngredients().length ? this.inventoryIngredients().join(',') : null,
       recipe: this.selectedRecipeId() || null
     };
@@ -184,22 +173,30 @@ export class RecipeExplorerFacade {
 
   clearFilters(): void {
     this._searchTerm.set('');
-    this._selectedQuality.set('');
-    this._selectedPokemon.set('');
-    this._selectedType.set('');
-    this._pokemonFilterQuery.set('');
+    this._selectedQualities.set([]);
+    this._selectedPokemon.set([]);
+    this._selectedTypes.set([]);
   }
 
   toggleQuality(quality: string): void {
-    this._selectedQuality.set(this.selectedQuality() === quality ? '' : quality);
+    const current = this.selectedQualities();
+    this._selectedQualities.set(
+      current.includes(quality) ? current.filter((entry) => entry !== quality) : [...current, quality]
+    );
   }
 
   toggleType(typeName: string): void {
-    this._selectedType.set(this.selectedType() === typeName ? '' : typeName);
+    const current = this.selectedTypes();
+    this._selectedTypes.set(
+      current.includes(typeName) ? current.filter((entry) => entry !== typeName) : [...current, typeName]
+    );
   }
 
   togglePokemon(name: string): void {
-    this._selectedPokemon.set(this.selectedPokemon() === name ? '' : name);
+    const current = this.selectedPokemon();
+    this._selectedPokemon.set(
+      current.includes(name) ? current.filter((entry) => entry !== name) : [...current, name]
+    );
   }
 
   clearInventoryIngredients(): void {
@@ -226,13 +223,17 @@ export class RecipeExplorerFacade {
   }
 
   private parseInventoryParam(inventory: string | undefined): string[] {
-    if (!inventory) {
+    return this.parseListParam(inventory);
+  }
+
+  private parseListParam(value: string | undefined): string[] {
+    if (!value) {
       return [];
     }
 
-    return inventory
+    return value
       .split(',')
-      .map((value) => value.trim())
+      .map((entry) => entry.trim())
       .filter(Boolean);
   }
 }

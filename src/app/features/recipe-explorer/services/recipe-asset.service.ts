@@ -128,7 +128,7 @@ export class RecipeAssetService {
   }
 
   typeIconPath(typeName: string): string {
-    const slug = TYPE_ICON_BY_NAME[typeName] ?? typeName.toLowerCase();
+    const slug = TYPE_ICON_BY_NAME[typeName] ?? 'normal';
     return `assets/types/${slug}.png`;
   }
 

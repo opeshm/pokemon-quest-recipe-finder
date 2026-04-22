@@ -1,6 +1,6 @@
 <section class="controls" aria-label="search and filters">
   <label class="field search-field">
-    <span>Search</span>
+    <span>Recipe search</span>
     <input
       type="search"
       [ngModel]="vm().searchTerm"
@@ -8,95 +8,169 @@
       placeholder="Dish, ingredient, or Pokemon"
     />
   </label>
+</section>
+
+<section class="filters-panel" aria-label="Recipe filters">
+  <div class="selector-grid">
+    <section class="selector-box selector-box--quality" aria-label="Quality filters">
+      <div class="selector-box-header">
+        <div>
+          <h2>Quality</h2>
+          <p>{{ vm().selectedQualities.length }} selected</p>
+        </div>
+
+        <button type="button" class="selector-trigger" (click)="openSelector('quality')">
+          Add Quality
+        </button>
+      </div>
+
+      <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedQualities.length">
+        @for (quality of vm().selectedQualities; track quality) {
+          <span class="selected-text-chip" [attr.title]="quality">{{ quality }}</span>
+        } @empty {
+          <p class="selector-empty-copy">Limit the recipe list to one or more quality tiers.</p>
+        }
+      </div>
+    </section>
+
+    <section class="selector-box selector-box--type" aria-label="Type filters">
+      <div class="selector-box-header">
+        <div>
+          <h2>Types</h2>
+          <p>{{ vm().selectedTypes.length }} selected</p>
+        </div>
+
+        <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+      </div>
+
+      <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedTypes.length">
+        @for (typeName of vm().selectedTypes; track typeName) {
+          <span class="selected-icon-chip selected-icon-chip--type" [attr.title]="typeName" [attr.aria-label]="typeName">
+            <img [src]="assets().typeIconPath(typeName)" [alt]="typeName" width="28" height="28" loading="lazy" />
+          </span>
+        } @empty {
+          <p class="selector-empty-copy">Filter recipes by one or more dish types.</p>
+        }
+      </div>
+    </section>
+
+    <section class="selector-box selector-box--pokemon" aria-label="Pokemon filters">
+      <div class="selector-box-header">
+        <div>
+          <h2>Pokemon</h2>
+          <p>{{ vm().selectedPokemon.length }} selected</p>
+        </div>
+
+        <button type="button" class="selector-trigger" (click)="openSelector('pokemon')">
+          Add Pokemon
+        </button>
+      </div>
+
+      <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedPokemon.length">
+        @for (pokemon of vm().selectedPokemon; track pokemon) {
+          <span class="selected-icon-chip selected-icon-chip--pokemon" [attr.title]="pokemon" [attr.aria-label]="pokemon">
+            <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(pokemon, 32)"></span>
+          </span>
+        } @empty {
+          <p class="selector-empty-copy">Target recipes that can attract specific Pokemon.</p>
+        }
+      </div>
+    </section>
+
+    <section class="selector-box selector-box--inventory" aria-label="Inventory filters">
+      <div class="selector-box-header">
+        <div>
+          <h2>Inventory</h2>
+          <p>{{ vm().selectedInventory.size }} selected</p>
+        </div>
+
+        <button type="button" class="selector-trigger" (click)="openSelector('inventory')">
+          Add Ingredient
+        </button>
+      </div>
+
+      <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedInventory.size">
+        @for (ingredient of vm().ingredients; track ingredient.code) {
+          @if (vm().selectedInventory.has(ingredient.code)) {
+            <span class="selected-icon-chip selected-icon-chip--ingredient" [attr.title]="ingredient.name" [attr.aria-label]="ingredient.name">
+              <img [src]="assets().ingredientIconPath(ingredient.code)" [alt]="ingredient.name" width="32" height="32" loading="lazy" />
+            </span>
+          }
+        }
+        @if (!vm().selectedInventory.size) {
+          <p class="selector-empty-copy">Only show configurations cookable with selected ingredients.</p>
+        }
+      </div>
+    </section>
+  </div>
+
   <button type="button" class="clear-button" (click)="clearFilters.emit()">Clear filters</button>
 </section>
 
-<section class="interactive-filters" aria-label="interactive type, quality and pokemon filters">
-  <div class="filter-block">
-    <h3>Quality</h3>
-    <div class="pill-toggle-row">
-      @for (quality of vm().qualityOptions; track quality) {
-        <button
-          type="button"
-          class="pill-toggle"
-          [class.active]="vm().selectedQuality === quality"
-          (click)="onToggleQuality(quality)"
-          [attr.aria-pressed]="vm().selectedQuality === quality"
-        >
-          {{ quality }}
-        </button>
-      }
-    </div>
-  </div>
+@if (modalKind; as activeModal) {
+  <div class="selector-modal-backdrop">
+    <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle()">
+      <div class="selector-modal-header">
+        <div>
+          <p class="selector-modal-eyebrow">Recipe filter</p>
+          <h2>{{ modalTitle() }}</h2>
+        </div>
 
-  <div class="filter-block">
-    <h3>Type</h3>
-    <div class="type-chip-grid">
-      @for (typeName of vm().typeOptions; track typeName) {
-        <button
-          type="button"
-          class="type-chip"
-          [class.active]="vm().selectedType === typeName"
-          (click)="onToggleType(typeName)"
-          [attr.aria-pressed]="vm().selectedType === typeName"
-        >
-          <img [src]="assets().typeIconPath(typeName)" [alt]="typeName" loading="lazy" />
-          <span>{{ typeName }}</span>
+        <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="closeSelector()">
+          Close
         </button>
-      }
-    </div>
-  </div>
+      </div>
 
-  <div class="filter-block">
-    <h3>Pokemon</h3>
-    <label class="field pokemon-search-field">
-      <span>Quick search</span>
-      <input
-        type="search"
-        [ngModel]="vm().pokemonFilterQuery"
-        (ngModelChange)="pokemonFilterQueryChange.emit($event)"
-        placeholder="Find Pokemon"
-      />
-    </label>
-    <div class="pokemon-chip-grid">
-      @for (pokemon of vm().visiblePokemonOptions; track pokemon) {
-        <button
-          type="button"
-          class="pokemon-chip"
-          [class.active]="vm().selectedPokemon === pokemon"
-          (click)="onTogglePokemon(pokemon)"
-          [attr.aria-pressed]="vm().selectedPokemon === pokemon"
-        >
-          <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(pokemon, 24)"></span>
-          <span>{{ pokemon }}</span>
+      @if (activeModal === 'pokemon' || activeModal === 'inventory') {
+        <label class="modal-search-field">
+          <span>{{ activeModal === 'pokemon' ? 'Search pokemon' : 'Search ingredients' }}</span>
+          <input
+            type="search"
+            [ngModel]="modalSearch"
+            (ngModelChange)="updateModalSearch($event)"
+            [placeholder]="activeModal === 'pokemon' ? 'Find a pokemon' : 'Find an ingredient'"
+          />
+        </label>
+      }
+
+      <div class="selector-modal-options">
+        @for (option of modalOptions(); track option) {
+          <button
+            type="button"
+            class="modal-option"
+            [class.modal-option--selected]="isModalOptionSelected(option)"
+            [attr.aria-pressed]="isModalOptionSelected(option)"
+            (click)="toggleModalOption(option)"
+          >
+            @if (activeModal === 'quality') {
+              <span class="modal-text-badge">{{ option }}</span>
+            }
+
+            @if (activeModal === 'type') {
+              <img [src]="assets().typeIconPath(option)" [alt]="" width="28" height="28" loading="lazy" aria-hidden="true" />
+            }
+
+            @if (activeModal === 'pokemon') {
+              <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(option, 32)" aria-hidden="true"></span>
+            }
+
+            @if (activeModal === 'inventory') {
+              <img [src]="assets().ingredientIconPath(option)" [alt]="" width="32" height="32" loading="lazy" aria-hidden="true" />
+            }
+
+            <span>{{ activeModal === 'inventory' ? ingredientName(option) : option }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="selector-modal-actions">
+        <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="closeSelector()">
+          Cancel
         </button>
-      }
-    </div>
+        <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="saveSelector()">
+          Save selection
+        </button>
+      </div>
+    </section>
   </div>
-</section>
-
-<section class="inventory-filter" aria-label="inventory ingredient filter">
-  <div class="inventory-header-row">
-    <h3>Inventory Ingredients</h3>
-    @if (vm().hasInventoryFilter) {
-      <button type="button" class="clear-mini-button" (click)="clearInventory.emit()">Clear inventory filter</button>
-    }
-  </div>
-  <p>Select ingredients you currently have. Only configurations that can be cooked with these ingredients are shown.</p>
-  <div class="inventory-chip-grid">
-    @for (ingredient of vm().ingredients; track ingredient.code) {
-      <button
-        type="button"
-        class="inventory-chip"
-        [class.active]="isInventoryIngredientSelected(ingredient.code)"
-        (click)="toggleInventoryIngredient.emit(ingredient.code)"
-        [attr.aria-pressed]="isInventoryIngredientSelected(ingredient.code)"
-      >
-        <span class="ingredient-token big">
-          <img [src]="assets().ingredientIconPath(ingredient.code)" [alt]="ingredient.name" loading="lazy" />
-        </span>
-        <span>{{ ingredient.name }}</span>
-      </button>
-    }
-  </div>
-</section>
+}
