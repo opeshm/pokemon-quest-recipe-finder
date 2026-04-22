@@ -1,0 +1,136 @@
+<main class="page-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">Pokemon Quest Pokedex</p>
+    <h1>Every Pokemon available in Pokemon Quest</h1>
+    <p class="intro">
+      Browse the full roster and narrow it down by automatic style and elemental type.
+    </p>
+
+    <div class="hero-stats" aria-label="Pokedex counts">
+      <div>
+        <span>Visible</span>
+        <strong>{{ filteredEntries().length }}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>{{ entries.length }}</strong>
+      </div>
+    </div>
+  </section>
+
+  @if (spriteWarning(); as warningMessage) {
+    <section class="status-panel warning" aria-live="polite">
+      <h2>Sprite sheet unavailable</h2>
+      <p>{{ warningMessage }}</p>
+    </section>
+  }
+
+  <section class="filters-panel" aria-label="Pokedex filters">
+    <div class="filter-group">
+      <div class="filter-heading">
+        <h2>Style</h2>
+        <p>Filter by the Pokemon's automatic combat style.</p>
+      </div>
+
+      <div class="chip-row">
+        @for (style of styleOptions; track style) {
+          <button
+            type="button"
+            class="chip"
+            [class.active]="selectedStyle() === style"
+            [attr.aria-pressed]="selectedStyle() === style"
+            (click)="toggleStyle(style)"
+          >
+            {{ style }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-heading">
+        <h2>Type</h2>
+        <p>Show Pokemon that match at least one selected type.</p>
+      </div>
+
+      <div class="chip-row types">
+        @for (type of typeOptions(); track type) {
+          <button
+            type="button"
+            class="chip type-chip"
+            [class.active]="selectedType() === type"
+            [attr.aria-pressed]="selectedType() === type"
+            (click)="toggleType(type)"
+          >
+            <img [src]="typeIconPath(type)" alt="" width="18" height="18" aria-hidden="true" />
+            {{ type }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <button type="button" class="clear-button" (click)="clearFilters()">Clear filters</button>
+  </section>
+
+  <section class="results-grid" aria-label="Pokemon list">
+    @for (entry of filteredEntries(); track trackByNumber($index, entry)) {
+      <article class="pokedex-card">
+        <div class="card-header">
+          <span class="dex-number">#{{ entry.number.toString().padStart(3, '0') }}</span>
+          <span class="style-badge">{{ entry.style }}</span>
+        </div>
+
+        <div class="card-main">
+          <div class="sprite-frame">
+            @if (hasSprite(entry.name)) {
+              <div
+                class="pokemon-sprite"
+                [ngStyle]="pokemonSpriteStyle(entry.name)"
+                [attr.aria-label]="entry.name + ' sprite'"
+              ></div>
+            } @else {
+              <img
+                class="pokemon-avatar"
+                [src]="pokemonAvatarPath(entry.number)"
+                [alt]="entry.name + ' avatar'"
+                width="72"
+                height="72"
+              />
+            }
+          </div>
+
+          <div class="card-copy">
+            <h2>{{ entry.name }}</h2>
+
+            <div class="type-list" aria-label="Pokemon types">
+              @for (type of entry.types; track type) {
+                <span class="type-pill">
+                  <img [src]="typeIconPath(type)" alt="" width="16" height="16" aria-hidden="true" />
+                  {{ type }}
+                </span>
+              }
+            </div>
+
+            <dl class="stat-grid">
+              <div>
+                <dt>HP</dt>
+                <dd>{{ entry.baseHp }}</dd>
+              </div>
+              <div>
+                <dt>ATK</dt>
+                <dd>{{ entry.baseAtk }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <p class="obtain-method">{{ entry.obtainingMethod }}</p>
+      </article>
+    } @empty {
+      <article class="empty-state">
+        <h2>No Pokemon match those filters</h2>
+        <p>Try clearing one filter to widen the roster again.</p>
+      </article>
+    }
+  </section>
+</main>

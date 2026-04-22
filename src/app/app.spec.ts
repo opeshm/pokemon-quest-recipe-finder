@@ -81,13 +81,17 @@ describe('App', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('renders the router outlet shell', async () => {
+  it('renders the app navigation and router outlet shell', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect((fixture.nativeElement as HTMLElement).querySelector('router-outlet')).toBeTruthy();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    expect(compiled.textContent).toContain('Recipes');
+    expect(compiled.textContent).toContain('Pokedex');
   });
 
   it('keeps the recipe explorer route at the root path', async () => {

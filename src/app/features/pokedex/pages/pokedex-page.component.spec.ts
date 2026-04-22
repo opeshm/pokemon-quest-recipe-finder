@@ -1,0 +1,106 @@
+import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { LoadState } from '../../recipe-explorer/models/load-state.model';
+import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
+import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { PokedexPageComponent } from './pokedex-page.component';
+
+const mockDataset = {
+  metadata: {
+    title: 'Pokemon Quest Recipe Finder Dataset',
+    source: 'https://pokequestrecipes.me',
+    generatedAt: '2026-03-30T00:00:00.000Z',
+    totalRecipes: 1,
+    totalDishes: 1,
+    totalPokemon: 151,
+    scannedPages: 1,
+    rateLimitMs: 250
+  },
+  ingredients: [],
+  sprites: {
+    file: 'assets/pokemon-assets.png',
+    columns: 10,
+    cellSizePx: 260,
+    iconSizePx: 256,
+    borderPx: 4
+  },
+  dishSprites: {
+    file: 'assets/recipes-assets.png',
+    columns: 4,
+    rows: 5,
+    cellWidthPx: 203,
+    cellHeightPx: 130,
+    iconWidthPx: 199,
+    iconHeightPx: 126,
+    borderPx: 4
+  },
+  pokemonIndex: [
+    { id: 1, name: 'Bulbasaur', spriteCol: 0, spriteRow: 0 },
+    { id: 63, name: 'Abra', spriteCol: 2, spriteRow: 6 },
+    { id: 81, name: 'Magnemite', spriteCol: 0, spriteRow: 8 },
+    { id: 82, name: 'Magneton', spriteCol: 1, spriteRow: 8 },
+    { id: 145, name: 'Zapdos', spriteCol: 4, spriteRow: 14 }
+  ],
+  dishIndex: [],
+  recipes: []
+};
+
+describe('PokedexPageComponent', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PokedexPageComponent],
+      providers: [
+        {
+          provide: RecipeDataService,
+          useValue: {
+            dataset$: of(mockDataset),
+            loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
+            reload: vi.fn()
+          }
+        }
+      ]
+    }).compileComponents();
+  });
+
+  it('renders the full Pokemon Quest roster', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Every Pokemon available');
+    expect(compiled.querySelectorAll('.pokedex-card')).toHaveLength(151);
+  });
+
+  it('filters the roster by style and type', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const chipButtons = Array.from(compiled.querySelectorAll('.chip')) as HTMLButtonElement[];
+
+    chipButtons.find((button) => button.textContent?.includes('Range'))?.click();
+    fixture.detectChanges();
+
+    chipButtons.find((button) => button.textContent?.includes('Electric'))?.click();
+    fixture.detectChanges();
+
+    const visiblePokemon = Array.from(compiled.querySelectorAll('.pokedex-card h2')).map((heading) =>
+      heading.textContent?.trim()
+    );
+
+    expect(visiblePokemon).toEqual(['Magnemite', 'Magneton', 'Zapdos']);
+  });
+
+  it('uses downloaded avatar assets when the sprite sheet has no entry', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+
+    expect(component.hasSprite('Ivysaur')).toBe(false);
+    expect(component.pokemonAvatarPath(2)).toBe('assets/pokemon/002.png');
+  });
+});

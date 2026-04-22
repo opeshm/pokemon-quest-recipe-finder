@@ -19,6 +19,12 @@ const TYPE_ICON_BY_NAME: Record<string, string> = {
   Fire: 'fire',
   Electric: 'electric',
   Fighting: 'fighting',
+  Fairy: 'fairy',
+  Steel: 'steel',
+  Ice: 'ice',
+  Ghost: 'ghost',
+  Dragon: 'dragon',
+  Dark: 'dark',
   Legendary: 'dragon'
 };
 
@@ -122,7 +128,11 @@ export class RecipeAssetService {
   }
 
   typeIconPath(typeName: string): string {
-    const slug = TYPE_ICON_BY_NAME[typeName] ?? 'normal';
+    const slug = TYPE_ICON_BY_NAME[typeName] ?? typeName.toLowerCase();
     return `assets/types/${slug}.png`;
+  }
+
+  pokemonAvatarPath(number: number): string {
+    return `assets/pokemon/${String(number).padStart(3, '0')}.png`;
   }
 }
