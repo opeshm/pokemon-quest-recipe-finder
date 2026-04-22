@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
 import { RecipeAssetService } from '../../recipe-explorer/services/recipe-asset.service';
+import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
 import { POKEMON_QUEST_MOVES } from '../data/moves.data';
+import { POKEDEX_ENTRIES } from '../../pokedex/data/pokedex.data';
 
 const MOVE_ICON_BY_NAME: Record<string, string> = {
   'Acid Armor': 'acidarmor.png',
@@ -173,6 +177,15 @@ const MOVE_ICON_BY_NAME: Record<string, string> = {
   'Zen Headbutt': 'zenheadbutt.png'
 };
 
+const STONE_ICON_BY_NAME: Record<string, string> = {
+  'Broadburst Stone': 'broadburststone.png',
+  'Scattershot Stone': 'scattershotstone.png',
+  'Sharing Stone': 'sharingstone.png',
+  'Stay Strong Stone': 'staystrongstone.png',
+  'Wait Less Stone': 'waitlessstone.png',
+  'Whack-Whack Stone': 'whack-whackstone.png'
+};
+
 @Component({
   selector: 'app-moves-page',
   imports: [CommonModule],
@@ -181,6 +194,7 @@ const MOVE_ICON_BY_NAME: Record<string, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovesPageComponent {
+  private readonly recipeDataService = inject(RecipeDataService);
   private readonly recipeAssetService = inject(RecipeAssetService);
 
   private readonly _nameFilter = signal('');
@@ -189,10 +203,19 @@ export class MovesPageComponent {
   private readonly _pokemonFilter = signal('');
 
   readonly moves = POKEMON_QUEST_MOVES;
+  readonly dataset = toSignal<RecipeDataset | null>(this.recipeDataService.dataset$, {
+    initialValue: null
+  });
   readonly nameFilter = this._nameFilter.asReadonly();
   readonly selectedType = this._selectedType.asReadonly();
   readonly selectedStone = this._selectedStone.asReadonly();
   readonly pokemonFilter = this._pokemonFilter.asReadonly();
+
+  readonly pokemonNumberByName = new Map(POKEDEX_ENTRIES.map((entry) => [entry.name, entry.number]));
+
+  readonly pokemonSpriteByName = computed(
+    () => new Map((this.dataset()?.pokemonIndex ?? []).map((entry) => [entry.name, entry]))
+  );
 
   readonly typeOptions = computed(() =>
     [...new Set(this.moves.map((move) => move.type))].sort((left, right) => left.localeCompare(right))
@@ -258,8 +281,32 @@ export class MovesPageComponent {
     return this.recipeAssetService.typeIconPath(typeName);
   }
 
+  hasPokemonSprite(name: string): boolean {
+    return this.pokemonSpriteByName().has(name);
+  }
+
+  pokemonSpriteStyle(name: string): Record<string, string> {
+    return this.recipeAssetService.getPokemonSpriteStyle(
+      name,
+      this.dataset()?.pokemonIndex ?? [],
+      this.pokemonSpriteByName(),
+      this.dataset()?.sprites,
+      40
+    );
+  }
+
+  pokemonAvatarPath(name: string): string {
+    const number = this.pokemonNumberByName.get(name);
+
+    return this.recipeAssetService.pokemonAvatarPath(number ?? 1);
+  }
+
   moveIconPath(name: string): string {
     return `assets/moves/${MOVE_ICON_BY_NAME[name]}`;
+  }
+
+  stoneIconPath(name: string): string {
+    return `assets/stones/${STONE_ICON_BY_NAME[name]}`;
   }
 
   trackByIndex(index: number): number {

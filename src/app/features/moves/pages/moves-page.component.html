@@ -109,18 +109,36 @@
 
         <div class="detail-block">
           <h3>Compatible stones</h3>
-          <div class="chip-row" aria-label="Compatible stones">
+          <div class="stone-icon-row" aria-label="Compatible stones">
             @for (stone of move.stones; track trackByValue($index, stone)) {
-              <span class="chip">{{ stone }}</span>
+              <span class="stone-icon-chip" [attr.title]="stone" [attr.aria-label]="stone">
+                <img class="stone-icon" [src]="stoneIconPath(stone)" [alt]="stone" width="40" height="40" />
+              </span>
             }
           </div>
         </div>
 
         <div class="detail-block">
           <h3>Pokemon that can equip it</h3>
-          <div class="chip-row" aria-label="Compatible Pokemon">
+          <div class="pokemon-avatar-row" aria-label="Compatible Pokemon">
             @for (pokemon of move.pokemon; track trackByValue($index, pokemon)) {
-              <span class="chip subdued">{{ pokemon }}</span>
+              <span class="pokemon-avatar-chip" [attr.title]="pokemon" [attr.aria-label]="pokemon">
+                @if (hasPokemonSprite(pokemon)) {
+                  <span
+                    class="pokemon-mini-sprite"
+                    [ngStyle]="pokemonSpriteStyle(pokemon)"
+                    aria-hidden="true"
+                  ></span>
+                } @else {
+                  <img
+                    class="pokemon-mini-avatar"
+                    [src]="pokemonAvatarPath(pokemon)"
+                    [alt]="pokemon"
+                    width="40"
+                    height="40"
+                  />
+                }
+              </span>
             }
           </div>
         </div>
