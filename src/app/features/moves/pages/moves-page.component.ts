@@ -186,6 +186,8 @@ const STONE_ICON_BY_NAME: Record<string, string> = {
   'Whack-Whack Stone': 'whack-whackstone.png'
 };
 
+type MovesFilterModalKind = 'type' | 'stone' | 'pokemon';
+
 @Component({
   selector: 'app-moves-page',
   imports: [CommonModule],
@@ -198,18 +200,24 @@ export class MovesPageComponent {
   private readonly recipeAssetService = inject(RecipeAssetService);
 
   private readonly _nameFilter = signal('');
-  private readonly _selectedType = signal('');
-  private readonly _selectedStone = signal('');
-  private readonly _pokemonFilter = signal('');
+  private readonly _selectedTypes = signal<string[]>([]);
+  private readonly _selectedStones = signal<string[]>([]);
+  private readonly _selectedPokemon = signal<string[]>([]);
+  private readonly _modalKind = signal<MovesFilterModalKind | null>(null);
+  private readonly _modalSelection = signal<string[]>([]);
+  private readonly _modalSearch = signal('');
 
   readonly moves = POKEMON_QUEST_MOVES;
   readonly dataset = toSignal<RecipeDataset | null>(this.recipeDataService.dataset$, {
     initialValue: null
   });
   readonly nameFilter = this._nameFilter.asReadonly();
-  readonly selectedType = this._selectedType.asReadonly();
-  readonly selectedStone = this._selectedStone.asReadonly();
-  readonly pokemonFilter = this._pokemonFilter.asReadonly();
+  readonly selectedTypes = this._selectedTypes.asReadonly();
+  readonly selectedStones = this._selectedStones.asReadonly();
+  readonly selectedPokemon = this._selectedPokemon.asReadonly();
+  readonly modalKind = this._modalKind.asReadonly();
+  readonly modalSelection = this._modalSelection.asReadonly();
+  readonly modalSearch = this._modalSearch.asReadonly();
 
   readonly pokemonNumberByName = new Map(POKEDEX_ENTRIES.map((entry) => [entry.name, entry.number]));
 
@@ -227,18 +235,41 @@ export class MovesPageComponent {
     )
   );
 
+  readonly pokemonOptions = computed(() =>
+    [...new Set(this.moves.flatMap((move) => move.pokemon))].sort((left, right) =>
+      left.localeCompare(right)
+    )
+  );
+
+  readonly modalOptions = computed(() => {
+    const pokemonSearch = this.modalSearch().trim().toLocaleLowerCase();
+
+    switch (this.modalKind()) {
+      case 'type':
+        return this.typeOptions();
+      case 'stone':
+        return this.stoneOptions();
+      case 'pokemon':
+        return this.pokemonOptions().filter(
+          (option) => !pokemonSearch || option.toLocaleLowerCase().includes(pokemonSearch)
+        );
+      default:
+        return [];
+    }
+  });
+
   readonly filteredMoves = computed(() => {
     const moveName = this.nameFilter().trim().toLocaleLowerCase();
-    const type = this.selectedType();
-    const stone = this.selectedStone();
-    const pokemon = this.pokemonFilter().trim().toLocaleLowerCase();
+    const types = this.selectedTypes();
+    const stones = this.selectedStones();
+    const pokemon = this.selectedPokemon();
 
     return this.moves.filter(
       (move) =>
         (!moveName || move.name.toLocaleLowerCase().includes(moveName)) &&
-        (!type || move.type === type) &&
-        (!stone || move.stones.includes(stone)) &&
-        (!pokemon || move.pokemon.some((entry) => entry.toLocaleLowerCase().includes(pokemon)))
+        (!types.length || types.includes(move.type)) &&
+        (!stones.length || stones.some((stone) => move.stones.includes(stone))) &&
+        (!pokemon.length || pokemon.some((entry) => move.pokemon.includes(entry)))
     );
   });
 
@@ -249,32 +280,94 @@ export class MovesPageComponent {
   readonly hasActiveFilters = computed(
     () =>
       this.nameFilter().length > 0 ||
-      this.selectedType().length > 0 ||
-      this.selectedStone().length > 0 ||
-      this.pokemonFilter().length > 0
+      this.selectedTypes().length > 0 ||
+      this.selectedStones().length > 0 ||
+      this.selectedPokemon().length > 0
   );
 
   updateNameFilter(value: string): void {
     this._nameFilter.set(value);
   }
 
-  updateTypeFilter(value: string): void {
-    this._selectedType.set(value);
+  openSelector(kind: MovesFilterModalKind): void {
+    this._modalKind.set(kind);
+    this._modalSearch.set('');
+
+    switch (kind) {
+      case 'type':
+        this._modalSelection.set([...this.selectedTypes()]);
+        break;
+      case 'stone':
+        this._modalSelection.set([...this.selectedStones()]);
+        break;
+      case 'pokemon':
+        this._modalSelection.set([...this.selectedPokemon()]);
+        break;
+    }
   }
 
-  updateStoneFilter(value: string): void {
-    this._selectedStone.set(value);
+  closeSelector(): void {
+    this._modalKind.set(null);
+    this._modalSelection.set([]);
+    this._modalSearch.set('');
   }
 
-  updatePokemonFilter(value: string): void {
-    this._pokemonFilter.set(value);
+  updateModalSearch(value: string): void {
+    this._modalSearch.set(value);
+  }
+
+  toggleModalOption(value: string): void {
+    const current = this.modalSelection();
+
+    if (current.includes(value)) {
+      this._modalSelection.set(current.filter((entry) => entry !== value));
+      return;
+    }
+
+    this._modalSelection.set([...current, value]);
+  }
+
+  saveSelector(): void {
+    const selected = this.modalOptions().filter((option) => this.modalSelection().includes(option));
+
+    switch (this.modalKind()) {
+      case 'type':
+        this._selectedTypes.set(selected);
+        break;
+      case 'stone':
+        this._selectedStones.set(selected);
+        break;
+      case 'pokemon':
+        this._selectedPokemon.set(selected);
+        break;
+    }
+
+    this.closeSelector();
   }
 
   clearFilters(): void {
     this._nameFilter.set('');
-    this._selectedType.set('');
-    this._selectedStone.set('');
-    this._pokemonFilter.set('');
+    this._selectedTypes.set([]);
+    this._selectedStones.set([]);
+    this._selectedPokemon.set([]);
+    this.closeSelector();
+  }
+
+  isModalOptionSelected(value: string): boolean {
+    return this.modalSelection().includes(value);
+  }
+
+  modalTitle(): string {
+    switch (this.modalKind()) {
+      case 'type':
+        return 'Select types';
+      case 'stone':
+        return 'Select stones';
+      case 'pokemon':
+        return 'Select pokemon';
+      default:
+        return 'Select filters';
+    }
   }
 
   typeIconPath(typeName: string): string {

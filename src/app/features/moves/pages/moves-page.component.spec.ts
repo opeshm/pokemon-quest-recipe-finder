@@ -88,25 +88,23 @@ describe('MovesPageComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const [nameInput, pokemonInput] = Array.from(
-      compiled.querySelectorAll('input[type="search"]')
-    ) as HTMLInputElement[];
-    const [typeSelect, stoneSelect] = Array.from(compiled.querySelectorAll('select')) as [
-      HTMLSelectElement,
-      HTMLSelectElement
-    ];
+    const nameInput = compiled.querySelector('input[type="search"]') as HTMLInputElement;
 
     nameInput.value = 'bolt';
     nameInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
 
-    typeSelect.value = 'Electric';
-    typeSelect.dispatchEvent(new Event('change'));
+    openSelector(compiled, fixture, 'Add Type');
+    toggleModalOption(compiled, fixture, 'Electric');
+    saveModal(compiled, fixture);
 
-    stoneSelect.value = 'Stay Strong Stone';
-    stoneSelect.dispatchEvent(new Event('change'));
+    openSelector(compiled, fixture, 'Add Stone');
+    toggleModalOption(compiled, fixture, 'Stay Strong Stone');
+    saveModal(compiled, fixture);
 
-    pokemonInput.value = 'mewtwo';
-    pokemonInput.dispatchEvent(new Event('input'));
+    openSelector(compiled, fixture, 'Add Pokemon');
+    toggleModalOption(compiled, fixture, 'Mewtwo');
+    saveModal(compiled, fixture);
 
     fixture.detectChanges();
 
@@ -123,21 +121,82 @@ describe('MovesPageComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const [nameInput] = Array.from(compiled.querySelectorAll('input[type="search"]')) as [
-      HTMLInputElement,
-      HTMLInputElement
-    ];
+    const nameInput = compiled.querySelector('input[type="search"]') as HTMLInputElement;
     const clearButton = compiled.querySelector('.clear-button') as HTMLButtonElement;
 
     nameInput.value = 'transform';
     nameInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
+    openSelector(compiled, fixture, 'Add Type');
+    toggleModalOption(compiled, fixture, 'Psychic');
+    saveModal(compiled, fixture);
+
     clearButton.click();
     fixture.detectChanges();
 
     expect(nameInput.value).toBe('');
     expect(compiled.querySelectorAll('.move-card')).toHaveLength(169);
+    expect(compiled.querySelectorAll('.selected-icon-chip')).toHaveLength(0);
+  });
+
+  it('shows saved selections as icons inside the selector boxes', async () => {
+    const fixture = TestBed.createComponent(MovesPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    openSelector(compiled, fixture, 'Add Type');
+    toggleModalOption(compiled, fixture, 'Electric');
+    saveModal(compiled, fixture);
+
+    openSelector(compiled, fixture, 'Add Stone');
+    toggleModalOption(compiled, fixture, 'Wait Less Stone');
+    saveModal(compiled, fixture);
+
+    openSelector(compiled, fixture, 'Add Pokemon');
+    toggleModalOption(compiled, fixture, 'Arbok');
+    saveModal(compiled, fixture);
+
+    const selectedType = compiled.querySelector('.selector-box--type .selected-icon-chip') as HTMLElement;
+    const selectedStone = compiled.querySelector(
+      '.selector-box--stone .selected-icon-chip'
+    ) as HTMLElement;
+    const selectedPokemon = compiled.querySelector(
+      '.selector-box--pokemon .selected-icon-chip'
+    ) as HTMLElement;
+
+    expect(selectedType.title).toBe('Electric');
+    expect(selectedType.querySelector('img')?.getAttribute('src')).toContain('assets/types/electric');
+    expect(selectedStone.title).toBe('Wait Less Stone');
+    expect(selectedStone.querySelector('img')?.getAttribute('src')).toContain(
+      'assets/stones/waitlessstone.png'
+    );
+    expect(selectedPokemon.title).toBe('Arbok');
+    expect(selectedPokemon.querySelector('.pokemon-mini-sprite, img')).toBeTruthy();
+  });
+
+  it('filters pokemon modal options by the modal search field', async () => {
+    const fixture = TestBed.createComponent(MovesPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    openSelector(compiled, fixture, 'Add Pokemon');
+
+    const modalSearch = compiled.querySelector('.modal-search-field input') as HTMLInputElement;
+    modalSearch.value = 'arb';
+    modalSearch.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const options = Array.from(compiled.querySelectorAll('.modal-option')).map((option) =>
+      option.textContent?.replace(/\s+/g, ' ').trim()
+    );
+
+    expect(options).toContain('Arbok');
+    expect(options).not.toContain('Mewtwo');
   });
 
   it('renders Pokemon avatars with tooltip names instead of text chips', async () => {
@@ -170,3 +229,32 @@ describe('MovesPageComponent', () => {
     expect(firstStoneChip.querySelector('.stone-icon')).toBeTruthy();
   });
 });
+
+function openSelector(compiled: HTMLElement, fixture: { detectChanges(): void }, buttonText: string): void {
+  findButton(compiled, '.selector-trigger', buttonText).click();
+  fixture.detectChanges();
+}
+
+function toggleModalOption(
+  compiled: HTMLElement,
+  fixture: { detectChanges(): void },
+  optionText: string
+): void {
+  findButton(compiled, '.modal-option', optionText).click();
+  fixture.detectChanges();
+}
+
+function saveModal(compiled: HTMLElement, fixture: { detectChanges(): void }): void {
+  findButton(compiled, '.selector-modal-button--primary', 'Save selection').click();
+  fixture.detectChanges();
+}
+
+function findButton(root: HTMLElement, selector: string, text: string): HTMLButtonElement {
+  const button = Array.from(root.querySelectorAll(selector)).find(
+    (element) => element.textContent?.replace(/\s+/g, ' ').trim() === text
+  );
+
+  expect(button).toBeTruthy();
+
+  return button as HTMLButtonElement;
+}

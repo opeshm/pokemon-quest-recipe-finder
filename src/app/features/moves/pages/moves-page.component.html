@@ -36,36 +36,87 @@
           (input)="updateNameFilter($any($event.target).value)"
         />
       </label>
+    </div>
 
-      <label class="filter-field">
-        <span>Type</span>
-        <select [value]="selectedType()" (change)="updateTypeFilter($any($event.target).value)">
-          <option value="">All types</option>
-          @for (type of typeOptions(); track trackByValue($index, type)) {
-            <option [value]="type">{{ type }}</option>
+    <div class="selector-grid">
+      <section class="selector-box selector-box--type" aria-label="Type filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Types</h2>
+            <p>{{ selectedTypes().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedTypes().length">
+          @for (type of selectedTypes(); track trackByValue($index, type)) {
+            <span class="selected-icon-chip selected-icon-chip--type" [attr.title]="type" [attr.aria-label]="type">
+              <img [src]="typeIconPath(type)" [alt]="type" width="28" height="28" />
+            </span>
+          } @empty {
+            <p class="selector-empty-copy">Filter by one or more move types.</p>
           }
-        </select>
-      </label>
+        </div>
+      </section>
 
-      <label class="filter-field">
-        <span>Stone</span>
-        <select [value]="selectedStone()" (change)="updateStoneFilter($any($event.target).value)">
-          <option value="">All stones</option>
-          @for (stone of stoneOptions(); track trackByValue($index, stone)) {
-            <option [value]="stone">{{ stone }}</option>
+      <section class="selector-box selector-box--stone" aria-label="Stone filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Stones</h2>
+            <p>{{ selectedStones().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('stone')">
+            Add Stone
+          </button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedStones().length">
+          @for (stone of selectedStones(); track trackByValue($index, stone)) {
+            <span class="selected-icon-chip selected-icon-chip--stone" [attr.title]="stone" [attr.aria-label]="stone">
+              <img [src]="stoneIconPath(stone)" [alt]="stone" width="32" height="32" />
+            </span>
+          } @empty {
+            <p class="selector-empty-copy">Pick one or more stone synergies.</p>
           }
-        </select>
-      </label>
+        </div>
+      </section>
 
-      <label class="filter-field">
-        <span>Pokemon</span>
-        <input
-          type="search"
-          [value]="pokemonFilter()"
-          placeholder="Search equipable Pokemon"
-          (input)="updatePokemonFilter($any($event.target).value)"
-        />
-      </label>
+      <section class="selector-box selector-box--pokemon" aria-label="Pokemon filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Pokemon</h2>
+            <p>{{ selectedPokemon().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('pokemon')">
+            Add Pokemon
+          </button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedPokemon().length">
+          @for (pokemon of selectedPokemon(); track trackByValue($index, pokemon)) {
+            <span
+              class="selected-icon-chip selected-icon-chip--pokemon"
+              [attr.title]="pokemon"
+              [attr.aria-label]="pokemon"
+            >
+              @if (hasPokemonSprite(pokemon)) {
+                <span
+                  class="pokemon-mini-sprite"
+                  [ngStyle]="pokemonSpriteStyle(pokemon)"
+                  aria-hidden="true"
+                ></span>
+              } @else {
+                <img [src]="pokemonAvatarPath(pokemon)" [alt]="pokemon" width="32" height="32" />
+              }
+            </span>
+          } @empty {
+            <p class="selector-empty-copy">Limit the list to specific compatible Pokemon.</p>
+          }
+        </div>
+      </section>
     </div>
 
     <button
@@ -77,6 +128,78 @@
       Clear filters
     </button>
   </section>
+
+  @if (modalKind(); as activeModal) {
+    <div class="selector-modal-backdrop">
+      <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle()">
+        <div class="selector-modal-header">
+          <div>
+            <p class="selector-modal-eyebrow">Move filter</p>
+            <h2>{{ modalTitle() }}</h2>
+          </div>
+
+          <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="closeSelector()">
+            Close
+          </button>
+        </div>
+
+        @if (activeModal === 'pokemon') {
+          <label class="modal-search-field">
+            <span>Search pokemon</span>
+            <input
+              type="search"
+              [value]="modalSearch()"
+              placeholder="Find a pokemon"
+              (input)="updateModalSearch($any($event.target).value)"
+            />
+          </label>
+        }
+
+        <div class="selector-modal-options">
+          @for (option of modalOptions(); track trackByValue($index, option)) {
+            <button
+              type="button"
+              class="modal-option"
+              [class.modal-option--selected]="isModalOptionSelected(option)"
+              [attr.aria-pressed]="isModalOptionSelected(option)"
+              (click)="toggleModalOption(option)"
+            >
+              @if (activeModal === 'type') {
+                <img [src]="typeIconPath(option)" [alt]="" width="28" height="28" aria-hidden="true" />
+              }
+
+              @if (activeModal === 'stone') {
+                <img [src]="stoneIconPath(option)" [alt]="" width="32" height="32" aria-hidden="true" />
+              }
+
+              @if (activeModal === 'pokemon') {
+                @if (hasPokemonSprite(option)) {
+                  <span
+                    class="pokemon-mini-sprite"
+                    [ngStyle]="pokemonSpriteStyle(option)"
+                    aria-hidden="true"
+                  ></span>
+                } @else {
+                  <img [src]="pokemonAvatarPath(option)" [alt]="" width="32" height="32" aria-hidden="true" />
+                }
+              }
+
+              <span>{{ option }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="selector-modal-actions">
+          <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="closeSelector()">
+            Cancel
+          </button>
+          <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="saveSelector()">
+            Save selection
+          </button>
+        </div>
+      </section>
+    </div>
+  }
 
   <section class="results-grid" aria-label="Move list">
     @for (move of filteredMoves(); track trackByIndex($index)) {
