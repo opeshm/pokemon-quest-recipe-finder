@@ -9,16 +9,17 @@
 - Full test run: `npm run test -- --watch=false`.
 - Focus one spec file: `npm run test -- --watch=false --include src/app/path/to/file.spec.ts`.
 - Focus by suite/test name: add `--filter "pattern"`.
+- There is no separate lint or typecheck script; use `npm run build` for strict TS/template validation.
 
 ## Architecture
 - This is a single Angular application, not a monorepo.
-- The app boots from `src/main.ts` via `bootstrapApplication(App, appConfig)` and uses standalone components/providers throughout; there are no NgModules.
-- Routing is minimal: `src/app/app.routes.ts` lazy-loads only `features/recipe-explorer/pages/recipe-explorer-page.component` at `/`.
-- The core feature wiring lives in `src/app/features/recipe-explorer/`:
-  - `services/recipe-data.service.ts` loads the dataset from `public/data/recipes.json` via `GET data/recipes.json`.
-  - `facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
-  - `pages/recipe-explorer-page.component.ts` syncs facade state to URL query params and composes the panel components.
-- If you change dataset shape or asset metadata, update `public/data/recipes.json`, the `models/` types, and the affected facade/utils/specs together.
+- The app boots from `src/main.ts` via `bootstrapApplication(App, appConfig)`. Root component/config files are `src/app/app.ts` and `src/app/app.config.ts`, not the usual `app.component.ts` layout.
+- The app is fully standalone; there are no NgModules.
+- `src/app/app.routes.ts` lazy-loads three feature pages: recipe explorer at `/`, moves at `/moves`, and pokedex at `/pokedex`.
+- `src/app/features/recipe-explorer/` is the only feature backed by fetched data. `services/recipe-data.service.ts` loads `public/data/recipes.json` via `GET data/recipes.json`, and `facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
+- `moves/` and `pokedex/` mostly render static TS datasets (`data/*.data.ts`) but still depend on `RecipeDataService` for shared sprite metadata and image lookup.
+- `src/app/shared/pokemon-profile/` is a cross-feature modal mounted in the app shell; it combines static pokedex/move data with fetched recipe data.
+- If you change Pokemon names, sprite metadata, or recipe dataset shape, reconcile `public/data/recipes.json`, the `recipe-explorer/models/` types, any affected static `moves/` or `pokedex/` data, and related specs together.
 
 ## Testing Notes
 - The Angular test builder defaults to `vitest` plus `jsdom` here. If you assume browser-only/Karma behavior, you'll likely write the wrong setup.
