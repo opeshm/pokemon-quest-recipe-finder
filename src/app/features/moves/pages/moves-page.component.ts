@@ -277,8 +277,8 @@ export class MovesPageComponent {
     return `assets/stones/${STONE_ICON_BY_NAME[name]}`;
   }
 
-  trackByIndex(index: number): number {
-    return index;
+  trackByMove(_: number, move: (typeof this.moves)[number]): string {
+    return `${move.name}|${move.type}|${move.waitTime}|${move.power}`;
   }
 
   trackByValue(_: number, value: string): string {

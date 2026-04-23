@@ -156,6 +156,7 @@ describe('RecipeExplorerFacade', () => {
     facade.setSelectedQualities(['Special']);
     facade.setSelectedPokemon(['Bulbasaur']);
     facade.setSelectedTypes(['Misc']);
+    facade.setInventoryIngredients(['bm']);
 
     facade.clearFilters();
 

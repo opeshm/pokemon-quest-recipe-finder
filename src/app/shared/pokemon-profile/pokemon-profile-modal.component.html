@@ -155,7 +155,7 @@
                     <strong>{{ recipe.recipeName }}</strong>
                     <span>{{ recipe.quality }} · {{ recipe.typeName }}</span>
                   </div>
-                  <span class="attract-rate">{{ attractRateFor(recipe.id, pokemonProfile.entry.name) }}</span>
+                  <span class="attract-rate">{{ recipe.attractRate.toFixed(2) }}%</span>
                 </li>
               }
             </ul>

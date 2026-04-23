@@ -221,7 +221,7 @@
   }
 
   <section class="results-grid" aria-label="Move list">
-    @for (move of filteredMoves(); track trackByIndex($index)) {
+    @for (move of filteredMoves(); track trackByMove($index, move)) {
       <article class="move-card">
         <div class="card-header">
           <div class="move-heading">

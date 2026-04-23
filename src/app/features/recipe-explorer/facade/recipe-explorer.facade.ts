@@ -153,7 +153,7 @@ export class RecipeExplorerFacade {
 
   hydrateFromQueryParams(params: Partial<Record<'search' | 'quality' | 'pokemon' | 'type' | 'inventory' | 'recipe', string>>): void {
     this._searchTerm.set(params.search ?? '');
-    this._selectedQualities.set(this.parseListParam(params.quality));
+    this._selectedQualities.set(this.parseListParam(params.quality, new Set(this.qualityOptions)));
     this._selectedPokemon.set(this.parseListParam(params.pokemon));
     this._selectedTypes.set(this.parseListParam(params.type));
     this._inventoryIngredients.set(this.parseInventoryParam(params.inventory));
@@ -176,6 +176,7 @@ export class RecipeExplorerFacade {
     this._selectedQualities.set([]);
     this._selectedPokemon.set([]);
     this._selectedTypes.set([]);
+    this._inventoryIngredients.set([]);
   }
 
   toggleQuality(quality: string): void {
@@ -226,14 +227,22 @@ export class RecipeExplorerFacade {
     return this.parseListParam(inventory);
   }
 
-  private parseListParam(value: string | undefined): string[] {
+  private parseListParam(value: string | undefined, allowedValues?: ReadonlySet<string>): string[] {
     if (!value) {
       return [];
     }
 
-    return value
+    const values = value
       .split(',')
       .map((entry) => entry.trim())
       .filter(Boolean);
+
+    const uniqueValues = [...new Set(values)];
+
+    if (!allowedValues) {
+      return uniqueValues;
+    }
+
+    return uniqueValues.filter((entry) => allowedValues.has(entry));
   }
 }

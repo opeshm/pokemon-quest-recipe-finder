@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FiltersPanelComponent } from '../components/filters-panel/filters-panel.component';
 import { HeroSectionComponent } from '../components/hero-section/hero-section.component';
@@ -29,11 +29,8 @@ export class RecipeExplorerPageComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly recipeAssetService = inject(RecipeAssetService);
   private readonly pokemonProfileService = inject(PokemonProfileService);
-
-  private isHydratingFromUrl = false;
 
   readonly pokemonSpriteStyleFn = (name: string, sizePx?: number) =>
     this.recipeAssetService.getPokemonSpriteStyle(
@@ -69,8 +66,7 @@ export class RecipeExplorerPageComponent {
     openPokemonProfile: (name) => this.pokemonProfileService.open(name)
   };
 
-  readonly filtersVm = () =>
-    ({
+  readonly filtersVm = computed<FiltersPanelViewModel>(() => ({
       searchTerm: this.facade.searchTerm(),
       selectedQualities: this.facade.selectedQualities(),
       selectedPokemon: this.facade.selectedPokemon(),
@@ -81,19 +77,17 @@ export class RecipeExplorerPageComponent {
       ingredients: this.facade.dataset()?.ingredients ?? [],
       hasInventoryFilter: this.facade.hasInventoryFilter(),
       selectedInventory: this.facade.inventoryIngredientSet()
-    }) satisfies FiltersPanelViewModel;
+    }));
 
-  readonly recipeListVm = () =>
-    ({
+  readonly recipeListVm = computed<RecipeListPanelViewModel>(() => ({
       cards: this.facade.recipeCards(),
       selectedRecipeId: this.facade.selectedRecipeId()
-    }) satisfies RecipeListPanelViewModel;
+    }));
 
-  readonly recipeDetailVm = () =>
-    ({
+  readonly recipeDetailVm = computed<RecipeDetailPanelViewModel>(() => ({
       selectedRecipeView: this.facade.selectedRecipeView(),
       maxAttractRate: this.facade.maxAttractRate()
-    }) satisfies RecipeDetailPanelViewModel;
+    }));
 
   constructor() {
     const queryParamMap = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
@@ -109,18 +103,10 @@ export class RecipeExplorerPageComponent {
         recipe: queryParams.get('recipe') ?? undefined
       };
 
-      this.isHydratingFromUrl = true;
       this.facade.hydrateFromQueryParams(nextParams);
-      queueMicrotask(() => {
-        this.isHydratingFromUrl = false;
-      });
     });
 
     effect(() => {
-      if (this.isHydratingFromUrl) {
-        return;
-      }
-
       const nextQueryParams = this.facade.buildQueryParams();
       const currentQueryParams = this.route.snapshot.queryParams;
 
@@ -133,10 +119,6 @@ export class RecipeExplorerPageComponent {
         queryParams: nextQueryParams,
         replaceUrl: true
       });
-    });
-
-    this.destroyRef.onDestroy(() => {
-      this.isHydratingFromUrl = false;
     });
   }
 

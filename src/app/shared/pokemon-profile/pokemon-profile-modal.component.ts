@@ -69,11 +69,6 @@ export class PokemonProfileModalComponent {
     );
   }
 
-  attractRateFor(recipeId: string, pokemonName: string): string {
-    const recipe = this.profile()?.recipes.find((entry) => entry.id === recipeId);
-    return recipe == null ? '-' : `${recipe.attractRate.toFixed(2)}%`;
-  }
-
   evolutionRequirementLabel(requirement: string): string {
     return requirement.replace(/^Lv\.\s*/i, 'Lv. ');
   }
