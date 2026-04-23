@@ -101,6 +101,10 @@
               class="selected-icon-chip selected-icon-chip--pokemon"
               [attr.title]="pokemon"
               [attr.aria-label]="pokemon"
+              tabindex="0"
+              (click)="openPokemonProfile(pokemon)"
+              (keydown.enter)="openPokemonProfile(pokemon)"
+              (keydown.space)="openPokemonProfile(pokemon); $event.preventDefault()"
             >
               @if (hasPokemonSprite(pokemon)) {
                 <span
@@ -260,7 +264,7 @@
           <h3>Pokemon that can equip it</h3>
           <div class="pokemon-avatar-row" aria-label="Compatible Pokemon">
             @for (pokemon of move.pokemon; track trackByValue($index, pokemon)) {
-              <span class="pokemon-avatar-chip" [attr.title]="pokemon" [attr.aria-label]="pokemon">
+              <span class="pokemon-avatar-chip" [attr.title]="pokemon" [attr.aria-label]="pokemon" tabindex="0" (click)="openPokemonProfile(pokemon)" (keydown.enter)="openPokemonProfile(pokemon)" (keydown.space)="openPokemonProfile(pokemon); $event.preventDefault()">
                 @if (hasPokemonSprite(pokemon)) {
                   <span
                     class="pokemon-mini-sprite"

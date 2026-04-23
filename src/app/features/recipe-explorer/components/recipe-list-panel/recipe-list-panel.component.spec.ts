@@ -44,6 +44,9 @@ describe('RecipeListPanelComponent', () => {
       ingredientIconPath: (code: string) => `assets/ingredients/${code}.png`,
       ingredientLabel: () => 'Balm Mushroom'
     });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile: vi.fn()
+    });
 
     const selectionSpy = vi.fn();
     component.selectedRecipeIdChange.subscribe(selectionSpy);
@@ -55,5 +58,49 @@ describe('RecipeListPanelComponent', () => {
 
     (compiled.querySelector('.recipe-list button') as HTMLButtonElement).click();
     expect(selectionSpy).toHaveBeenCalledWith('recipe-1');
+  });
+
+  it('opens the Pokemon profile from top attracted Pokemon icons', () => {
+    const fixture = TestBed.createComponent(RecipeListPanelComponent);
+    const openPokemonProfile = vi.fn();
+
+    fixture.componentRef.setInput('vm', {
+      selectedRecipeId: 'recipe-1',
+      cards: [
+        {
+          recipe: {
+            id: 'recipe-1',
+            recipeName: 'Mulligan Stew a la Cube',
+            dishName: 'Mulligan Stew a la Cube',
+            dishSlug: 'mulligan-stew-a-la-cube',
+            typeName: 'Misc',
+            quality: 'Special',
+            qualityTier: 4,
+            pokemonResults: [{ name: 'Bulbasaur', attractRate: 66.66 }],
+            source: { page: 'https://example.com', extractionType: 'test' },
+            variants: []
+          },
+          ingredientSummary: '5x Balm Mushroom',
+          firstVariant: null,
+          visibleVariantCount: 1
+        }
+      ]
+    });
+    fixture.componentRef.setInput('assets', {
+      getDishSpriteStyle: () => ({ width: '110px', height: '69px' }),
+      getPokemonSpriteStyle: () => ({ width: '24px', height: '24px' }),
+      ingredientIconPath: (code: string) => `assets/ingredients/${code}.png`,
+      ingredientLabel: () => 'Balm Mushroom'
+    });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile
+    });
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    (compiled.querySelector('.pokemon-icon.mini') as HTMLElement).click();
+
+    expect(openPokemonProfile).toHaveBeenCalledWith('Bulbasaur');
   });
 });

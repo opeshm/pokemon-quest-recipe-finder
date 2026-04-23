@@ -123,6 +123,12 @@
 .pokemon-icon.mini {
   border-width: 1px;
   border-radius: 0.34rem;
+  cursor: pointer;
+}
+
+.pokemon-icon.mini:focus-visible {
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.35);
+  outline-offset: 2px;
 }
 
 .ingredient-token {

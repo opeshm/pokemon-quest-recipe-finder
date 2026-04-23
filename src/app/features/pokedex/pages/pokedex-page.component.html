@@ -146,7 +146,7 @@
 
   <section class="results-grid" aria-label="Pokemon list">
     @for (entry of filteredEntries(); track trackByNumber($index, entry)) {
-      <article class="pokedex-card">
+      <article class="pokedex-card" tabindex="0" (click)="openPokemonProfile(entry.name)" (keydown.enter)="openPokemonProfile(entry.name)" (keydown.space)="openPokemonProfile(entry.name); $event.preventDefault()">
         <div class="card-header">
           <span class="dex-number">#{{ entry.number.toString().padStart(3, '0') }}</span>
           <span class="style-badge">{{ entry.style }}</span>

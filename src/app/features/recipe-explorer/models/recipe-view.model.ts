@@ -63,3 +63,7 @@ export type RecipeDetailPanelViewModel = {
   selectedRecipeView: SelectedRecipeView | null;
   maxAttractRate: number;
 };
+
+export type PokemonProfileTrigger = {
+  openPokemonProfile: (name: string) => void;
+};

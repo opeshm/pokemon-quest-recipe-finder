@@ -5,6 +5,7 @@ import { LoadState } from '../models/load-state.model';
 import { RecipeDataset } from '../models/recipe.model';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
 import { RecipeDataService } from '../services/recipe-data.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { RecipeExplorerPageComponent } from './recipe-explorer-page.component';
 
 const mockDataset = {
@@ -155,6 +156,48 @@ describe('RecipeExplorerPageComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Discover every recipe');
     expect(compiled.querySelector('.recipe-list li strong')?.textContent).toContain('Mulligan Stew a la Cube');
+  });
+
+  it('opens the Pokemon profile modal from recipe results', async () => {
+    const activatedRouteMock = createActivatedRouteMock();
+    const routerMock = {
+      navigate: vi.fn().mockResolvedValue(true)
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [RecipeExplorerPageComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteMock
+        },
+        {
+          provide: Router,
+          useValue: routerMock
+        },
+        {
+          provide: RecipeDataService,
+          useValue: {
+            dataset$: of(mockDataset),
+            loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
+            reload: vi.fn()
+          }
+        }
+      ]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(RecipeExplorerPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    (compiled.querySelector('.recipe-list .pokemon-icon.mini') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const pokemonProfileService = TestBed.inject(PokemonProfileService);
+
+    expect(pokemonProfileService.selectedPokemonName()).toBe('Bulbasaur');
+    expect(pokemonProfileService.selectedProfile()?.entry.name).toBe('Bulbasaur');
   });
 
   it('hydrates state from query params', async () => {

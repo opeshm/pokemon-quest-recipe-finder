@@ -1,0 +1,169 @@
+@if (profile(); as pokemonProfile) {
+  <div class="pokemon-profile-backdrop" (click)="close()">
+    <section
+      class="pokemon-profile-modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="pokemonProfile.entry.name + ' profile'"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="pokemon-profile-scroll">
+        <header class="profile-header">
+          <div class="profile-identity">
+            <div class="sprite-frame">
+              @if (hasSprite(pokemonProfile.entry.name)) {
+                <span
+                  class="pokemon-sprite"
+                  [ngStyle]="pokemonSpriteStyle(pokemonProfile.entry.name, 88)"
+                  [attr.aria-label]="pokemonProfile.entry.name + ' sprite'"
+                ></span>
+              } @else {
+                <img
+                  class="pokemon-avatar"
+                  [src]="pokemonAvatarPath(pokemonProfile.entry.number)"
+                  [alt]="pokemonProfile.entry.name + ' avatar'"
+                  width="88"
+                  height="88"
+                />
+              }
+            </div>
+
+            <div class="profile-copy">
+              <p class="profile-kicker">Pokemon Profile</p>
+              <div class="profile-title-row">
+                <h2>{{ pokemonProfile.entry.name }}</h2>
+                <span class="dex-number">#{{ pokemonProfile.entry.number.toString().padStart(3, '0') }}</span>
+              </div>
+
+              <div class="type-list" aria-label="Pokemon types">
+                @for (type of pokemonProfile.entry.types; track type) {
+                  <span class="type-pill">
+                    <img [src]="typeIconPath(type)" alt="" width="16" height="16" aria-hidden="true" />
+                    {{ type }}
+                  </span>
+                }
+              </div>
+
+              <div class="meta-grid">
+                <div>
+                  <span>Style</span>
+                  <strong>{{ pokemonProfile.entry.style }}</strong>
+                </div>
+                <div>
+                  <span>HP</span>
+                  <strong>{{ pokemonProfile.entry.baseHp }}</strong>
+                </div>
+                <div>
+                  <span>ATK</span>
+                  <strong>{{ pokemonProfile.entry.baseAtk }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="close-button" aria-label="Close Pokemon profile" (click)="close()">
+            Close
+          </button>
+        </header>
+
+        <section class="profile-section">
+          <h3>Obtaining Method</h3>
+          <p>{{ pokemonProfile.entry.obtainingMethod }}</p>
+        </section>
+
+        <section class="profile-section">
+          <h3>Evolution Chain</h3>
+          <div class="evolution-chain" aria-label="Evolution chain">
+            @for (step of pokemonProfile.evolutionChain; track evolutionTrackBy($index, step); let stepIndex = $index) {
+              @if (stepIndex > 0) {
+                <div class="evolution-connector">
+                  <span class="evolution-requirement">{{ evolutionRequirementLabel(step.requirement ?? '') }}</span>
+                </div>
+              }
+
+              <div class="evolution-step" [class.evolution-step--active]="step.pokemon.name === pokemonProfile.entry.name">
+                <div class="evolution-card">
+                  @if (hasSprite(step.pokemon.name)) {
+                    <span class="evolution-sprite" [ngStyle]="pokemonSpriteStyle(step.pokemon.name, 56)"></span>
+                  } @else {
+                    <img
+                      class="evolution-avatar"
+                      [src]="pokemonAvatarPath(step.pokemon.number)"
+                      [alt]="step.pokemon.name + ' avatar'"
+                      width="56"
+                      height="56"
+                    />
+                  }
+                  <strong>{{ step.pokemon.name }}</strong>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="section-header">
+            <h3>Moves</h3>
+            <span>{{ pokemonProfile.moves.length }} available</span>
+          </div>
+
+          @if (pokemonProfile.moves.length) {
+            <div class="table-scroll">
+              <table class="moves-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Wait</th>
+                    <th>Power</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (move of pokemonProfile.moves; track move.name) {
+                    <tr>
+                      <td>
+                        <div class="move-name-cell">
+                          <img class="move-icon" [src]="move.iconPath" [alt]="move.name + ' icon'" width="28" height="28" />
+                          <span>{{ move.name }}</span>
+                        </div>
+                      </td>
+                      <td>{{ move.type }}</td>
+                      <td>{{ move.waitTime }}</td>
+                      <td>{{ move.power }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="empty-copy">No move data is available for this Pokemon.</p>
+          }
+        </section>
+
+        <section class="profile-section">
+          <div class="section-header">
+            <h3>Recipes</h3>
+            <span>{{ pokemonProfile.recipes.length }} matched</span>
+          </div>
+
+          @if (pokemonProfile.recipes.length) {
+            <ul class="recipe-list">
+              @for (recipe of pokemonProfile.recipes; track recipe.id) {
+                <li class="recipe-item">
+                  <span class="dish-icon" [ngStyle]="dishSpriteStyle(recipe.dishSlug, 84)" [attr.aria-label]="recipe.recipeName"></span>
+                  <div class="recipe-copy">
+                    <strong>{{ recipe.recipeName }}</strong>
+                    <span>{{ recipe.quality }} · {{ recipe.typeName }}</span>
+                  </div>
+                  <span class="attract-rate">{{ attractRateFor(recipe.id, pokemonProfile.entry.name) }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-copy">This Pokemon does not appear in the current recipe dataset.</p>
+          }
+        </section>
+      </div>
+    </section>
+  </div>
+}

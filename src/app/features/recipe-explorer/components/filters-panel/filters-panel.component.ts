@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FiltersPanelViewModel, RecipeAssetBindings } from '../../models/recipe-view.model';
+import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings } from '../../models/recipe-view.model';
 
 type RecipeFilterModalKind = 'quality' | 'type' | 'pokemon' | 'inventory';
 
@@ -17,6 +17,7 @@ export class FiltersPanelComponent {
   readonly assets = input.required<
     Pick<RecipeAssetBindings, 'ingredientIconPath' | 'typeIconPath' | 'getPokemonSpriteStyle'>
   >();
+  readonly pokemonProfile = input.required<PokemonProfileTrigger>();
 
   readonly searchTermChange = output<string>();
   readonly selectedQualitiesChange = output<string[]>();

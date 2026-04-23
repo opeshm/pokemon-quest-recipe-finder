@@ -338,6 +338,12 @@
   border-radius: 1.35rem;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.pokedex-card:focus-visible {
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.35);
+  outline-offset: 3px;
 }
 
 .card-header,

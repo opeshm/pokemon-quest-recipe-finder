@@ -44,11 +44,56 @@ describe('RecipeDetailPanelComponent', () => {
       ingredientIconPath: (code: string) => `assets/ingredients/${code}.png`,
       ingredientLabel: () => 'Honey'
     });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile: vi.fn()
+    });
 
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h2')?.textContent).toContain('Honey Nectar a la Cube');
     expect(component.getRateFill(40)).toBe(0.5);
+  });
+
+  it('opens the Pokemon profile from attracted Pokemon rows', () => {
+    const fixture = TestBed.createComponent(RecipeDetailPanelComponent);
+    const openPokemonProfile = vi.fn();
+
+    fixture.componentRef.setInput('vm', {
+      maxAttractRate: 80,
+      selectedRecipeView: {
+        recipe: {
+          id: 'recipe-1',
+          recipeName: 'Honey Nectar a la Cube',
+          dishName: 'Honey Nectar a la Cube',
+          dishSlug: 'honey-nectar-a-la-cube',
+          typeName: 'Yellow',
+          quality: 'Good',
+          qualityTier: 2,
+          pokemonResults: [{ name: 'Eevee', attractRate: 80 }],
+          source: { page: 'https://example.com', extractionType: 'test' },
+          variants: []
+        },
+        visibleVariants: [],
+        visibleVariantCount: 0,
+        hiddenVariantCount: 0
+      }
+    });
+    fixture.componentRef.setInput('assets', {
+      getDishSpriteStyle: () => ({ width: '170px', height: '108px' }),
+      getPokemonSpriteStyle: () => ({ width: '36px', height: '36px' }),
+      ingredientIconPath: (code: string) => `assets/ingredients/${code}.png`,
+      ingredientLabel: () => 'Honey'
+    });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile
+    });
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    (compiled.querySelector('.pokemon-icon') as HTMLElement).click();
+
+    expect(openPokemonProfile).toHaveBeenCalledWith('Eevee');
   });
 });

@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 import { LoadState } from '../../recipe-explorer/models/load-state.model';
 import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
 import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { PokedexPageComponent } from './pokedex-page.component';
 
 const mockDataset = {
@@ -138,6 +139,21 @@ describe('PokedexPageComponent', () => {
 
     expect(component.hasSprite('Ivysaur')).toBe(false);
     expect(component.pokemonAvatarPath(2)).toBe('assets/pokemon/002.png');
+  });
+
+  it('opens the Pokemon profile modal when a Pokedex card is clicked', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    (compiled.querySelector('.pokedex-card') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const pokemonProfileService = TestBed.inject(PokemonProfileService);
+
+    expect(pokemonProfileService.selectedPokemonName()).toBe('Bulbasaur');
+    expect(pokemonProfileService.selectedProfile()?.entry.name).toBe('Bulbasaur');
   });
 });
 

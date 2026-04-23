@@ -23,6 +23,9 @@ describe('FiltersPanelComponent', () => {
       typeIconPath: (typeName: string) => `assets/types/${typeName}.png`,
       getPokemonSpriteStyle: () => ({ width: '24px', height: '24px' })
     });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile: vi.fn()
+    });
 
     const selectedQualitiesChangeSpy = vi.fn();
     component.selectedQualitiesChange.subscribe(selectedQualitiesChangeSpy);
@@ -65,6 +68,9 @@ describe('FiltersPanelComponent', () => {
       ingredientIconPath: (code: string) => `assets/ingredients/${code}.png`,
       typeIconPath: (typeName: string) => `assets/types/${typeName}.png`,
       getPokemonSpriteStyle: () => ({ width: '24px', height: '24px' })
+    });
+    fixture.componentRef.setInput('pokemonProfile', {
+      openPokemonProfile: vi.fn()
     });
 
     const selectedPokemonChangeSpy = vi.fn();

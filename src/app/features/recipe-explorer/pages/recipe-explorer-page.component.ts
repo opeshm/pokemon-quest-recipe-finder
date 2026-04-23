@@ -7,8 +7,9 @@ import { HeroSectionComponent } from '../components/hero-section/hero-section.co
 import { RecipeDetailPanelComponent } from '../components/recipe-detail-panel/recipe-detail-panel.component';
 import { RecipeListPanelComponent } from '../components/recipe-list-panel/recipe-list-panel.component';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
-import { FiltersPanelViewModel, RecipeAssetBindings, RecipeDetailPanelViewModel, RecipeListPanelViewModel } from '../models/recipe-view.model';
+import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings, RecipeDetailPanelViewModel, RecipeListPanelViewModel } from '../models/recipe-view.model';
 import { RecipeAssetService } from '../services/recipe-asset.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 
 @Component({
   selector: 'app-recipe-explorer-page',
@@ -30,6 +31,7 @@ export class RecipeExplorerPageComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly recipeAssetService = inject(RecipeAssetService);
+  private readonly pokemonProfileService = inject(PokemonProfileService);
 
   private isHydratingFromUrl = false;
 
@@ -61,6 +63,10 @@ export class RecipeExplorerPageComponent {
     ingredientIconPath: (code) => this.ingredientIconPathFn(code),
     ingredientLabel: (code) => this.ingredientLabelFn(code),
     typeIconPath: (typeName) => this.typeIconPathFn(typeName)
+  };
+
+  readonly pokemonProfileBindings: PokemonProfileTrigger = {
+    openPokemonProfile: (name) => this.pokemonProfileService.open(name)
   };
 
   readonly filtersVm = () =>

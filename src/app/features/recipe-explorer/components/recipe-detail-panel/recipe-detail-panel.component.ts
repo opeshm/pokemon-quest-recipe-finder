@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { IngredientConfiguration, RecipeAssetBindings, RecipeDetailPanelViewModel } from '../../models/recipe-view.model';
+import { IngredientConfiguration, PokemonProfileTrigger, RecipeAssetBindings, RecipeDetailPanelViewModel } from '../../models/recipe-view.model';
 
 @Component({
   selector: 'app-recipe-detail-panel',
@@ -12,6 +12,7 @@ import { IngredientConfiguration, RecipeAssetBindings, RecipeDetailPanelViewMode
 export class RecipeDetailPanelComponent {
   readonly vm = input.required<RecipeDetailPanelViewModel>();
   readonly assets = input.required<Pick<RecipeAssetBindings, 'getDishSpriteStyle' | 'getPokemonSpriteStyle' | 'ingredientIconPath' | 'ingredientLabel'>>();
+  readonly pokemonProfile = input.required<PokemonProfileTrigger>();
 
   variantSummary(variant: IngredientConfiguration): string {
     return variant.ingredients.map((item) => `${item.quantity}x ${item.name}`).join(', ');

@@ -5,6 +5,7 @@ import { LoadState } from '../../recipe-explorer/models/load-state.model';
 import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
 import { RecipeAssetService } from '../../recipe-explorer/services/recipe-asset.service';
 import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { POKEDEX_ENTRIES } from '../data/pokedex.data';
 import { PokedexEntry, PokemonStyle } from '../models/pokedex.model';
 
@@ -29,6 +30,7 @@ const SORT_OPTIONS: Array<{ value: PokedexSortOption; label: string }> = [
 export class PokedexPageComponent {
   private readonly recipeDataService = inject(RecipeDataService);
   private readonly recipeAssetService = inject(RecipeAssetService);
+  private readonly pokemonProfileService = inject(PokemonProfileService);
 
   private readonly _selectedStyles = signal<PokemonStyle[]>([]);
   private readonly _selectedTypes = signal<string[]>([]);
@@ -225,6 +227,10 @@ export class PokedexPageComponent {
 
   trackByNumber(_: number, entry: PokedexEntry): number {
     return entry.number;
+  }
+
+  openPokemonProfile(name: string): void {
+    this.pokemonProfileService.open(name);
   }
 
   private compareEntries(

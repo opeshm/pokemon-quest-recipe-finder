@@ -48,7 +48,7 @@
           <li>
             <div class="pokemon-rate-row">
               <div class="pokemon-label">
-                <span class="pokemon-icon" [ngStyle]="assets().getPokemonSpriteStyle(pokemon.name)" [attr.aria-label]="pokemon.name"></span>
+                <span class="pokemon-icon" [ngStyle]="assets().getPokemonSpriteStyle(pokemon.name)" [attr.aria-label]="pokemon.name" tabindex="0" (click)="pokemonProfile().openPokemonProfile(pokemon.name)" (keydown.enter)="pokemonProfile().openPokemonProfile(pokemon.name)" (keydown.space)="pokemonProfile().openPokemonProfile(pokemon.name); $event.preventDefault()"></span>
                 <span>{{ pokemon.name }}</span>
               </div>
               <strong>{{ pokemon.attractRate | number: '1.0-2' }}%</strong>

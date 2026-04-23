@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 import { LoadState } from '../../recipe-explorer/models/load-state.model';
 import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
 import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { MovesPageComponent } from './moves-page.component';
 
 const mockDataset = {
@@ -252,6 +253,21 @@ describe('MovesPageComponent', () => {
     expect(firstStoneChip.title).toBe('Sharing Stone');
     expect(firstStoneChip.textContent?.trim()).toBe('');
     expect(firstStoneChip.querySelector('.stone-icon')).toBeTruthy();
+  });
+
+  it('opens the Pokemon profile modal from a move compatibility chip', async () => {
+    const fixture = TestBed.createComponent(MovesPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    (compiled.querySelector('.pokemon-avatar-chip') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const pokemonProfileService = TestBed.inject(PokemonProfileService);
+
+    expect(pokemonProfileService.selectedPokemonName()).toBe('Grimer');
+    expect(pokemonProfileService.selectedProfile()?.entry.name).toBe('Grimer');
   });
 });
 

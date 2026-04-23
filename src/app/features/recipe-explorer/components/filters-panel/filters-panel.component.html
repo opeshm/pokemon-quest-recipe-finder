@@ -68,7 +68,7 @@
 
       <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedPokemon.length">
         @for (pokemon of vm().selectedPokemon; track pokemon) {
-          <span class="selected-icon-chip selected-icon-chip--pokemon" [attr.title]="pokemon" [attr.aria-label]="pokemon">
+          <span class="selected-icon-chip selected-icon-chip--pokemon" [attr.title]="pokemon" [attr.aria-label]="pokemon" tabindex="0" (click)="pokemonProfile().openPokemonProfile(pokemon)" (keydown.enter)="pokemonProfile().openPokemonProfile(pokemon)" (keydown.space)="pokemonProfile().openPokemonProfile(pokemon); $event.preventDefault()">
             <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(pokemon, 32)"></span>
           </span>
         } @empty {
