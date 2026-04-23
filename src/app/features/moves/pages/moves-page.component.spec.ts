@@ -115,6 +115,24 @@ describe('MovesPageComponent', () => {
     expect(visibleMoves).toEqual(['Thunderbolt']);
   });
 
+  it('sorts the filtered move list by the selected ordering option', async () => {
+    const fixture = TestBed.createComponent(MovesPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    openSelector(compiled, fixture, 'Change Sort');
+    toggleModalOption(compiled, fixture, 'Power');
+    saveModal(compiled, fixture);
+
+    const firstMove = compiled.querySelector('.move-card h2')?.textContent?.trim();
+    const sortChip = compiled.querySelector('.selector-box--sort .selected-text-chip')?.textContent?.trim();
+
+    expect(firstMove).toBe('Explosion');
+    expect(sortChip).toBe('Power');
+  });
+
   it('clears all active filters', async () => {
     const fixture = TestBed.createComponent(MovesPageComponent);
     await fixture.whenStable();
@@ -132,12 +150,19 @@ describe('MovesPageComponent', () => {
     toggleModalOption(compiled, fixture, 'Psychic');
     saveModal(compiled, fixture);
 
+    openSelector(compiled, fixture, 'Change Sort');
+    toggleModalOption(compiled, fixture, 'Wait');
+    saveModal(compiled, fixture);
+
     clearButton.click();
     fixture.detectChanges();
 
     expect(nameInput.value).toBe('');
     expect(compiled.querySelectorAll('.move-card')).toHaveLength(169);
     expect(compiled.querySelectorAll('.selected-icon-chip')).toHaveLength(0);
+    expect(compiled.querySelector('.selector-box--sort .selected-text-chip')?.textContent?.trim()).toBe(
+      'Original Order'
+    );
   });
 
   it('shows saved selections as icons inside the selector boxes', async () => {

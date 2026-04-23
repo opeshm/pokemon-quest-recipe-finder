@@ -117,6 +117,21 @@
           }
         </div>
       </section>
+
+      <section class="selector-box selector-box--sort" aria-label="Sorting options">
+        <div class="selector-box-header">
+          <div>
+            <h2>Sort</h2>
+            <p>1 selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('sort')">Change Sort</button>
+        </div>
+
+        <div class="selector-box-content">
+          <span class="selected-text-chip" [attr.title]="sortLabel(sortBy())">{{ sortLabel(sortBy()) }}</span>
+        </div>
+      </section>
     </div>
 
     <button
@@ -184,7 +199,7 @@
                 }
               }
 
-              <span>{{ option }}</span>
+              <span>{{ modalOptionLabel(option) }}</span>
             </button>
           }
         </div>

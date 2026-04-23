@@ -224,6 +224,17 @@
   box-shadow: inset 0 0 0 1px rgba(var(--text-primary-rgb), 0.06);
 }
 
+.selected-text-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.95rem;
+  background: rgba(var(--brand-primary-rgb), 0.08);
+  box-shadow: inset 0 0 0 1px rgba(var(--text-primary-rgb), 0.06);
+  font-weight: 700;
+}
+
 .selected-icon-chip img {
   display: block;
   object-fit: contain;
