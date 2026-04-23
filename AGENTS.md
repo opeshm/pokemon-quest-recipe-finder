@@ -30,3 +30,7 @@
 - TypeScript and Angular template checks are strict (`strict`, `noImplicitOverride`, `noImplicitReturns`, `strictTemplates`, etc.). Prefer fixing types cleanly instead of weakening config.
 - Components default to SCSS (`angular.json`) and repo formatting is driven by Prettier: `singleQuote: true`, `printWidth: 100`, Angular HTML parser for `*.html`.
 - Production build budgets are enforced: initial bundle warning/error at `500kB`/`1MB`, component style warning/error at `11kB`/`12kB`. Large style additions can fail CI/builds.
+
+## OpenCode
+- Project-level OpenCode config lives in `opencode.json` and loads extra instruction files from `docs/ai/`. Keep `AGENTS.md` short; put reusable detail there instead of bloating this file.
+- Use `.opencode/agents/repo-docs.md` when the task is specifically about maintaining repo docs or agent reference files.
