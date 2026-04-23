@@ -72,25 +72,42 @@ describe('PokedexPageComponent', () => {
     expect(compiled.querySelectorAll('.pokedex-card')).toHaveLength(151);
   });
 
-  it('filters the roster by style and type', async () => {
+  it('filters the roster by style and type through selector modals', async () => {
     const fixture = TestBed.createComponent(PokedexPageComponent);
     await fixture.whenStable();
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const chipButtons = Array.from(compiled.querySelectorAll('.chip')) as HTMLButtonElement[];
 
-    chipButtons.find((button) => button.textContent?.includes('Range'))?.click();
-    fixture.detectChanges();
+    openSelector(compiled, fixture, 'Add Style');
+    toggleModalOption(compiled, fixture, 'Range');
+    saveModal(compiled, fixture);
 
-    chipButtons.find((button) => button.textContent?.includes('Electric'))?.click();
-    fixture.detectChanges();
+    openSelector(compiled, fixture, 'Add Type');
+    toggleModalOption(compiled, fixture, 'Electric');
+    saveModal(compiled, fixture);
 
     const visiblePokemon = Array.from(compiled.querySelectorAll('.pokedex-card h2')).map((heading) =>
       heading.textContent?.trim()
     );
 
     expect(visiblePokemon).toEqual(['Magnemite', 'Magneton', 'Zapdos']);
+  });
+
+  it('sorts the roster by selected ordering option', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    openSelector(compiled, fixture, 'Change Sort');
+    toggleModalOption(compiled, fixture, 'ATK');
+    saveModal(compiled, fixture);
+
+    const firstPokemon = compiled.querySelector('.pokedex-card h2')?.textContent?.trim();
+
+    expect(firstPokemon).toBe('Mewtwo');
   });
 
   it('uses downloaded avatar assets when the sprite sheet has no entry', async () => {
@@ -104,3 +121,36 @@ describe('PokedexPageComponent', () => {
     expect(component.pokemonAvatarPath(2)).toBe('assets/pokemon/002.png');
   });
 });
+
+function openSelector(
+  compiled: HTMLElement,
+  fixture: { detectChanges(): void },
+  buttonText: string
+): void {
+  findButton(compiled, '.selector-trigger', buttonText).click();
+  fixture.detectChanges();
+}
+
+function toggleModalOption(
+  compiled: HTMLElement,
+  fixture: { detectChanges(): void },
+  optionText: string
+): void {
+  findButton(compiled, '.modal-option', optionText).click();
+  fixture.detectChanges();
+}
+
+function saveModal(compiled: HTMLElement, fixture: { detectChanges(): void }): void {
+  findButton(compiled, '.selector-modal-button--primary', 'Save selection').click();
+  fixture.detectChanges();
+}
+
+function findButton(root: HTMLElement, selector: string, text: string): HTMLButtonElement {
+  const button = Array.from(root.querySelectorAll(selector)).find((element) =>
+    element.textContent?.replace(/\s+/g, ' ').trim().includes(text)
+  );
+
+  expect(button).toBeTruthy();
+
+  return button as HTMLButtonElement;
+}

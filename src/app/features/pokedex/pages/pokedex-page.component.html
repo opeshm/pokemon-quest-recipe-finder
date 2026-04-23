@@ -26,51 +26,111 @@
   }
 
   <section class="filters-panel" aria-label="Pokedex filters">
-    <div class="filter-group">
-      <div class="filter-heading">
-        <h2>Style</h2>
-        <p>Filter by the Pokemon's automatic combat style.</p>
-      </div>
+    <div class="selector-grid">
+      <section class="selector-box selector-box--style" aria-label="Style filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Style</h2>
+            <p>{{ selectedStyles().length }} selected</p>
+          </div>
 
-      <div class="chip-row">
-        @for (style of styleOptions; track style) {
-          <button
-            type="button"
-            class="chip"
-            [class.active]="selectedStyle() === style"
-            [attr.aria-pressed]="selectedStyle() === style"
-            (click)="toggleStyle(style)"
-          >
-            {{ style }}
-          </button>
-        }
-      </div>
+          <button type="button" class="selector-trigger" (click)="openSelector('style')">Add Style</button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedStyles().length">
+          @for (style of selectedStyles(); track style) {
+            <span class="selected-text-chip" [attr.title]="style">{{ style }}</span>
+          } @empty {
+            <p class="selector-empty-copy">Limit the roster to one or more combat styles.</p>
+          }
+        </div>
+      </section>
+
+      <section class="selector-box selector-box--type" aria-label="Type filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Type</h2>
+            <p>{{ selectedTypes().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedTypes().length">
+          @for (type of selectedTypes(); track type) {
+            <span class="selected-icon-chip selected-icon-chip--type" [attr.title]="type" [attr.aria-label]="type">
+              <img [src]="typeIconPath(type)" [alt]="type" width="28" height="28" />
+            </span>
+          } @empty {
+            <p class="selector-empty-copy">Filter Pokemon by one or more elemental types.</p>
+          }
+        </div>
+      </section>
+
+      <section class="selector-box selector-box--sort" aria-label="Sorting options">
+        <div class="selector-box-header">
+          <div>
+            <h2>Sort</h2>
+            <p>1 selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('sort')">Change Sort</button>
+        </div>
+
+        <div class="selector-box-content">
+          <span class="selected-text-chip" [attr.title]="sortLabel(sortBy())">{{ sortLabel(sortBy()) }}</span>
+        </div>
+      </section>
     </div>
 
-    <div class="filter-group">
-      <div class="filter-heading">
-        <h2>Type</h2>
-        <p>Show Pokemon that match at least one selected type.</p>
-      </div>
-
-      <div class="chip-row types">
-        @for (type of typeOptions(); track type) {
-          <button
-            type="button"
-            class="chip type-chip"
-            [class.active]="selectedType() === type"
-            [attr.aria-pressed]="selectedType() === type"
-            (click)="toggleType(type)"
-          >
-            <img [src]="typeIconPath(type)" alt="" width="18" height="18" aria-hidden="true" />
-            {{ type }}
-          </button>
-        }
-      </div>
-    </div>
-
-    <button type="button" class="clear-button" (click)="clearFilters()">Clear filters</button>
+    <button type="button" class="clear-button" [disabled]="!hasActiveFilters()" (click)="clearFilters()">
+      Clear filters
+    </button>
   </section>
+
+  @if (modalKind(); as activeModal) {
+    <div class="selector-modal-backdrop">
+      <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle()">
+        <div class="selector-modal-header">
+          <div>
+            <p class="selector-modal-eyebrow">Pokedex filter</p>
+            <h2>{{ modalTitle() }}</h2>
+          </div>
+
+          <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="closeSelector()">
+            Close
+          </button>
+        </div>
+
+        <div class="selector-modal-options">
+          @for (option of modalOptions(); track option) {
+            <button
+              type="button"
+              class="modal-option"
+              [class.modal-option--selected]="isModalOptionSelected(option)"
+              [attr.aria-pressed]="isModalOptionSelected(option)"
+              (click)="toggleModalOption(option)"
+            >
+              @if (activeModal === 'type') {
+                <img [src]="typeIconPath(option)" [alt]="" width="28" height="28" aria-hidden="true" />
+              }
+
+              <span>{{ modalOptionLabel(option) }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="selector-modal-actions">
+          <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="closeSelector()">
+            Cancel
+          </button>
+          <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="saveSelector()">
+            Save selection
+          </button>
+        </div>
+      </section>
+    </div>
+  }
 
   <section class="results-grid" aria-label="Pokemon list">
     @for (entry of filteredEntries(); track trackByNumber($index, entry)) {
