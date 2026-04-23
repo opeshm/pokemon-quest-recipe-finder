@@ -61,7 +61,7 @@ describe('MovesPageComponent', () => {
     }).compileComponents();
   });
 
-  it('renders the full Pokemon Quest move list and preserves duplicate Transform rows', async () => {
+  it('renders the full Pokemon Quest move list with unique move rows', async () => {
     const fixture = TestBed.createComponent(MovesPageComponent);
     await fixture.whenStable();
     fixture.detectChanges();
@@ -72,8 +72,8 @@ describe('MovesPageComponent', () => {
     );
 
     expect(compiled.querySelector('h1')?.textContent).toContain('All Pokemon Quest moves');
-    expect(compiled.querySelectorAll('.move-card')).toHaveLength(169);
-    expect(moveTitles.filter((title) => title === 'Transform')).toHaveLength(3);
+    expect(compiled.querySelectorAll('.move-card')).toHaveLength(167);
+    expect(moveTitles.filter((title) => title === 'Transform')).toHaveLength(1);
     expect((compiled.querySelector('.move-icon') as HTMLImageElement)?.src).toContain(
       'assets/moves/acidarmor.png'
     );
@@ -159,7 +159,7 @@ describe('MovesPageComponent', () => {
     fixture.detectChanges();
 
     expect(nameInput.value).toBe('');
-    expect(compiled.querySelectorAll('.move-card')).toHaveLength(169);
+    expect(compiled.querySelectorAll('.move-card')).toHaveLength(167);
     expect(compiled.querySelectorAll('.selected-icon-chip')).toHaveLength(0);
     expect(compiled.querySelector('.selector-box--sort .selected-text-chip')?.textContent?.trim()).toBe(
       'Original Order'

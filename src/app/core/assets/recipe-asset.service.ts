@@ -3,6 +3,7 @@ import { DishSpriteEntry, DishSpriteMetadata, PokemonSpriteEntry, SpriteMetadata
 
 const TYPE_ICON_BY_NAME: Record<string, string> = {
   Misc: 'normal',
+  Mulligan: 'normal',
   Red: 'fire',
   Blue: 'water',
   Yellow: 'electric',

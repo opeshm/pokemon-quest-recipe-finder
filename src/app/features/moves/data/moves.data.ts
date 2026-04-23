@@ -3308,34 +3308,6 @@ export const POKEMON_QUEST_MOVES: readonly PokemonQuestMove[] = [
     ]
   },
   {
-    "name": "Transform",
-    "type": "Normal",
-    "waitTime": 0,
-    "power": 0,
-    "description": "When Ditto transforms into another Pokémon, this changes into a move that Pokémon can learn.",
-    "stones": [
-      "Wait Less Stone",
-      "Whack-Whack Stone"
-    ],
-    "pokemon": [
-      "Ditto"
-    ]
-  },
-  {
-    "name": "Transform",
-    "type": "Normal",
-    "waitTime": 0,
-    "power": 0,
-    "description": "When Ditto transforms into another Pokémon, this changes into a move that Pokémon can learn.",
-    "stones": [
-      "Wait Less Stone",
-      "Whack-Whack Stone"
-    ],
-    "pokemon": [
-      "Ditto"
-    ]
-  },
-  {
     "name": "Tri Attack",
     "type": "Normal",
     "waitTime": 5,
