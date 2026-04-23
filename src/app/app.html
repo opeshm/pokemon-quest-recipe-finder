@@ -1,14 +1,21 @@
 <header class="app-header">
-  <nav class="primary-nav" aria-label="Primary navigation">
-    <a
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Recipes</a
-    >
-    <a routerLink="/moves" routerLinkActive="active">Moves</a>
-    <a routerLink="/pokedex" routerLinkActive="active">Pokedex</a>
-  </nav>
+  <div class="app-header-inner">
+    <div class="brand-mark">
+      <span class="brand-kicker">Energia Creativa</span>
+      <strong>PokeQuest Studio</strong>
+    </div>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Recipes</a
+      >
+      <a routerLink="/moves" routerLinkActive="active">Moves</a>
+      <a routerLink="/pokedex" routerLinkActive="active">Pokedex</a>
+    </nav>
+  </div>
 </header>
 
 <router-outlet></router-outlet>

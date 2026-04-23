@@ -2,9 +2,9 @@
   min-height: 100dvh;
   padding: clamp(1rem, 1.5vw, 2rem);
   background:
-    radial-gradient(circle at 16% 12%, rgba(252, 244, 208, 0.92) 0%, rgba(252, 244, 208, 0) 30%),
-    radial-gradient(circle at 84% 12%, rgba(137, 221, 255, 0.24) 0%, rgba(137, 221, 255, 0) 26%),
-    linear-gradient(160deg, #efe4c0 0%, #ddc27f 45%, #be8d50 100%);
+    radial-gradient(circle at 14% 10%, var(--halo-primary) 0%, rgba(var(--brand-primary-rgb), 0) 28%),
+    radial-gradient(circle at 86% 12%, var(--halo-accent) 0%, rgba(var(--brand-accent-rgb), 0) 24%),
+    linear-gradient(180deg, #ffffff 0%, #fcf8ff 100%);
   color: var(--ink-900);
 }
 
@@ -20,10 +20,10 @@
   width: min(78rem, 100%);
   margin: 1rem auto 0;
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(92, 75, 56, 0.12);
+  border: 1px solid var(--border-subtle);
   border-radius: 1.5rem;
-  background: rgba(255, 248, 232, 0.9);
-  box-shadow: 0 1.25rem 2.5rem rgba(92, 75, 56, 0.12);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-md);
 }
 
 .loading {
@@ -31,18 +31,18 @@
 }
 
 .error {
-  border-color: rgba(190, 74, 47, 0.32);
-  background: rgba(255, 230, 220, 0.9);
-  color: #6c2618;
+  border-color: rgba(var(--brand-accent-rgb), 0.28);
+  background: rgba(var(--brand-accent-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .retry-button {
   margin-top: 0.75rem;
   min-height: 3rem;
-  border: 1px solid rgba(92, 75, 56, 0.16);
+  border: 1px solid rgba(var(--brand-primary-rgb), 0.18);
   border-radius: 1rem;
   padding: 0.8rem 1.1rem;
-  background: var(--brick-500);
+  background: var(--brand-primary);
   color: #fffaf2;
   font: inherit;
   font-weight: 700;
@@ -50,7 +50,7 @@
 }
 
 .retry-button:focus-visible {
-  outline: 2px solid rgba(92, 75, 56, 0.28);
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.3);
   outline-offset: 2px;
 }
 

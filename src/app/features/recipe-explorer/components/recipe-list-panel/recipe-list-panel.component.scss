@@ -4,17 +4,17 @@
 
 .recipe-list-panel {
   min-height: 31rem;
-  border: 1px solid rgba(92, 75, 56, 0.12);
+  border: 1px solid var(--border-subtle);
   border-radius: 1.35rem;
-  background: rgba(255, 249, 237, 0.94);
-  box-shadow: 0 1rem 2rem rgba(92, 75, 56, 0.1);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
 }
 
 .recipe-list-panel header {
   padding: 1rem;
-  border-bottom: 1px solid rgba(92, 75, 56, 0.12);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .recipe-list-panel h2 {
@@ -41,25 +41,25 @@
   width: 100%;
   text-align: left;
   border-radius: 1rem;
-  border: 1px solid rgba(92, 75, 56, 0.12);
-  background: #fffdf7;
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
   padding: 0.66rem 0.72rem;
   cursor: pointer;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .recipe-list button:hover {
-  border-color: rgba(190, 74, 47, 0.35);
+  border-color: rgba(var(--brand-primary-rgb), 0.26);
 }
 
 .recipe-list button:focus-visible {
-  outline: 2px solid rgba(92, 75, 56, 0.28);
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.3);
   outline-offset: 2px;
 }
 
 .recipe-list button.active {
-  border-color: rgba(228, 84, 53, 0.5);
-  background: rgba(228, 84, 53, 0.08);
+  border-color: rgba(var(--brand-primary-rgb), 0.4);
+  background: rgba(var(--brand-primary-rgb), 0.08);
   transform: translateY(-1px);
 }
 
@@ -96,7 +96,7 @@
   margin-top: 0.22rem;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  background: rgba(228, 84, 53, 0.12);
+  background: rgba(var(--brand-accent-rgb), 0.14);
   color: var(--ink-900);
   font-weight: 700;
   font-size: 0.75rem;
@@ -129,12 +129,12 @@
   width: 24px;
   height: 24px;
   border-radius: 0.44rem;
-  border: 1px solid rgba(92, 75, 56, 0.16);
-  background: rgba(92, 75, 56, 0.08);
+  border: 1px solid rgba(var(--brand-accent-rgb), 0.18);
+  background: rgba(var(--brand-accent-rgb), 0.12);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 0 0 1px rgba(92, 75, 56, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(var(--text-primary-rgb), 0.04);
 }
 
 .ingredient-token img {
@@ -150,8 +150,8 @@
   padding: 0 0.42rem;
   height: 24px;
   border-radius: 999px;
-  border: 1px dashed rgba(92, 75, 56, 0.28);
-  background: rgba(92, 75, 56, 0.08);
+  border: 1px dashed rgba(var(--brand-primary-rgb), 0.28);
+  background: rgba(var(--brand-primary-rgb), 0.08);
   color: var(--ink-700);
   font-size: 0.74rem;
   font-weight: 700;
@@ -161,8 +161,8 @@
   margin: 1rem;
   padding: 1rem 1.25rem;
   border-radius: 1rem;
-  border: 1px solid rgba(92, 75, 56, 0.12);
-  background: rgba(255, 248, 232, 0.9);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.94);
   color: var(--ink-700);
 }
 
