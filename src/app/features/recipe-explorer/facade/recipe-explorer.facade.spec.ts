@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
-import { LoadState } from '../models/load-state.model';
-import { RecipeDataset } from '../models/recipe.model';
-import { RecipeDataService } from '../services/recipe-data.service';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { LoadState } from '../../../core/models/load-state.model';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { RecipeExplorerFacade } from './recipe-explorer.facade';
 
 const mockDataset = {

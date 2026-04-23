@@ -5,9 +5,9 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { App } from './app';
 import { routes } from './app.routes';
-import { LoadState } from './features/recipe-explorer/models/load-state.model';
-import { RecipeDataset } from './features/recipe-explorer/models/recipe.model';
-import { RecipeDataService } from './features/recipe-explorer/services/recipe-data.service';
+import { RecipeDataService } from './core/data-access/recipe-data.service';
+import { LoadState } from './core/models/load-state.model';
+import { RecipeDataset } from './core/models/recipe-dataset.model';
 
 const mockDataset = {
   metadata: {

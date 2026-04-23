@@ -1,4 +1,4 @@
-import { Recipe } from '../models/recipe.model';
+import { Recipe } from '../../../core/models/recipe-dataset.model';
 import { GroupedRecipe, IngredientConfiguration } from '../models/recipe-view.model';
 
 function toIngredientConfiguration(recipe: Recipe): IngredientConfiguration {

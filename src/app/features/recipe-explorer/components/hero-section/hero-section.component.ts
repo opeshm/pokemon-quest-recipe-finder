@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { RecipeDataset } from '../../models/recipe.model';
+import { RecipeDataset } from '../../../../core/models/recipe-dataset.model';
 
 @Component({
   selector: 'app-hero-section',

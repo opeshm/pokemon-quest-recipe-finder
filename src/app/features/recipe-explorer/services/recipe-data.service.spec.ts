@@ -1,7 +1,7 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { RecipeDataService } from './recipe-data.service';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
 
 describe('RecipeDataService', () => {
   beforeEach(() => {

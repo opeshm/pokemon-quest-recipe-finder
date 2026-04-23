@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
-import { LoadState } from '../models/load-state.model';
-import { RecipeDataset } from '../models/recipe.model';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { LoadState } from '../../../core/models/load-state.model';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
-import { RecipeDataService } from '../services/recipe-data.service';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { RecipeExplorerPageComponent } from './recipe-explorer-page.component';
 

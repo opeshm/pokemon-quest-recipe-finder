@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
-import { RecipeAssetService } from '../../recipe-explorer/services/recipe-asset.service';
-import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { POKEMON_QUEST_MOVES } from '../data/moves.data';
 import { POKEDEX_ENTRIES } from '../../pokedex/data/pokedex.data';

@@ -1,4 +1,4 @@
-import { IngredientOption, Recipe } from './recipe.model';
+import { IngredientOption, Recipe } from '../../../core/models/recipe-dataset.model';
 
 export type IngredientConfiguration = {
   id: string;

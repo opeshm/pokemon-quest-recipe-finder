@@ -1,5 +1,5 @@
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
-import { Recipe } from '../../features/recipe-explorer/models/recipe.model';
+import { Recipe } from '../../core/models/recipe-dataset.model';
 
 export type EvolutionChainStep = {
   pokemon: PokedexEntry;

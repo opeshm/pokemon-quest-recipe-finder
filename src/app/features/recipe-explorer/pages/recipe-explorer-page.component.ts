@@ -8,7 +8,7 @@ import { RecipeDetailPanelComponent } from '../components/recipe-detail-panel/re
 import { RecipeListPanelComponent } from '../components/recipe-list-panel/recipe-list-panel.component';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
 import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings, RecipeDetailPanelViewModel, RecipeListPanelViewModel } from '../models/recipe-view.model';
-import { RecipeAssetService } from '../services/recipe-asset.service';
+import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 
 @Component({

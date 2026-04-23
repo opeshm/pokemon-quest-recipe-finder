@@ -1,4 +1,4 @@
-import { IngredientOption } from '../models/recipe.model';
+import { IngredientOption } from '../../../core/models/recipe-dataset.model';
 import { GroupedRecipe, IngredientConfiguration } from '../models/recipe-view.model';
 
 export function buildIngredientNameByCode(ingredients: IngredientOption[]): Map<string, string> {

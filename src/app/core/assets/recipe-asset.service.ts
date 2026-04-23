@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DishSpriteEntry, DishSpriteMetadata, PokemonSpriteEntry, SpriteMetadata } from '../models/recipe.model';
+import { DishSpriteEntry, DishSpriteMetadata, PokemonSpriteEntry, SpriteMetadata } from '../models/recipe-dataset.model';
 
 const TYPE_ICON_BY_NAME: Record<string, string> = {
   Misc: 'normal',

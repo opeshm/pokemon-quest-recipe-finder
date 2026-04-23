@@ -2,7 +2,7 @@ import { Injectable, computed, signal } from '@angular/core';
 import { POKEDEX_ENTRIES } from '../../features/pokedex/data/pokedex.data';
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
 import { POKEMON_QUEST_MOVES } from '../../features/moves/data/moves.data';
-import { Recipe } from '../../features/recipe-explorer/models/recipe.model';
+import { Recipe } from '../../core/models/recipe-dataset.model';
 import { moveIconPath } from '../../features/moves/utils/move-icon.util';
 import { PokemonProfileViewModel } from './pokemon-profile.model';
 

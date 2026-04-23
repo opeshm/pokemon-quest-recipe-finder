@@ -1,10 +1,10 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { LoadState } from '../models/load-state.model';
-import { DishSpriteEntry, PokemonSpriteEntry, RecipeDataset } from '../models/recipe.model';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { LoadState } from '../../../core/models/load-state.model';
+import { DishSpriteEntry, PokemonSpriteEntry, RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { RecipeExplorerFilters } from '../models/recipe-filters.model';
 import { GroupedRecipe } from '../models/recipe-view.model';
-import { RecipeDataService } from '../services/recipe-data.service';
 import {
   buildVisibleVariantsByRecipeId,
   filterGroupedRecipes,

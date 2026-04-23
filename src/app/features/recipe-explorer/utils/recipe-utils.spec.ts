@@ -7,7 +7,7 @@ import {
 import { groupRecipes, getPokemonOptions, getTypeOptions } from './recipe-grouping.util';
 import { buildIngredientNameByCode, getIngredientSummary, getVariantSummary, getVisibleVariants } from './recipe-summary.util';
 import { buildRecipeCards, buildSelectedRecipeView } from './recipe-view-mapper.util';
-import { RecipeDataset } from '../models/recipe.model';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 
 const mockDataset: RecipeDataset = {
   metadata: {

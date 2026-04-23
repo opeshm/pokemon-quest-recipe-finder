@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { LoadState } from '../../recipe-explorer/models/load-state.model';
-import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
-import { RecipeAssetService } from '../../recipe-explorer/services/recipe-asset.service';
-import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { LoadState } from '../../../core/models/load-state.model';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { POKEDEX_ENTRIES } from '../data/pokedex.data';
 import { PokedexEntry, PokemonStyle } from '../models/pokedex.model';

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { LoadState } from '../../recipe-explorer/models/load-state.model';
-import { RecipeDataset } from '../../recipe-explorer/models/recipe.model';
-import { RecipeDataService } from '../../recipe-explorer/services/recipe-data.service';
+import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { LoadState } from '../../../core/models/load-state.model';
+import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { PokedexPageComponent } from './pokedex-page.component';
 
