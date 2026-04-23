@@ -2,9 +2,9 @@
   min-height: 100dvh;
   padding: clamp(1rem, 1.5vw, 2rem);
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 249, 232, 0.9) 0%, rgba(255, 249, 232, 0) 28%),
-    radial-gradient(circle at 82% 8%, rgba(137, 221, 255, 0.28) 0%, rgba(137, 221, 255, 0) 24%),
-    linear-gradient(160deg, #f7edd2 0%, #ebd49d 42%, #d2a55f 100%);
+    radial-gradient(circle at 16% 12%, rgba(252, 244, 208, 0.92) 0%, rgba(252, 244, 208, 0) 30%),
+    radial-gradient(circle at 84% 12%, rgba(137, 221, 255, 0.24) 0%, rgba(137, 221, 255, 0) 26%),
+    linear-gradient(160deg, #efe4c0 0%, #ddc27f 45%, #be8d50 100%);
   color: var(--ink-900);
 }
 
@@ -12,11 +12,11 @@
 .filters-panel,
 .status-panel,
 .empty-state {
-  width: min(72rem, 100%);
+  width: min(78rem, 100%);
   margin: 0 auto;
   border: 1px solid rgba(92, 75, 56, 0.12);
   border-radius: 1.5rem;
-  background: rgba(255, 248, 232, 0.88);
+  background: rgba(255, 248, 232, 0.9);
   box-shadow: 0 1.25rem 2.5rem rgba(92, 75, 56, 0.12);
 }
 
@@ -92,8 +92,8 @@
 }
 
 .warning {
-  border-color: rgba(190, 74, 47, 0.18);
-  background: rgba(255, 237, 222, 0.92);
+  border-color: rgba(190, 74, 47, 0.32);
+  background: rgba(255, 230, 220, 0.9);
 }
 
 .filters-panel {
@@ -114,7 +114,7 @@
 .chip,
 .clear-button {
   border: 1px solid rgba(92, 75, 56, 0.16);
-  border-radius: 999px;
+  border-radius: 1rem;
   background: #fffdf7;
   color: var(--ink-900);
   font: inherit;
@@ -144,9 +144,9 @@
 }
 
 .chip.active {
-  background: var(--ink-900);
-  color: var(--sand-50);
-  border-color: var(--ink-900);
+  background: rgba(228, 84, 53, 0.08);
+  color: var(--ink-900);
+  border-color: rgba(228, 84, 53, 0.5);
 }
 
 .type-chip img,
@@ -160,7 +160,7 @@
 }
 
 .results-grid {
-  width: min(72rem, 100%);
+  width: min(78rem, 100%);
   margin: 1rem auto 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
@@ -207,7 +207,7 @@
 .style-badge {
   padding: 0.35rem 0.7rem;
   background: rgba(228, 84, 53, 0.12);
-  color: var(--brick-500);
+  color: var(--ink-900);
 }
 
 .sprite-frame {
@@ -218,7 +218,7 @@
   border-radius: 1.25rem;
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0)),
-    linear-gradient(180deg, #f8e6b8, #e9bb6d);
+    linear-gradient(180deg, rgba(244, 201, 123, 0.35), rgba(190, 141, 80, 0.28));
 }
 
 .pokemon-sprite,
