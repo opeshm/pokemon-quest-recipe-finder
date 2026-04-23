@@ -26,6 +26,18 @@
   }
 
   <section class="filters-panel" aria-label="Pokedex filters">
+    <div class="filter-grid">
+      <label class="filter-field">
+        <span>Pokemon name</span>
+        <input
+          type="search"
+          [value]="nameFilter()"
+          placeholder="Search Pokemon"
+          (input)="updateNameFilter($any($event.target).value)"
+        />
+      </label>
+    </div>
+
     <div class="selector-grid">
       <section class="selector-box selector-box--style" aria-label="Style filters">
         <div class="selector-box-header">

@@ -1,16 +1,16 @@
-<section class="controls" aria-label="search and filters">
-  <label class="field search-field">
-    <span>Recipe search</span>
-    <input
-      type="search"
-      [ngModel]="vm().searchTerm"
-      (ngModelChange)="searchTermChange.emit($event)"
-      placeholder="Dish, ingredient, or Pokemon"
-    />
-  </label>
-</section>
-
 <section class="filters-panel" aria-label="Recipe filters">
+  <div class="filter-grid">
+    <label class="field search-field">
+      <span>Recipe search</span>
+      <input
+        type="search"
+        [ngModel]="vm().searchTerm"
+        (ngModelChange)="searchTermChange.emit($event)"
+        placeholder="Dish, ingredient, or Pokemon"
+      />
+    </label>
+  </div>
+
   <div class="selector-grid">
     <section class="selector-box selector-box--quality" aria-label="Quality filters">
       <div class="selector-box-header">

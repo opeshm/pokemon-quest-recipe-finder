@@ -32,6 +32,7 @@ export class PokedexPageComponent {
 
   private readonly _selectedStyles = signal<PokemonStyle[]>([]);
   private readonly _selectedTypes = signal<string[]>([]);
+  private readonly _nameFilter = signal('');
   private readonly _sortBy = signal<PokedexSortOption>('number');
   private readonly _modalKind = signal<PokedexFilterModalKind | null>(null);
   private readonly _modalSelection = signal<string[]>([]);
@@ -45,6 +46,7 @@ export class PokedexPageComponent {
   });
   readonly selectedStyles = this._selectedStyles.asReadonly();
   readonly selectedTypes = this._selectedTypes.asReadonly();
+  readonly nameFilter = this._nameFilter.asReadonly();
   readonly sortBy = this._sortBy.asReadonly();
   readonly modalKind = this._modalKind.asReadonly();
   readonly modalSelection = this._modalSelection.asReadonly();
@@ -75,11 +77,13 @@ export class PokedexPageComponent {
   readonly filteredEntries = computed(() => {
     const styles = this.selectedStyles();
     const types = this.selectedTypes();
+    const nameFilter = this.nameFilter().trim().toLocaleLowerCase();
     const sortBy = this.sortBy();
 
     return this.entries
       .filter(
         (entry) =>
+          (!nameFilter || entry.name.toLocaleLowerCase().includes(nameFilter)) &&
           (!styles.length || styles.includes(entry.style)) &&
           (!types.length || types.some((type) => entry.types.includes(type)))
       )
@@ -94,8 +98,16 @@ export class PokedexPageComponent {
   );
 
   readonly hasActiveFilters = computed(
-    () => this.selectedStyles().length > 0 || this.selectedTypes().length > 0 || this.sortBy() !== 'number'
+    () =>
+      this.nameFilter().length > 0 ||
+      this.selectedStyles().length > 0 ||
+      this.selectedTypes().length > 0 ||
+      this.sortBy() !== 'number'
   );
+
+  updateNameFilter(value: string): void {
+    this._nameFilter.set(value);
+  }
 
   openSelector(kind: PokedexFilterModalKind): void {
     this._modalKind.set(kind);
@@ -157,6 +169,7 @@ export class PokedexPageComponent {
   }
 
   clearFilters(): void {
+    this._nameFilter.set('');
     this._selectedStyles.set([]);
     this._selectedTypes.set([]);
     this._sortBy.set('number');

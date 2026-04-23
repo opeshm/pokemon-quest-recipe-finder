@@ -110,6 +110,25 @@ describe('PokedexPageComponent', () => {
     expect(firstPokemon).toBe('Mewtwo');
   });
 
+  it('filters the roster by Pokemon name search', async () => {
+    const fixture = TestBed.createComponent(PokedexPageComponent);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nameInput = compiled.querySelector('input[type="search"]') as HTMLInputElement;
+
+    nameInput.value = 'saur';
+    nameInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const visiblePokemon = Array.from(compiled.querySelectorAll('.pokedex-card h2')).map((heading) =>
+      heading.textContent?.trim()
+    );
+
+    expect(visiblePokemon).toEqual(['Bulbasaur', 'Ivysaur', 'Venusaur']);
+  });
+
   it('uses downloaded avatar assets when the sprite sheet has no entry', async () => {
     const fixture = TestBed.createComponent(PokedexPageComponent);
     await fixture.whenStable();
