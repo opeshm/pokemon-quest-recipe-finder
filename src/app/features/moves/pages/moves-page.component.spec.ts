@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { RECIPES_REPOSITORY } from '../../../core/data-access/recipes.repository';
 import { LoadState } from '../../../core/models/load-state.model';
 import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
@@ -50,7 +50,7 @@ describe('MovesPageComponent', () => {
       imports: [MovesPageComponent],
       providers: [
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),

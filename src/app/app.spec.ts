@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { App } from './app';
 import { routes } from './app.routes';
-import { RecipeDataService } from './core/data-access/recipe-data.service';
+import { RECIPES_REPOSITORY } from './core/data-access/recipes.repository';
 import { LoadState } from './core/models/load-state.model';
 import { RecipeDataset } from './core/models/recipe-dataset.model';
 
@@ -65,7 +65,7 @@ describe('App', () => {
         provideRouter(routes),
         provideLocationMocks(),
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),

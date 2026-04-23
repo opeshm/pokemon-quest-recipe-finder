@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
-import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { PokedexRepository } from '../../../core/data-access/pokedex.repository';
+import { RECIPES_REPOSITORY, RecipesRepository } from '../../../core/data-access/recipes.repository';
 import { LoadState } from '../../../core/models/load-state.model';
 import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
-import { POKEDEX_ENTRIES } from '../data/pokedex.data';
 import { PokedexEntry, PokemonStyle } from '../models/pokedex.model';
 
 type PokedexFilterModalKind = 'style' | 'type' | 'sort';
@@ -28,7 +28,8 @@ const SORT_OPTIONS: Array<{ value: PokedexSortOption; label: string }> = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PokedexPageComponent {
-  private readonly recipeDataService = inject(RecipeDataService);
+  private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
+  private readonly pokedexRepository = inject(PokedexRepository);
   private readonly recipeAssetService = inject(RecipeAssetService);
   private readonly pokemonProfileService = inject(PokemonProfileService);
 
@@ -39,11 +40,11 @@ export class PokedexPageComponent {
   private readonly _modalKind = signal<PokedexFilterModalKind | null>(null);
   private readonly _modalSelection = signal<string[]>([]);
 
-  readonly entries = POKEDEX_ENTRIES;
+  readonly entries = this.pokedexRepository.getAll();
   readonly styleOptions: PokemonStyle[] = ['Melee', 'Range'];
   readonly sortOptions = SORT_OPTIONS;
-  readonly dataset = toSignal(this.recipeDataService.dataset$, { initialValue: null });
-  readonly loadState = toSignal(this.recipeDataService.loadState$, {
+  readonly dataset = toSignal(this.recipesRepository.dataset$, { initialValue: null });
+  readonly loadState = toSignal(this.recipesRepository.loadState$, {
     initialValue: { status: 'loading' } as LoadState<RecipeDataset>
   });
   readonly selectedStyles = this._selectedStyles.asReadonly();

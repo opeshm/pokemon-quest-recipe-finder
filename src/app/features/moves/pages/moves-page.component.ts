@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
-import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { MovesRepository } from '../../../core/data-access/moves.repository';
+import { PokedexRepository } from '../../../core/data-access/pokedex.repository';
+import { RECIPES_REPOSITORY, RecipesRepository } from '../../../core/data-access/recipes.repository';
 import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
-import { POKEMON_QUEST_MOVES } from '../data/moves.data';
-import { POKEDEX_ENTRIES } from '../../pokedex/data/pokedex.data';
 import { MOVE_ICON_BY_NAME } from '../utils/move-icon.util';
 
 const STONE_ICON_BY_NAME: Record<string, string> = {
@@ -36,7 +36,9 @@ const SORT_OPTIONS: Array<{ value: MovesSortOption; label: string }> = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovesPageComponent {
-  private readonly recipeDataService = inject(RecipeDataService);
+  private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
+  private readonly movesRepository = inject(MovesRepository);
+  private readonly pokedexRepository = inject(PokedexRepository);
   private readonly recipeAssetService = inject(RecipeAssetService);
   private readonly pokemonProfileService = inject(PokemonProfileService);
 
@@ -49,8 +51,8 @@ export class MovesPageComponent {
   private readonly _modalSelection = signal<string[]>([]);
   private readonly _modalSearch = signal('');
 
-  readonly moves = POKEMON_QUEST_MOVES;
-  readonly dataset = toSignal<RecipeDataset | null>(this.recipeDataService.dataset$, {
+  readonly moves = this.movesRepository.getAll();
+  readonly dataset = toSignal<RecipeDataset | null>(this.recipesRepository.dataset$, {
     initialValue: null
   });
   readonly nameFilter = this._nameFilter.asReadonly();
@@ -63,7 +65,7 @@ export class MovesPageComponent {
   readonly modalSelection = this._modalSelection.asReadonly();
   readonly modalSearch = this._modalSearch.asReadonly();
 
-  readonly pokemonNumberByName = new Map(POKEDEX_ENTRIES.map((entry) => [entry.name, entry.number]));
+  readonly pokemonNumberByName = new Map(this.pokedexRepository.getAll().map((entry) => [entry.name, entry.number]));
 
   readonly pokemonSpriteByName = computed(
     () => new Map((this.dataset()?.pokemonIndex ?? []).map((entry) => [entry.name, entry]))

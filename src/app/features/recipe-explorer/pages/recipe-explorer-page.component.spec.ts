@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
-import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { RECIPES_REPOSITORY } from '../../../core/data-access/recipes.repository';
 import { LoadState } from '../../../core/models/load-state.model';
 import { RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
@@ -139,7 +139,7 @@ describe('RecipeExplorerPageComponent', () => {
           useValue: routerMock
         },
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
@@ -176,7 +176,7 @@ describe('RecipeExplorerPageComponent', () => {
           useValue: routerMock
         },
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
@@ -224,7 +224,7 @@ describe('RecipeExplorerPageComponent', () => {
           useValue: routerMock
         },
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
@@ -269,7 +269,7 @@ describe('RecipeExplorerPageComponent', () => {
           useValue: routerMock
         },
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$,

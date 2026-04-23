@@ -1,6 +1,6 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { RecipeDataService } from '../../../core/data-access/recipe-data.service';
+import { RECIPES_REPOSITORY, RecipesRepository } from '../../../core/data-access/recipes.repository';
 import { LoadState } from '../../../core/models/load-state.model';
 import { DishSpriteEntry, PokemonSpriteEntry, RecipeDataset } from '../../../core/models/recipe-dataset.model';
 import { RecipeExplorerFilters } from '../models/recipe-filters.model';
@@ -19,12 +19,12 @@ const QUALITY_OPTIONS = ['Special', 'Very Good', 'Good', 'Normal'] as const;
 
 @Injectable({ providedIn: 'root' })
 export class RecipeExplorerFacade {
-  private readonly recipeDataService = inject(RecipeDataService);
+  private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
 
-  readonly loadState = toSignal(this.recipeDataService.loadState$, {
+  readonly loadState = toSignal(this.recipesRepository.loadState$, {
     initialValue: { status: 'loading' } as LoadState<RecipeDataset>
   });
-  readonly dataset = toSignal(this.recipeDataService.dataset$, { initialValue: null });
+  readonly dataset = toSignal(this.recipesRepository.dataset$, { initialValue: null });
 
   private readonly _searchTerm = signal('');
   private readonly _selectedQualities = signal<string[]>([]);
@@ -220,7 +220,7 @@ export class RecipeExplorerFacade {
   }
 
   retryLoad(): void {
-    this.recipeDataService.reload();
+    this.recipesRepository.reload();
   }
 
   private parseInventoryParam(inventory: string | undefined): string[] {
