@@ -1,17 +1,24 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { POKEDEX_ENTRIES } from '../../features/pokedex/data/pokedex.data';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MovesRepository } from '../../core/data-access/moves.repository';
+import { PokedexRepository } from '../../core/data-access/pokedex.repository';
+import { RECIPES_REPOSITORY, RecipesRepository } from '../../core/data-access/recipes.repository';
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
-import { POKEMON_QUEST_MOVES } from '../../features/moves/data/moves.data';
-import { Recipe } from '../../core/models/recipe-dataset.model';
 import { moveIconPath } from '../../features/moves/utils/move-icon.util';
 import { PokemonProfileViewModel } from './pokemon-profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonProfileService {
+  private readonly pokedexRepository = inject(PokedexRepository);
+  private readonly movesRepository = inject(MovesRepository);
+  private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
+
   private readonly _selectedPokemonName = signal<string | null>(null);
-  private readonly _recipes = signal<readonly Recipe[]>([]);
+  private readonly pokedexEntries = this.pokedexRepository.getAll();
+  private readonly moves = this.movesRepository.getAll();
 
   readonly selectedPokemonName = this._selectedPokemonName.asReadonly();
+  readonly dataset = toSignal(this.recipesRepository.dataset$, { initialValue: null });
 
   readonly selectedProfile = computed<PokemonProfileViewModel | null>(() => {
     const name = this.selectedPokemonName();
@@ -20,13 +27,14 @@ export class PokemonProfileService {
       return null;
     }
 
-    const entry = POKEDEX_ENTRIES.find((pokemon) => pokemon.name === name);
+    const entry = this.pokedexEntries.find((pokemon) => pokemon.name === name);
 
     if (!entry) {
       return null;
     }
 
-    const moves = POKEMON_QUEST_MOVES.filter((move) => move.pokemon.includes(name))
+    const moves = this.moves
+      .filter((move) => move.pokemon.includes(name))
       .map((move) => ({
         name: move.name,
         type: move.type,
@@ -37,7 +45,7 @@ export class PokemonProfileService {
       .sort((left, right) => left.name.localeCompare(right.name));
 
     const recipes = Array.from(
-      this._recipes()
+      (this.dataset()?.recipes ?? [])
         .filter((recipe) => recipe.pokemonResults.some((pokemon) => pokemon.name === name))
         .reduce(
           (map, recipe) => {
@@ -70,12 +78,8 @@ export class PokemonProfileService {
     };
   });
 
-  setRecipes(recipes: readonly Recipe[]): void {
-    this._recipes.set(recipes);
-  }
-
   open(name: string): void {
-    if (!POKEDEX_ENTRIES.some((entry) => entry.name === name)) {
+    if (!this.pokedexEntries.some((entry) => entry.name === name)) {
       return;
     }
 
@@ -88,7 +92,7 @@ export class PokemonProfileService {
 
   private buildEvolutionChain(entry: PokedexEntry) {
     const rootName = this.findBasePokemonName(entry);
-    const root = POKEDEX_ENTRIES.find((pokemon) => pokemon.name === rootName) ?? entry;
+    const root = this.pokedexEntries.find((pokemon) => pokemon.name === rootName) ?? entry;
     const chain = [{ pokemon: root, requirement: null as string | null }];
     this.collectDescendants(root, chain);
     return chain;
@@ -98,7 +102,7 @@ export class PokemonProfileService {
     current: PokedexEntry,
     chain: Array<{ pokemon: PokedexEntry; requirement: string | null }>
   ): void {
-    const descendants = POKEDEX_ENTRIES.filter((pokemon) => this.getEvolutionSourceName(pokemon) === current.name);
+    const descendants = this.pokedexEntries.filter((pokemon) => this.getEvolutionSourceName(pokemon) === current.name);
 
     for (const descendant of descendants) {
       chain.push({
@@ -114,7 +118,7 @@ export class PokemonProfileService {
     let source = this.getEvolutionSourceName(current);
 
     while (source) {
-      const previous = POKEDEX_ENTRIES.find((pokemon) => pokemon.name === source);
+      const previous = this.pokedexEntries.find((pokemon) => pokemon.name === source);
 
       if (!previous) {
         break;

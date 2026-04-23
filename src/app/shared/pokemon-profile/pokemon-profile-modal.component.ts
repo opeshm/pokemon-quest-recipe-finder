@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RecipeAssetService } from '../../core/assets/recipe-asset.service';
-import { RecipeDataService } from '../../core/data-access/recipe-data.service';
+import { RECIPES_REPOSITORY, RecipesRepository } from '../../core/data-access/recipes.repository';
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
 import { PokemonProfileService } from './pokemon-profile.service';
 
@@ -16,10 +16,10 @@ import { PokemonProfileService } from './pokemon-profile.service';
 export class PokemonProfileModalComponent {
   readonly profileService = inject(PokemonProfileService);
 
-  private readonly recipeDataService = inject(RecipeDataService);
+  private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
   private readonly recipeAssetService = inject(RecipeAssetService);
 
-  readonly dataset = toSignal(this.recipeDataService.dataset$, { initialValue: null });
+  readonly dataset = toSignal(this.recipesRepository.dataset$, { initialValue: null });
   readonly profile = this.profileService.selectedProfile;
   readonly pokemonSpriteByName = computed(
     () => new Map((this.dataset()?.pokemonIndex ?? []).map((entry) => [entry.name, entry]))
@@ -27,12 +27,6 @@ export class PokemonProfileModalComponent {
   readonly dishSpriteBySlug = computed(
     () => new Map((this.dataset()?.dishIndex ?? []).map((entry) => [entry.slug, entry]))
   );
-
-  constructor() {
-    effect(() => {
-      this.profileService.setRecipes(this.dataset()?.recipes ?? []);
-    });
-  }
 
   close(): void {
     this.profileService.close();
