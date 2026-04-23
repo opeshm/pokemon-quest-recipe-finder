@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
+import { FilterSelectorModalComponent } from '../../../shared/ui/filter-selector-modal/filter-selector-modal.component';
 import { MovesFacade, MovesSortOption } from '../facade/moves.facade';
 import { MOVE_ICON_BY_NAME } from '../utils/move-icon.util';
 
@@ -16,7 +17,7 @@ const STONE_ICON_BY_NAME: Record<string, string> = {
 
 @Component({
   selector: 'app-moves-page',
-  imports: [CommonModule],
+  imports: [CommonModule, FilterSelectorModalComponent],
   templateUrl: './moves-page.component.html',
   styleUrl: './moves-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,6 +88,45 @@ export class MovesPageComponent {
 
   modalOptionLabel(option: string): string {
     return this.facade.modalOptionLabel(option);
+  }
+
+  modalLeadingImageSrc(option: string): string | null {
+    switch (this.modalKind()) {
+      case 'type':
+        return this.typeIconPath(option);
+      case 'stone':
+        return this.stoneIconPath(option);
+      case 'pokemon':
+        return this.hasPokemonSprite(option) ? null : this.pokemonAvatarPath(option);
+      default:
+        return null;
+    }
+  }
+
+  modalLeadingImageAlt(option: string): string {
+    return this.modalKind() === 'sort' ? '' : option;
+  }
+
+  modalLeadingSpriteStyle(option: string): Record<string, string> | null {
+    return this.modalKind() === 'pokemon' && this.hasPokemonSprite(option)
+      ? this.pokemonSpriteStyle(option)
+      : null;
+  }
+
+  modalLeadingImageWidth(): number {
+    switch (this.modalKind()) {
+      case 'type':
+        return 28;
+      case 'stone':
+      case 'pokemon':
+        return 32;
+      default:
+        return 0;
+    }
+  }
+
+  modalLeadingImageHeight(): number {
+    return this.modalLeadingImageWidth();
   }
 
   typeIconPath(typeName: string): string {

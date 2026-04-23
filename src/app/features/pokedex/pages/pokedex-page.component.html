@@ -100,48 +100,20 @@
     </button>
   </section>
 
-  @if (modalKind(); as activeModal) {
-    <div class="selector-modal-backdrop">
-      <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle()">
-        <div class="selector-modal-header">
-          <div>
-            <p class="selector-modal-eyebrow">Pokedex filter</p>
-            <h2>{{ modalTitle() }}</h2>
-          </div>
-
-          <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="closeSelector()">
-            Close
-          </button>
-        </div>
-
-        <div class="selector-modal-options">
-          @for (option of modalOptions(); track option) {
-            <button
-              type="button"
-              class="modal-option"
-              [class.modal-option--selected]="isModalOptionSelected(option)"
-              [attr.aria-pressed]="isModalOptionSelected(option)"
-              (click)="toggleModalOption(option)"
-            >
-              @if (activeModal === 'type') {
-                <img [src]="typeIconPath(option)" [alt]="" width="28" height="28" aria-hidden="true" />
-              }
-
-              <span>{{ modalOptionLabel(option) }}</span>
-            </button>
-          }
-        </div>
-
-        <div class="selector-modal-actions">
-          <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="closeSelector()">
-            Cancel
-          </button>
-          <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="saveSelector()">
-            Save selection
-          </button>
-        </div>
-      </section>
-    </div>
+  @if (modalKind()) {
+    <app-filter-selector-modal
+      [title]="modalTitle()"
+      [eyebrow]="'Pokedex filter'"
+      [options]="modalOptions()"
+      [isOptionSelected]="isModalOptionSelected.bind(this)"
+      [optionLabel]="modalOptionLabel.bind(this)"
+      [leadingImageSrc]="modalLeadingImageSrc.bind(this)"
+      [leadingImageWidth]="28"
+      [leadingImageHeight]="28"
+      (close)="closeSelector()"
+      (optionToggle)="toggleModalOption($event)"
+      (save)="saveSelector()"
+    ></app-filter-selector-modal>
   }
 
   <section class="results-grid" aria-label="Pokemon list">

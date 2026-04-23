@@ -1,0 +1,60 @@
+<div class="selector-modal-backdrop">
+  <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="title()">
+    <div class="selector-modal-header">
+      <div>
+        <p class="selector-modal-eyebrow">{{ eyebrow() }}</p>
+        <h2>{{ title() }}</h2>
+      </div>
+
+      <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="close.emit()">
+        Close
+      </button>
+    </div>
+
+    @if (showSearch()) {
+      <label class="modal-search-field">
+        <span>{{ searchLabel() }}</span>
+        <input
+          type="search"
+          [value]="searchValue()"
+          [placeholder]="searchPlaceholder()"
+          (input)="onSearchInput($any($event.target).value)"
+        />
+      </label>
+    }
+
+    <div class="selector-modal-options">
+      @for (option of options(); track trackByValue($index, option)) {
+        <button
+          type="button"
+          class="modal-option"
+          [class.modal-option--selected]="isOptionSelected()(option)"
+          [attr.aria-pressed]="isOptionSelected()(option)"
+          (click)="optionToggle.emit(option)"
+        >
+          @if (leadingSpriteStyle()(option); as spriteStyle) {
+            <span class="modal-option-sprite" [ngStyle]="spriteStyle" aria-hidden="true"></span>
+          } @else if (leadingImageSrc()(option); as imageSrc) {
+            <img
+              [src]="imageSrc"
+              [alt]="leadingImageAlt()(option)"
+              [attr.width]="leadingImageWidth() || null"
+              [attr.height]="leadingImageHeight() || null"
+              aria-hidden="true"
+            />
+          }
+          <span>{{ optionLabel()(option) }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="selector-modal-actions">
+      <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="close.emit()">
+        Cancel
+      </button>
+      <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="save.emit()">
+        Save selection
+      </button>
+    </div>
+  </section>
+</div>
