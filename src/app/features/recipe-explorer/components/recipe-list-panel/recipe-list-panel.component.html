@@ -31,6 +31,10 @@
                   [ngStyle]="assets().getPokemonSpriteStyle(pokemon.name, 24)"
                   [title]="pokemon.name"
                   [attr.aria-label]="pokemon.name"
+                  tabindex="0"
+                  (click)="$event.stopPropagation(); pokemonProfile().openPokemonProfile(pokemon.name)"
+                  (keydown.enter)="$event.stopPropagation(); pokemonProfile().openPokemonProfile(pokemon.name)"
+                  (keydown.space)="$event.stopPropagation(); pokemonProfile().openPokemonProfile(pokemon.name); $event.preventDefault()"
                 ></span>
               }
             </div>

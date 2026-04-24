@@ -1,4 +1,4 @@
-import { RecipeAssetService } from './recipe-asset.service';
+import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
 
 describe('RecipeAssetService', () => {
   const service = new RecipeAssetService();

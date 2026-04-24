@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FiltersPanelComponent } from '../components/filters-panel/filters-panel.component';
 import { HeroSectionComponent } from '../components/hero-section/hero-section.component';
 import { RecipeDetailPanelComponent } from '../components/recipe-detail-panel/recipe-detail-panel.component';
 import { RecipeListPanelComponent } from '../components/recipe-list-panel/recipe-list-panel.component';
 import { RecipeExplorerFacade } from '../facade/recipe-explorer.facade';
-import { FiltersPanelViewModel, RecipeAssetBindings, RecipeDetailPanelViewModel, RecipeListPanelViewModel } from '../models/recipe-view.model';
-import { RecipeAssetService } from '../services/recipe-asset.service';
+import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings, RecipeDetailPanelViewModel, RecipeListPanelViewModel } from '../models/recipe-view.model';
+import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
+import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 
 @Component({
   selector: 'app-recipe-explorer-page',
@@ -28,10 +29,8 @@ export class RecipeExplorerPageComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly recipeAssetService = inject(RecipeAssetService);
-
-  private isHydratingFromUrl = false;
+  private readonly pokemonProfileService = inject(PokemonProfileService);
 
   readonly pokemonSpriteStyleFn = (name: string, sizePx?: number) =>
     this.recipeAssetService.getPokemonSpriteStyle(
@@ -63,32 +62,32 @@ export class RecipeExplorerPageComponent {
     typeIconPath: (typeName) => this.typeIconPathFn(typeName)
   };
 
-  readonly filtersVm = () =>
-    ({
+  readonly pokemonProfileBindings: PokemonProfileTrigger = {
+    openPokemonProfile: (name) => this.pokemonProfileService.open(name)
+  };
+
+  readonly filtersVm = computed<FiltersPanelViewModel>(() => ({
       searchTerm: this.facade.searchTerm(),
-      selectedQuality: this.facade.selectedQuality(),
+      selectedQualities: this.facade.selectedQualities(),
       selectedPokemon: this.facade.selectedPokemon(),
-      selectedType: this.facade.selectedType(),
-      pokemonFilterQuery: this.facade.pokemonFilterQuery(),
+      selectedTypes: this.facade.selectedTypes(),
       qualityOptions: this.facade.qualityOptions,
       typeOptions: this.facade.typeOptions(),
-      visiblePokemonOptions: this.facade.visiblePokemonOptions(),
+      pokemonOptions: this.facade.pokemonOptions(),
       ingredients: this.facade.dataset()?.ingredients ?? [],
       hasInventoryFilter: this.facade.hasInventoryFilter(),
       selectedInventory: this.facade.inventoryIngredientSet()
-    }) satisfies FiltersPanelViewModel;
+    }));
 
-  readonly recipeListVm = () =>
-    ({
+  readonly recipeListVm = computed<RecipeListPanelViewModel>(() => ({
       cards: this.facade.recipeCards(),
       selectedRecipeId: this.facade.selectedRecipeId()
-    }) satisfies RecipeListPanelViewModel;
+    }));
 
-  readonly recipeDetailVm = () =>
-    ({
+  readonly recipeDetailVm = computed<RecipeDetailPanelViewModel>(() => ({
       selectedRecipeView: this.facade.selectedRecipeView(),
       maxAttractRate: this.facade.maxAttractRate()
-    }) satisfies RecipeDetailPanelViewModel;
+    }));
 
   constructor() {
     const queryParamMap = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
@@ -104,18 +103,10 @@ export class RecipeExplorerPageComponent {
         recipe: queryParams.get('recipe') ?? undefined
       };
 
-      this.isHydratingFromUrl = true;
       this.facade.hydrateFromQueryParams(nextParams);
-      queueMicrotask(() => {
-        this.isHydratingFromUrl = false;
-      });
     });
 
     effect(() => {
-      if (this.isHydratingFromUrl) {
-        return;
-      }
-
       const nextQueryParams = this.facade.buildQueryParams();
       const currentQueryParams = this.route.snapshot.queryParams;
 
@@ -128,10 +119,6 @@ export class RecipeExplorerPageComponent {
         queryParams: nextQueryParams,
         replaceUrl: true
       });
-    });
-
-    this.destroyRef.onDestroy(() => {
-      this.isHydratingFromUrl = false;
     });
   }
 

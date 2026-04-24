@@ -5,9 +5,9 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { App } from './app';
 import { routes } from './app.routes';
-import { LoadState } from './features/recipe-explorer/models/load-state.model';
-import { RecipeDataset } from './features/recipe-explorer/models/recipe.model';
-import { RecipeDataService } from './features/recipe-explorer/services/recipe-data.service';
+import { RECIPES_REPOSITORY } from './core/data-access/recipes.repository';
+import { LoadState } from './core/models/load-state.model';
+import { RecipeDataset } from './core/models/recipe-dataset.model';
 
 const mockDataset = {
   metadata: {
@@ -65,7 +65,7 @@ describe('App', () => {
         provideRouter(routes),
         provideLocationMocks(),
         {
-          provide: RecipeDataService,
+          provide: RECIPES_REPOSITORY,
           useValue: {
             dataset$: of(mockDataset),
             loadState$: of({ status: 'success', data: mockDataset } as LoadState<RecipeDataset>),
@@ -81,13 +81,18 @@ describe('App', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('renders the router outlet shell', async () => {
+  it('renders the app navigation and router outlet shell', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect((fixture.nativeElement as HTMLElement).querySelector('router-outlet')).toBeTruthy();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    expect(compiled.textContent).toContain('Recipes');
+    expect(compiled.textContent).toContain('Moves');
+    expect(compiled.textContent).toContain('Pokedex');
   });
 
   it('keeps the recipe explorer route at the root path', async () => {

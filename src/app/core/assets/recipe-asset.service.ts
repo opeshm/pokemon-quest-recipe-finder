@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DishSpriteEntry, DishSpriteMetadata, PokemonSpriteEntry, SpriteMetadata } from '../models/recipe.model';
+import { DishSpriteEntry, DishSpriteMetadata, PokemonSpriteEntry, SpriteMetadata } from '../models/recipe-dataset.model';
 
 const TYPE_ICON_BY_NAME: Record<string, string> = {
   Misc: 'normal',
+  Mulligan: 'normal',
   Red: 'fire',
   Blue: 'water',
   Yellow: 'electric',
@@ -19,6 +20,12 @@ const TYPE_ICON_BY_NAME: Record<string, string> = {
   Fire: 'fire',
   Electric: 'electric',
   Fighting: 'fighting',
+  Fairy: 'fairy',
+  Steel: 'steel',
+  Ice: 'ice',
+  Ghost: 'ghost',
+  Dragon: 'dragon',
+  Dark: 'dark',
   Legendary: 'dragon'
 };
 
@@ -124,5 +131,9 @@ export class RecipeAssetService {
   typeIconPath(typeName: string): string {
     const slug = TYPE_ICON_BY_NAME[typeName] ?? 'normal';
     return `assets/types/${slug}.png`;
+  }
+
+  pokemonAvatarPath(number: number): string {
+    return `assets/pokemon/${String(number).padStart(3, '0')}.png`;
   }
 }

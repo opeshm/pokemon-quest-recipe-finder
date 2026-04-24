@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FiltersPanelViewModel, RecipeAssetBindings } from '../../models/recipe-view.model';
+import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings } from '../../models/recipe-view.model';
+
+type RecipeFilterModalKind = 'quality' | 'type' | 'pokemon' | 'inventory';
 
 @Component({
   selector: 'app-filters-panel',
@@ -12,31 +14,131 @@ import { FiltersPanelViewModel, RecipeAssetBindings } from '../../models/recipe-
 })
 export class FiltersPanelComponent {
   readonly vm = input.required<FiltersPanelViewModel>();
-  readonly assets = input.required<Pick<RecipeAssetBindings, 'ingredientIconPath' | 'typeIconPath' | 'getPokemonSpriteStyle'>>();
+  readonly assets = input.required<
+    Pick<RecipeAssetBindings, 'ingredientIconPath' | 'typeIconPath' | 'getPokemonSpriteStyle'>
+  >();
+  readonly pokemonProfile = input.required<PokemonProfileTrigger>();
 
   readonly searchTermChange = output<string>();
-  readonly selectedQualityChange = output<string>();
-  readonly selectedTypeChange = output<string>();
-  readonly selectedPokemonChange = output<string>();
-  readonly pokemonFilterQueryChange = output<string>();
-
+  readonly selectedQualitiesChange = output<string[]>();
+  readonly selectedTypesChange = output<string[]>();
+  readonly selectedPokemonChange = output<string[]>();
+  readonly selectedInventoryChange = output<string[]>();
   readonly clearFilters = output<void>();
-  readonly clearInventory = output<void>();
-  readonly toggleInventoryIngredient = output<string>();
 
-  onToggleQuality(quality: string): void {
-    this.selectedQualityChange.emit(this.vm().selectedQuality === quality ? '' : quality);
+  modalKind: RecipeFilterModalKind | null = null;
+  modalSelection: string[] = [];
+  modalSearch = '';
+
+  openSelector(kind: RecipeFilterModalKind): void {
+    this.modalKind = kind;
+    this.modalSearch = '';
+
+    switch (kind) {
+      case 'quality':
+        this.modalSelection = [...this.vm().selectedQualities];
+        break;
+      case 'type':
+        this.modalSelection = [...this.vm().selectedTypes];
+        break;
+      case 'pokemon':
+        this.modalSelection = [...this.vm().selectedPokemon];
+        break;
+      case 'inventory':
+        this.modalSelection = [...this.vm().selectedInventory];
+        break;
+    }
   }
 
-  onToggleType(typeName: string): void {
-    this.selectedTypeChange.emit(this.vm().selectedType === typeName ? '' : typeName);
+  closeSelector(): void {
+    this.modalKind = null;
+    this.modalSelection = [];
+    this.modalSearch = '';
   }
 
-  onTogglePokemon(name: string): void {
-    this.selectedPokemonChange.emit(this.vm().selectedPokemon === name ? '' : name);
+  toggleModalOption(value: string): void {
+    if (this.modalSelection.includes(value)) {
+      this.modalSelection = this.modalSelection.filter((entry) => entry !== value);
+      return;
+    }
+
+    this.modalSelection = [...this.modalSelection, value];
   }
 
-  isInventoryIngredientSelected(code: string): boolean {
-    return this.vm().selectedInventory.has(code);
+  saveSelector(): void {
+    switch (this.modalKind) {
+      case 'quality':
+        this.selectedQualitiesChange.emit(
+          this.vm().qualityOptions.filter((option) => this.modalSelection.includes(option))
+        );
+        break;
+      case 'type':
+        this.selectedTypesChange.emit(
+          this.vm().typeOptions.filter((option) => this.modalSelection.includes(option))
+        );
+        break;
+      case 'pokemon':
+        this.selectedPokemonChange.emit(
+          this.vm().pokemonOptions.filter((option) => this.modalSelection.includes(option))
+        );
+        break;
+      case 'inventory':
+        this.selectedInventoryChange.emit(
+          this.vm().ingredients
+            .map((ingredient) => ingredient.code)
+            .filter((option) => this.modalSelection.includes(option))
+        );
+        break;
+    }
+
+    this.closeSelector();
+  }
+
+  updateModalSearch(value: string): void {
+    this.modalSearch = value;
+  }
+
+  isModalOptionSelected(value: string): boolean {
+    return this.modalSelection.includes(value);
+  }
+
+  modalTitle(): string {
+    switch (this.modalKind) {
+      case 'quality':
+        return 'Select qualities';
+      case 'type':
+        return 'Select types';
+      case 'pokemon':
+        return 'Select pokemon';
+      case 'inventory':
+        return 'Select ingredients';
+      default:
+        return 'Select filters';
+    }
+  }
+
+  modalOptions(): string[] {
+    const search = this.modalSearch.trim().toLocaleLowerCase();
+
+    switch (this.modalKind) {
+      case 'quality':
+        return [...this.vm().qualityOptions];
+      case 'type':
+        return this.vm().typeOptions;
+      case 'pokemon':
+        return this.vm().pokemonOptions.filter(
+          (option) => !search || option.toLocaleLowerCase().includes(search)
+        );
+      case 'inventory':
+        return this.vm().ingredients
+          .filter((ingredient) => !search || ingredient.name.toLocaleLowerCase().includes(search))
+          .map((ingredient) => ingredient.code);
+      default:
+        return [];
+    }
+  }
+
+  ingredientName(code: string): string {
+    return this.vm().ingredients.find((ingredient) => ingredient.code === code)?.name ?? code;
   }
 }

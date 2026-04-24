@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, filter, map, of, shareReplay, startWith, switchMap } from 'rxjs';
 import { LoadState } from '../models/load-state.model';
-import { RecipeDataset } from '../models/recipe.model';
+import { RecipeDataset } from '../models/recipe-dataset.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeDataService {

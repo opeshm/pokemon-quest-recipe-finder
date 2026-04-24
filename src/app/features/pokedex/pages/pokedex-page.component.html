@@ -1,0 +1,180 @@
+<main class="page-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">Pokemon Quest Pokedex</p>
+    <h1>Every Pokemon available in Pokemon Quest</h1>
+    <p class="intro">
+      Browse the full roster and narrow it down by automatic style and elemental type.
+    </p>
+
+    <div class="hero-stats" aria-label="Pokedex counts">
+      <div>
+        <span>Visible</span>
+        <strong>{{ filteredEntries().length }}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>{{ entries.length }}</strong>
+      </div>
+    </div>
+  </section>
+
+  @if (spriteWarning(); as warningMessage) {
+    <section class="status-panel warning" aria-live="polite">
+      <h2>Sprite sheet unavailable</h2>
+      <p>{{ warningMessage }}</p>
+    </section>
+  }
+
+  <section class="filters-panel" aria-label="Pokedex filters">
+    <div class="filter-grid">
+      <label class="filter-field">
+        <span>Pokemon name</span>
+        <input
+          type="search"
+          [value]="nameFilter()"
+          placeholder="Search Pokemon"
+          (input)="updateNameFilter($any($event.target).value)"
+        />
+      </label>
+    </div>
+
+    <div class="selector-grid">
+      <section class="selector-box selector-box--style" aria-label="Style filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Style</h2>
+            <p>{{ selectedStyles().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('style')">Add Style</button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedStyles().length">
+          @for (style of selectedStyles(); track style) {
+            <span class="selected-text-chip" [attr.title]="style">{{ style }}</span>
+          } @empty {
+            <p class="selector-empty-copy">Limit the roster to one or more combat styles.</p>
+          }
+        </div>
+      </section>
+
+      <section class="selector-box selector-box--type" aria-label="Type filters">
+        <div class="selector-box-header">
+          <div>
+            <h2>Type</h2>
+            <p>{{ selectedTypes().length }} selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+        </div>
+
+        <div class="selector-box-content" [class.selector-box-content--empty]="!selectedTypes().length">
+          @for (type of selectedTypes(); track type) {
+            <span class="selected-icon-chip selected-icon-chip--type" [attr.title]="type" [attr.aria-label]="type">
+              <img [src]="typeIconPath(type)" [alt]="type" width="28" height="28" />
+            </span>
+          } @empty {
+            <p class="selector-empty-copy">Filter Pokemon by one or more elemental types.</p>
+          }
+        </div>
+      </section>
+
+      <section class="selector-box selector-box--sort" aria-label="Sorting options">
+        <div class="selector-box-header">
+          <div>
+            <h2>Sort</h2>
+            <p>1 selected</p>
+          </div>
+
+          <button type="button" class="selector-trigger" (click)="openSelector('sort')">Change Sort</button>
+        </div>
+
+        <div class="selector-box-content">
+          <span class="selected-text-chip" [attr.title]="sortLabel(sortBy())">{{ sortLabel(sortBy()) }}</span>
+        </div>
+      </section>
+    </div>
+
+    <button type="button" class="clear-button" [disabled]="!hasActiveFilters()" (click)="clearFilters()">
+      Clear filters
+    </button>
+  </section>
+
+  @if (modalKind()) {
+    <app-filter-selector-modal
+      [title]="modalTitle()"
+      [eyebrow]="'Pokedex filter'"
+      [options]="modalOptions()"
+      [isOptionSelected]="isModalOptionSelected.bind(this)"
+      [optionLabel]="modalOptionLabel.bind(this)"
+      [leadingImageSrc]="modalLeadingImageSrc.bind(this)"
+      [leadingImageWidth]="28"
+      [leadingImageHeight]="28"
+      (close)="closeSelector()"
+      (optionToggle)="toggleModalOption($event)"
+      (save)="saveSelector()"
+    ></app-filter-selector-modal>
+  }
+
+  <section class="results-grid" aria-label="Pokemon list">
+    @for (entry of filteredEntries(); track trackByNumber($index, entry)) {
+      <article class="pokedex-card" tabindex="0" (click)="openPokemonProfile(entry.name)" (keydown.enter)="openPokemonProfile(entry.name)" (keydown.space)="openPokemonProfile(entry.name); $event.preventDefault()">
+        <div class="card-header">
+          <span class="dex-number">#{{ entry.number.toString().padStart(3, '0') }}</span>
+          <span class="style-badge">{{ entry.style }}</span>
+        </div>
+
+        <div class="card-main">
+          <div class="sprite-frame">
+            @if (hasSprite(entry.name)) {
+              <div
+                class="pokemon-sprite"
+                [ngStyle]="pokemonSpriteStyle(entry.name)"
+                [attr.aria-label]="entry.name + ' sprite'"
+              ></div>
+            } @else {
+              <img
+                class="pokemon-avatar"
+                [src]="pokemonAvatarPath(entry.number)"
+                [alt]="entry.name + ' avatar'"
+                width="72"
+                height="72"
+              />
+            }
+          </div>
+
+          <div class="card-copy">
+            <h2>{{ entry.name }}</h2>
+
+            <div class="type-list" aria-label="Pokemon types">
+              @for (type of entry.types; track type) {
+                <span class="type-pill">
+                  <img [src]="typeIconPath(type)" alt="" width="16" height="16" aria-hidden="true" />
+                  {{ type }}
+                </span>
+              }
+            </div>
+
+            <dl class="stat-grid">
+              <div>
+                <dt>HP</dt>
+                <dd>{{ entry.baseHp }}</dd>
+              </div>
+              <div>
+                <dt>ATK</dt>
+                <dd>{{ entry.baseAtk }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <p class="obtain-method">{{ entry.obtainingMethod }}</p>
+      </article>
+    } @empty {
+      <article class="empty-state">
+        <h2>No Pokemon match those filters</h2>
+        <p>Try clearing one filter to widen the roster again.</p>
+      </article>
+    }
+  </section>
+</main>

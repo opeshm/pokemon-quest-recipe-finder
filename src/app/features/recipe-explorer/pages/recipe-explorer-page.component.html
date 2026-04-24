@@ -11,26 +11,27 @@
     <app-filters-panel
       [vm]="filtersVm()"
       [assets]="assetBindings"
+      [pokemonProfile]="pokemonProfileBindings"
       (searchTermChange)="facade.setSearchTerm($event)"
-      (selectedQualityChange)="facade.setSelectedQuality($event)"
-      (selectedTypeChange)="facade.setSelectedType($event)"
+      (selectedQualitiesChange)="facade.setSelectedQualities($event)"
+      (selectedTypesChange)="facade.setSelectedTypes($event)"
       (selectedPokemonChange)="facade.setSelectedPokemon($event)"
-      (pokemonFilterQueryChange)="facade.setPokemonFilterQuery($event)"
+      (selectedInventoryChange)="facade.setInventoryIngredients($event)"
       (clearFilters)="facade.clearFilters()"
-      (clearInventory)="facade.clearInventoryIngredients()"
-      (toggleInventoryIngredient)="facade.toggleInventoryIngredient($event)"
     ></app-filters-panel>
 
     <section class="content-grid" aria-label="recipe results and details">
       <app-recipe-list-panel
         [vm]="recipeListVm()"
         [assets]="assetBindings"
+        [pokemonProfile]="pokemonProfileBindings"
         (selectedRecipeIdChange)="facade.selectRecipe($event)"
       ></app-recipe-list-panel>
 
       <app-recipe-detail-panel
         [vm]="recipeDetailVm()"
         [assets]="assetBindings"
+        [pokemonProfile]="pokemonProfileBindings"
       ></app-recipe-detail-panel>
     </section>
   } @else {

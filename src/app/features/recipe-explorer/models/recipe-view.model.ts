@@ -1,4 +1,4 @@
-import { IngredientOption, Recipe } from './recipe.model';
+import { IngredientOption, Recipe } from '../../../core/models/recipe-dataset.model';
 
 export type IngredientConfiguration = {
   id: string;
@@ -43,13 +43,12 @@ export type RecipeAssetBindings = {
 
 export type FiltersPanelViewModel = {
   searchTerm: string;
-  selectedQuality: string;
-  selectedPokemon: string;
-  selectedType: string;
-  pokemonFilterQuery: string;
+  selectedQualities: string[];
+  selectedPokemon: string[];
+  selectedTypes: string[];
   qualityOptions: readonly string[];
   typeOptions: string[];
-  visiblePokemonOptions: string[];
+  pokemonOptions: string[];
   ingredients: IngredientOption[];
   hasInventoryFilter: boolean;
   selectedInventory: ReadonlySet<string>;
@@ -63,4 +62,8 @@ export type RecipeListPanelViewModel = {
 export type RecipeDetailPanelViewModel = {
   selectedRecipeView: SelectedRecipeView | null;
   maxAttractRate: number;
+};
+
+export type PokemonProfileTrigger = {
+  openPokemonProfile: (name: string) => void;
 };

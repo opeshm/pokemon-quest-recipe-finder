@@ -4,22 +4,21 @@
 
 .recipe-list-panel {
   min-height: 31rem;
-  border: 3px solid #c69558;
-  border-radius: 1rem;
-  background: linear-gradient(180deg, #fff3d5 0%, #f8dfad 100%);
-  box-shadow: 0 12px 22px rgba(91, 57, 16, 0.14);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
 }
 
 .recipe-list-panel header {
   padding: 1rem;
-  border-bottom: 2px dashed #d2ab70;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .recipe-list-panel h2 {
   margin: 0;
-  font-family: 'Bungee', 'Segoe UI', sans-serif;
   font-size: clamp(1.2rem, 2vw, 1.65rem);
 }
 
@@ -41,26 +40,26 @@
 .recipe-list button {
   width: 100%;
   text-align: left;
-  border-radius: 0.78rem;
-  border: 2px solid #d3ad72;
-  background: #fff8e7;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
   padding: 0.66rem 0.72rem;
   cursor: pointer;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .recipe-list button:hover {
-  border-color: #ba7730;
+  border-color: rgba(var(--brand-primary-rgb), 0.26);
 }
 
 .recipe-list button:focus-visible {
-  outline: 3px solid #f1a53f;
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.3);
   outline-offset: 2px;
 }
 
 .recipe-list button.active {
-  border-color: #a55023;
-  background: linear-gradient(160deg, #ffe8b6 0%, #f8cb84 100%);
+  border-color: rgba(var(--brand-primary-rgb), 0.4);
+  background: rgba(var(--brand-primary-rgb), 0.08);
   transform: translateY(-1px);
 }
 
@@ -86,7 +85,7 @@
 .dish-icon {
   display: inline-block;
   flex: 0 0 auto;
-  border-radius: 0.66rem;
+  border-radius: 0.85rem;
   border: 2px solid #2f63ac;
   box-shadow: 0 2px 0 rgba(40, 64, 98, 0.35);
   image-rendering: auto;
@@ -95,10 +94,10 @@
 
 .quality-badge {
   margin-top: 0.22rem;
-  padding: 0.18rem 0.48rem;
+  padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  background: #d96434;
-  color: #fff;
+  background: rgba(var(--brand-accent-rgb), 0.14);
+  color: var(--ink-900);
   font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
@@ -124,18 +123,24 @@
 .pokemon-icon.mini {
   border-width: 1px;
   border-radius: 0.34rem;
+  cursor: pointer;
+}
+
+.pokemon-icon.mini:focus-visible {
+  outline: 2px solid rgba(var(--brand-primary-rgb), 0.35);
+  outline-offset: 2px;
 }
 
 .ingredient-token {
   width: 24px;
   height: 24px;
   border-radius: 0.44rem;
-  border: 1px solid #cc9b5f;
-  background: linear-gradient(180deg, #fff4d9 0%, #fde7b9 100%);
+  border: 1px solid rgba(var(--brand-accent-rgb), 0.18);
+  background: rgba(var(--brand-accent-rgb), 0.12);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(var(--text-primary-rgb), 0.04);
 }
 
 .ingredient-token img {
@@ -151,20 +156,20 @@
   padding: 0 0.42rem;
   height: 24px;
   border-radius: 999px;
-  border: 1px dashed #c0863f;
-  background: #fdebc6;
-  color: #784d1e;
+  border: 1px dashed rgba(var(--brand-primary-rgb), 0.28);
+  background: rgba(var(--brand-primary-rgb), 0.08);
+  color: var(--ink-700);
   font-size: 0.74rem;
   font-weight: 700;
 }
 
 .empty-state {
   margin: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  border: 2px dashed #c29a5f;
-  background: #ffefcb;
-  color: #5f4c35;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink-700);
 }
 
 @media (max-width: 70rem) {

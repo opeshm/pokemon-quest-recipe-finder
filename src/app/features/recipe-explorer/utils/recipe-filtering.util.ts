@@ -2,20 +2,10 @@ import { GroupedRecipe, IngredientConfiguration } from '../models/recipe-view.mo
 
 export type RecipeFilterCriteria = {
   searchTerm: string;
-  quality: string;
-  pokemon: string;
-  type: string;
+  qualities: string[];
+  pokemon: string[];
+  types: string[];
 };
-
-export function getVisiblePokemonOptions(pokemonOptions: string[], query: string): string[] {
-  const normalizedQuery = query.trim().toLowerCase();
-
-  if (!normalizedQuery) {
-    return pokemonOptions;
-  }
-
-  return pokemonOptions.filter((name) => name.toLowerCase().includes(normalizedQuery));
-}
 
 export function buildVisibleVariantsByRecipeId(
   groupedRecipes: GroupedRecipe[],
@@ -52,15 +42,15 @@ export function filterGroupedRecipes(
       return false;
     }
 
-    if (criteria.quality && recipe.quality !== criteria.quality) {
+    if (criteria.qualities.length && !criteria.qualities.includes(recipe.quality)) {
       return false;
     }
 
-    if (criteria.pokemon && !recipe.pokemonResults.some((entry) => entry.name === criteria.pokemon)) {
+    if (criteria.pokemon.length && !criteria.pokemon.some((name) => recipe.pokemonResults.some((entry) => entry.name === name))) {
       return false;
     }
 
-    if (criteria.type && recipe.typeName !== criteria.type) {
+    if (criteria.types.length && !criteria.types.includes(recipe.typeName)) {
       return false;
     }
 
