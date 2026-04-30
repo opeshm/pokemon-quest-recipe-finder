@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Commands
-- Use `npm install` with Node/npm managed by `packageManager: npm@10.9.7`.
+- Use `npm install`; the repo pins npm via `packageManager: npm@10.9.7`.
 - Dev server: `npm start` runs `ng serve --port 4300`. Do not trust the README's older `4200` note.
 - Production build: `npm run build`.
 - Development build/watch: `npm run watch`.
@@ -14,12 +14,13 @@
 ## Architecture
 - This is a single Angular application, not a monorepo.
 - The app boots from `src/main.ts` via `bootstrapApplication(App, appConfig)`. Root component/config files are `src/app/app.ts` and `src/app/app.config.ts`, not the usual `app.component.ts` layout.
-- The app is fully standalone; there are no NgModules.
 - `src/app/app.routes.ts` lazy-loads three feature pages: recipe explorer at `/`, moves at `/moves`, and pokedex at `/pokedex`.
-- `src/app/features/recipe-explorer/` is the only feature backed by fetched data. `services/recipe-data.service.ts` loads `public/data/recipes.json` via `GET data/recipes.json`, and `facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
-- `moves/` and `pokedex/` mostly render static TS datasets (`data/*.data.ts`) but still depend on `RecipeDataService` for shared sprite metadata and image lookup.
+- The app is fully standalone; do not add NgModules.
+- Fetched recipe content comes from `public/data/recipes.json`; `src/app/core/data-access/recipe-data.service.ts` loads it via `GET data/recipes.json` and is exposed through `RECIPES_REPOSITORY`.
+- `src/app/features/recipe-explorer/facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
+- `moves/` and `pokedex/` mostly render static TS datasets (`data/*.data.ts`) but still depend on recipe data plus `src/app/core/assets/recipe-asset.service.ts` for sprite metadata and image lookup.
 - `src/app/shared/pokemon-profile/` is a cross-feature modal mounted in the app shell; it combines static pokedex/move data with fetched recipe data.
-- If you change Pokemon names, sprite metadata, or recipe dataset shape, reconcile `public/data/recipes.json`, the `recipe-explorer/models/` types, any affected static `moves/` or `pokedex/` data, and related specs together.
+- If you change Pokemon names, sprite metadata, or recipe dataset shape, reconcile `public/data/recipes.json`, `src/app/core/models/`, facade/utils, affected static `moves`/`pokedex` data, and related specs together.
 
 ## Testing Notes
 - The Angular test builder defaults to `vitest` plus `jsdom` here. If you assume browser-only/Karma behavior, you'll likely write the wrong setup.
@@ -32,5 +33,5 @@
 - Production build budgets are enforced: initial bundle warning/error at `500kB`/`1MB`, component style warning/error at `11kB`/`12kB`. Large style additions can fail CI/builds.
 
 ## OpenCode
-- Project-level OpenCode config lives in `opencode.json` and loads extra instruction files from `docs/ai/`. Keep `AGENTS.md` short; put reusable detail there instead of bloating this file.
+- Project-level OpenCode config lives in `opencode.json` and also loads `docs/ai/architecture.md` and `docs/ai/testing.md`; keep this file to gotchas and avoid duplicating those references.
 - Use `.opencode/agents/repo-docs.md` when the task is specifically about maintaining repo docs or agent reference files.
