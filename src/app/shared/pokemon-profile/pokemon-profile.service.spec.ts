@@ -157,4 +157,29 @@ describe('PokemonProfileService', () => {
       'Flareon'
     ]);
   });
+
+  it('switches the modal to move details', () => {
+    const service = TestBed.inject(PokemonProfileService);
+
+    service.openMove('Vine Whip');
+
+    const view = service.selectedView();
+
+    expect(view?.kind).toBe('move');
+    expect(view?.kind === 'move' ? view.move.description : '').toContain('vines');
+    expect(view?.kind === 'move' ? view.move.iconPath : '').toContain('assets/moves/vinewhip.png');
+  });
+
+  it('switches the modal to recipe details with the current Pokemon attract rate', () => {
+    const service = TestBed.inject(PokemonProfileService);
+
+    service.open('Bulbasaur');
+    service.openRecipe('recipe-1', 'Bulbasaur');
+
+    const view = service.selectedView();
+
+    expect(view?.kind).toBe('recipe');
+    expect(view?.kind === 'recipe' ? view.recipe.recipe.recipeName : '').toBe('Mulligan Stew a la Cube');
+    expect(view?.kind === 'recipe' ? view.recipe.attractRate : null).toBe(66.66);
+  });
 });

@@ -5,7 +5,17 @@ import { PokedexRepository } from '../../core/data-access/pokedex.repository';
 import { RECIPES_REPOSITORY, RecipesRepository } from '../../core/data-access/recipes.repository';
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
 import { moveIconPath } from '../../features/moves/utils/move-icon.util';
-import { PokemonProfileViewModel } from './pokemon-profile.model';
+import {
+  PokemonProfileModalViewModel,
+  PokemonProfileMoveViewModel,
+  PokemonProfileRecipeViewModel,
+  PokemonProfileViewModel
+} from './pokemon-profile.model';
+
+type ModalSelection =
+  | { kind: 'pokemon'; name: string }
+  | { kind: 'move'; name: string }
+  | { kind: 'recipe'; id: string; pokemonName: string | null };
 
 @Injectable({ providedIn: 'root' })
 export class PokemonProfileService {
@@ -13,20 +23,79 @@ export class PokemonProfileService {
   private readonly movesRepository = inject(MovesRepository);
   private readonly recipesRepository = inject<RecipesRepository>(RECIPES_REPOSITORY);
 
-  private readonly _selectedPokemonName = signal<string | null>(null);
+  private readonly _selection = signal<ModalSelection | null>(null);
   private readonly pokedexEntries = this.pokedexRepository.getAll();
   private readonly moves = this.movesRepository.getAll();
 
-  readonly selectedPokemonName = this._selectedPokemonName.asReadonly();
+  readonly pokemonNumberByName = new Map(this.pokedexEntries.map((entry) => [entry.name, entry.number]));
+
+  readonly selectedPokemonName = computed(() => {
+    const selection = this._selection();
+
+    return selection?.kind === 'pokemon' ? selection.name : null;
+  });
   readonly dataset = toSignal(this.recipesRepository.dataset$, { initialValue: null });
 
-  readonly selectedProfile = computed<PokemonProfileViewModel | null>(() => {
-    const name = this.selectedPokemonName();
+  readonly selectedView = computed<PokemonProfileModalViewModel | null>(() => {
+    const selection = this._selection();
 
-    if (!name) {
+    if (!selection) {
       return null;
     }
 
+    switch (selection.kind) {
+      case 'pokemon': {
+        const profile = this.buildPokemonProfile(selection.name);
+        return profile ? { kind: 'pokemon', profile } : null;
+      }
+      case 'move': {
+        const move = this.buildMoveView(selection.name);
+        return move ? { kind: 'move', move } : null;
+      }
+      case 'recipe': {
+        const recipe = this.buildRecipeView(selection.id, selection.pokemonName);
+        return recipe ? { kind: 'recipe', recipe } : null;
+      }
+    }
+
+    return null;
+  });
+
+  readonly selectedProfile = computed<PokemonProfileViewModel | null>(() => {
+    const selectedView = this.selectedView();
+
+    return selectedView?.kind === 'pokemon' ? selectedView.profile : null;
+  });
+
+  open(name: string): void {
+    if (!this.pokedexEntries.some((entry) => entry.name === name)) {
+      return;
+    }
+
+    this._selection.set({ kind: 'pokemon', name });
+  }
+
+  openMove(name: string): void {
+    if (!this.moves.some((move) => move.name === name)) {
+      return;
+    }
+
+    this._selection.set({ kind: 'move', name });
+  }
+
+  openRecipe(id: string, pokemonName: string | null = this.selectedPokemonName()): void {
+    if (!this.dataset()?.recipes.some((recipe) => recipe.id === id)) {
+      return;
+    }
+
+    this._selection.set({ kind: 'recipe', id, pokemonName });
+  }
+
+  close(): void {
+    this._selection.set(null);
+  }
+
+  private buildPokemonProfile(name: string): PokemonProfileViewModel | null {
     const entry = this.pokedexEntries.find((pokemon) => pokemon.name === name);
 
     if (!entry) {
@@ -76,18 +145,30 @@ export class PokemonProfileService {
       moves,
       recipes
     };
-  });
-
-  open(name: string): void {
-    if (!this.pokedexEntries.some((entry) => entry.name === name)) {
-      return;
-    }
-
-    this._selectedPokemonName.set(name);
   }
 
-  close(): void {
-    this._selectedPokemonName.set(null);
+  private buildMoveView(name: string): PokemonProfileMoveViewModel | null {
+    const move = this.moves.find((entry) => entry.name === name);
+
+    return move ? { ...move, iconPath: moveIconPath(move.name) } : null;
+  }
+
+  private buildRecipeView(id: string, pokemonName: string | null): PokemonProfileRecipeViewModel | null {
+    const recipe = this.dataset()?.recipes.find((entry) => entry.id === id);
+
+    if (!recipe) {
+      return null;
+    }
+
+    const attractRate = pokemonName
+      ? recipe.pokemonResults.find((pokemon) => pokemon.name === pokemonName)?.attractRate ?? null
+      : null;
+
+    return {
+      recipe,
+      attractRate,
+      maxAttractRate: recipe.pokemonResults[0]?.attractRate ?? 0
+    };
   }
 
   private buildEvolutionChain(entry: PokedexEntry) {

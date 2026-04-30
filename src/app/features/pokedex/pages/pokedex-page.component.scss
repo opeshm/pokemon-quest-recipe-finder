@@ -45,7 +45,6 @@
 .intro,
 .status-panel p,
 .empty-state p,
-.obtain-method,
 .selector-box-header p,
 .selector-modal-eyebrow,
 .selector-empty-copy {
@@ -354,11 +353,6 @@
 
 .stat-grid div {
   min-width: 4.5rem;
-}
-
-.obtain-method {
-  margin: 0;
-  line-height: 1.45;
 }
 
 @media (max-width: 42rem) {
