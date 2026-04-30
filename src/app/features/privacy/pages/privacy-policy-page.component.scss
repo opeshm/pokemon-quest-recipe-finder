@@ -1,0 +1,51 @@
+.privacy-page {
+  min-height: calc(100dvh - 8rem);
+  padding: clamp(1rem, 1.5vw, 2rem);
+  background:
+    radial-gradient(circle at 14% 10%, var(--halo-primary) 0%, rgba(var(--brand-primary-rgb), 0) 28%),
+    radial-gradient(circle at 86% 12%, var(--halo-accent) 0%, rgba(var(--brand-accent-rgb), 0) 24%),
+    linear-gradient(180deg, #ffffff 0%, #fcf8ff 100%);
+  color: var(--ink-900);
+}
+
+.privacy-card {
+  width: min(54rem, 100%);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-md);
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+.updated {
+  margin: 0.4rem 0 0;
+  color: var(--ink-700);
+  font-weight: 700;
+}
+
+section {
+  margin-top: 1.35rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+section p {
+  margin: 0.55rem 0 0;
+  color: var(--ink-700);
+  line-height: 1.6;
+}

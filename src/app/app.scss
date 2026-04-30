@@ -69,8 +69,43 @@
   box-shadow: 0 10px 24px rgba(var(--brand-primary-rgb), 0.28);
 }
 
+.app-footer {
+  padding: 1rem clamp(1rem, 2vw, 2rem);
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.app-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: min(78rem, 100%);
+  margin: 0 auto;
+  color: var(--ink-700);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.app-footer a {
+  color: var(--brand-primary);
+  text-decoration: none;
+}
+
+.app-footer a:hover,
+.app-footer a:focus-visible {
+  text-decoration: underline;
+  outline: 0;
+}
+
 @media (max-width: 42rem) {
   .app-header-inner {
     align-items: stretch;
+  }
+
+  .app-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

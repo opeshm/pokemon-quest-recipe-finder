@@ -21,5 +21,12 @@ export const routes: Routes = [
       import('./features/pokedex/pages/pokedex-page.component').then(
         (module) => module.PokedexPageComponent
       )
+  },
+  {
+    path: 'privacy',
+    loadComponent: () =>
+      import('./features/privacy/pages/privacy-policy-page.component').then(
+        (module) => module.PrivacyPolicyPageComponent
+      )
   }
 ];
