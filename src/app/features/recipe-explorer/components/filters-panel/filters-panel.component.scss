@@ -145,6 +145,8 @@
 
 .selected-icon-chip img {
   display: block;
+  max-width: 34px;
+  max-height: 34px;
   object-fit: contain;
 }
 

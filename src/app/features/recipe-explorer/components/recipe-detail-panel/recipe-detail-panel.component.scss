@@ -136,10 +136,10 @@
 }
 
 .ingredient-token img {
-  width: 18px;
-  height: 18px;
+  max-width: 20px;
+  max-height: 20px;
   object-fit: contain;
-  image-rendering: pixelated;
+  image-rendering: auto;
 }
 
 .ingredient-token.big {
@@ -151,8 +151,8 @@
 }
 
 .ingredient-token.big img {
-  width: 32px;
-  height: 32px;
+  max-width: 34px;
+  max-height: 34px;
 }
 
 .pokemon-rate-row {
