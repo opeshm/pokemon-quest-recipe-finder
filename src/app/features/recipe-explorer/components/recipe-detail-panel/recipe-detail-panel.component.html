@@ -1,7 +1,7 @@
 <article class="detail-panel">
   @if (vm().selectedRecipeView; as selected) {
     <header>
-      <p class="detail-kicker">Recipe Detail</p>
+      <p class="detail-kicker">{{ 'recipes.detail.kicker' | translate }}</p>
       <div class="detail-title-row">
         <span
           class="dish-icon detail"
@@ -13,23 +13,23 @@
       <div class="detail-meta">
         <span>{{ selected.recipe.quality }}</span>
         <span>{{ selected.recipe.typeName }}</span>
-        <span>{{ selected.visibleVariantCount }} ingredient configs</span>
+        <span>{{ selected.visibleVariantCount }} {{ 'recipes.detail.ingredientConfigs' | translate }}</span>
         @if (selected.hiddenVariantCount > 0) {
-          <span>{{ selected.hiddenVariantCount }} hidden by inventory filter</span>
+          <span>{{ selected.hiddenVariantCount }} {{ 'recipes.detail.hiddenByInventory' | translate }}</span>
         }
       </div>
     </header>
 
     <section class="ingredients-section">
-      <h3>Ingredient Configurations</h3>
+      <h3>{{ 'recipes.detail.configurations' | translate }}</h3>
       <ul class="config-list">
         @for (variant of selected.visibleVariants; track variant.id; let variantIndex = $index) {
           <li>
             <div class="config-header-row">
-              <strong class="config-label">Config {{ variantIndex + 1 }}</strong>
+              <strong class="config-label">{{ 'recipes.detail.config' | translate }} {{ variantIndex + 1 }}</strong>
               <span class="config-text">{{ variantSummary(variant) }}</span>
             </div>
-            <div class="ingredient-mini-strip detailed" aria-label="Ingredient pattern">
+            <div class="ingredient-mini-strip detailed" [attr.aria-label]="'recipes.detail.patternAria' | translate">
               @for (code of variant.ingredientPattern; track $index) {
                 <span class="ingredient-token big">
                   <img [src]="assets().ingredientIconPath(code)" [alt]="assets().ingredientLabel(code)" loading="lazy" />
@@ -42,7 +42,7 @@
     </section>
 
     <section class="pokemon-section">
-      <h3>Attracted Pokemon</h3>
+      <h3>{{ 'recipes.detail.attractedPokemon' | translate }}</h3>
       <ul>
         @for (pokemon of selected.recipe.pokemonResults; track pokemon.name) {
           <li>
@@ -60,6 +60,6 @@
     </section>
 
   } @else {
-    <p class="empty-state">Select a recipe to view details.</p>
+    <p class="empty-state">{{ 'recipes.detail.empty' | translate }}</p>
   }
 </article>

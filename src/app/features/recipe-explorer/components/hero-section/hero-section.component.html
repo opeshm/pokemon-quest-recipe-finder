@@ -1,15 +1,15 @@
 <section class="hero">
-  <p class="kicker">Pokemon Quest Recipe Finder</p>
-  <h1>Discover every recipe, ingredient combo, and attraction rate</h1>
+  <p class="kicker">{{ 'recipes.hero.kicker' | translate }}</p>
+  <h1>{{ 'recipes.hero.title' | translate }}</h1>
   <p class="hero-copy">
-    Data extracted from pokequestrecipes.me and normalized into a local dataset for fast recipe search.
+    {{ 'recipes.hero.copy' | translate }}
   </p>
   @if (dataset(); as data) {
-    <div class="meta-row" aria-label="dataset statistics">
-      <span>{{ data.metadata.totalRecipes }} recipes</span>
-      <span>{{ data.metadata.totalDishes }} dishes</span>
-      <span>{{ data.metadata.totalPokemon }} Pokemon</span>
-      <span>Updated {{ data.metadata.generatedAt | date: 'medium' }}</span>
+    <div class="meta-row" [attr.aria-label]="'recipes.hero.statsLabel' | translate">
+      <span>{{ data.metadata.totalRecipes }} {{ 'recipes.hero.recipes' | translate }}</span>
+      <span>{{ data.metadata.totalDishes }} {{ 'recipes.hero.dishes' | translate }}</span>
+      <span>{{ data.metadata.totalPokemon }} {{ 'shared.pokemon' | translate }}</span>
+      <span>{{ 'recipes.hero.updated' | translate }} {{ data.metadata.generatedAt | date: 'medium' }}</span>
     </div>
   }
 </section>

@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RecipeAssetService } from '../../core/assets/recipe-asset.service';
 import { RECIPES_REPOSITORY, RecipesRepository } from '../../core/data-access/recipes.repository';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { PokedexEntry } from '../../features/pokedex/models/pokedex.model';
 import { PokemonProfileService } from './pokemon-profile.service';
 
@@ -17,7 +18,7 @@ const STONE_ICON_BY_NAME: Record<string, string> = {
 
 @Component({
   selector: 'app-pokemon-profile-modal',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './pokemon-profile-modal.component.html',
   styleUrl: './pokemon-profile-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

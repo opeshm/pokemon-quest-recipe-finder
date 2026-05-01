@@ -6,8 +6,8 @@
         <h2>{{ title() }}</h2>
       </div>
 
-      <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="close.emit()">
-        Close
+      <button type="button" class="selector-modal-close" [attr.aria-label]="'filter.closeAria' | translate" (click)="close.emit()">
+        {{ 'shared.close' | translate }}
       </button>
     </div>
 
@@ -50,10 +50,10 @@
 
     <div class="selector-modal-actions">
       <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="close.emit()">
-        Cancel
+        {{ 'shared.cancel' | translate }}
       </button>
       <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="save.emit()">
-        Save selection
+        {{ 'shared.saveSelection' | translate }}
       </button>
     </div>
   </section>

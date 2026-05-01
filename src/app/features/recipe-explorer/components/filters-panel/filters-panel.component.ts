@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '../../../../core/i18n/translate.pipe';
 import { FiltersPanelViewModel, PokemonProfileTrigger, RecipeAssetBindings } from '../../models/recipe-view.model';
 
 type RecipeFilterModalKind = 'quality' | 'type' | 'pokemon' | 'inventory';
 
 @Component({
   selector: 'app-filters-panel',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './filters-panel.component.html',
   styleUrl: './filters-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

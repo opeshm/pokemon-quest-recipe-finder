@@ -9,11 +9,20 @@
         routerLink="/"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
-        >Recipes</a
+        >{{ 'app.nav.recipes' | translate }}</a
       >
-      <a routerLink="/moves" routerLinkActive="active">Moves</a>
-      <a routerLink="/pokedex" routerLinkActive="active">Pokedex</a>
+      <a routerLink="/moves" routerLinkActive="active">{{ 'app.nav.moves' | translate }}</a>
+      <a routerLink="/pokedex" routerLinkActive="active">{{ 'app.nav.pokedex' | translate }}</a>
     </nav>
+
+    <label class="language-selector">
+      <span>{{ 'app.nav.language' | translate }}</span>
+      <select [value]="language()" (change)="setLanguage($any($event.target).value)">
+        @for (option of languageOptions; track trackByLanguage($index, option)) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
   </div>
 </header>
 
@@ -22,7 +31,7 @@
 <footer class="app-footer">
   <div class="app-footer-inner">
     <span>PokeQuest Studio</span>
-    <a routerLink="/privacy">Privacy Policy</a>
+    <a routerLink="/privacy">{{ 'app.footer.privacy' | translate }}</a>
   </div>
 </footer>
 

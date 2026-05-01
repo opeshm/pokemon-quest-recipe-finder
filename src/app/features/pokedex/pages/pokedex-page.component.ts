@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { FilterSelectorModalComponent } from '../../../shared/ui/filter-selector-modal/filter-selector-modal.component';
 import { PokedexFacade, PokedexSortOption } from '../facade/pokedex.facade';
@@ -8,7 +9,7 @@ import { PokedexEntry } from '../models/pokedex.model';
 
 @Component({
   selector: 'app-pokedex-page',
-  imports: [CommonModule, FilterSelectorModalComponent],
+  imports: [CommonModule, FilterSelectorModalComponent, TranslatePipe],
   templateUrl: './pokedex-page.component.html',
   styleUrl: './pokedex-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

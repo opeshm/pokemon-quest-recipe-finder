@@ -1,26 +1,26 @@
-<section class="filters-panel" aria-label="Recipe filters">
+<section class="filters-panel" [attr.aria-label]="'recipes.filters.aria' | translate">
   <div class="filter-grid">
     <label class="field search-field">
-      <span>Recipe search</span>
+      <span>{{ 'recipes.filters.searchLabel' | translate }}</span>
       <input
         type="search"
         [ngModel]="vm().searchTerm"
         (ngModelChange)="searchTermChange.emit($event)"
-        placeholder="Dish, ingredient, or Pokemon"
+        [placeholder]="'recipes.filters.searchPlaceholder' | translate"
       />
     </label>
   </div>
 
   <div class="selector-grid">
-    <section class="selector-box selector-box--quality" aria-label="Quality filters">
+    <section class="selector-box selector-box--quality" [attr.aria-label]="'recipes.filters.qualityAria' | translate">
       <div class="selector-box-header">
         <div>
-          <h2>Quality</h2>
-          <p>{{ vm().selectedQualities.length }} selected</p>
+          <h2>{{ 'recipes.filters.quality' | translate }}</h2>
+          <p>{{ vm().selectedQualities.length }} {{ 'shared.selected' | translate }}</p>
         </div>
 
         <button type="button" class="selector-trigger" (click)="openSelector('quality')">
-          Add Quality
+          {{ 'recipes.filters.addQuality' | translate }}
         </button>
       </div>
 
@@ -28,19 +28,19 @@
         @for (quality of vm().selectedQualities; track quality) {
           <span class="selected-text-chip" [attr.title]="quality">{{ quality }}</span>
         } @empty {
-          <p class="selector-empty-copy">Limit the recipe list to one or more quality tiers.</p>
+          <p class="selector-empty-copy">{{ 'recipes.filters.qualityEmpty' | translate }}</p>
         }
       </div>
     </section>
 
-    <section class="selector-box selector-box--type" aria-label="Type filters">
+    <section class="selector-box selector-box--type" [attr.aria-label]="'recipes.filters.typeAria' | translate">
       <div class="selector-box-header">
         <div>
-          <h2>Types</h2>
-          <p>{{ vm().selectedTypes.length }} selected</p>
+          <h2>{{ 'shared.types' | translate }}</h2>
+          <p>{{ vm().selectedTypes.length }} {{ 'shared.selected' | translate }}</p>
         </div>
 
-        <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+        <button type="button" class="selector-trigger" (click)="openSelector('type')">{{ 'shared.addType' | translate }}</button>
       </div>
 
       <div class="selector-box-content" [class.selector-box-content--empty]="!vm().selectedTypes.length">
@@ -49,20 +49,20 @@
             <img [src]="assets().typeIconPath(typeName)" [alt]="typeName" width="28" height="28" loading="lazy" />
           </span>
         } @empty {
-          <p class="selector-empty-copy">Filter recipes by one or more dish types.</p>
+          <p class="selector-empty-copy">{{ 'recipes.filters.typeEmpty' | translate }}</p>
         }
       </div>
     </section>
 
-    <section class="selector-box selector-box--pokemon" aria-label="Pokemon filters">
+    <section class="selector-box selector-box--pokemon" [attr.aria-label]="'recipes.filters.pokemonAria' | translate">
       <div class="selector-box-header">
         <div>
-          <h2>Pokemon</h2>
-          <p>{{ vm().selectedPokemon.length }} selected</p>
+          <h2>{{ 'shared.pokemon' | translate }}</h2>
+          <p>{{ vm().selectedPokemon.length }} {{ 'shared.selected' | translate }}</p>
         </div>
 
         <button type="button" class="selector-trigger" (click)="openSelector('pokemon')">
-          Add Pokemon
+          {{ 'recipes.filters.addPokemon' | translate }}
         </button>
       </div>
 
@@ -72,20 +72,20 @@
             <span class="pokemon-icon mini" [ngStyle]="assets().getPokemonSpriteStyle(pokemon, 32)"></span>
           </span>
         } @empty {
-          <p class="selector-empty-copy">Target recipes that can attract specific Pokemon.</p>
+          <p class="selector-empty-copy">{{ 'recipes.filters.pokemonEmpty' | translate }}</p>
         }
       </div>
     </section>
 
-    <section class="selector-box selector-box--inventory" aria-label="Inventory filters">
+    <section class="selector-box selector-box--inventory" [attr.aria-label]="'recipes.filters.inventoryAria' | translate">
       <div class="selector-box-header">
         <div>
-          <h2>Inventory</h2>
-          <p>{{ vm().selectedInventory.size }} selected</p>
+          <h2>{{ 'recipes.filters.inventory' | translate }}</h2>
+          <p>{{ vm().selectedInventory.size }} {{ 'shared.selected' | translate }}</p>
         </div>
 
         <button type="button" class="selector-trigger" (click)="openSelector('inventory')">
-          Add Ingredient
+          {{ 'recipes.filters.addIngredient' | translate }}
         </button>
       </div>
 
@@ -98,13 +98,13 @@
           }
         }
         @if (!vm().selectedInventory.size) {
-          <p class="selector-empty-copy">Only show configurations cookable with selected ingredients.</p>
+          <p class="selector-empty-copy">{{ 'recipes.filters.inventoryEmpty' | translate }}</p>
         }
       </div>
     </section>
   </div>
 
-  <button type="button" class="clear-button" (click)="clearFilters.emit()">Clear filters</button>
+  <button type="button" class="clear-button" (click)="clearFilters.emit()">{{ 'shared.clearFilters' | translate }}</button>
 </section>
 
 @if (modalKind; as activeModal) {
@@ -112,23 +112,23 @@
     <section class="selector-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle()">
       <div class="selector-modal-header">
         <div>
-          <p class="selector-modal-eyebrow">Recipe filter</p>
+          <p class="selector-modal-eyebrow">{{ 'recipes.filters.modalEyebrow' | translate }}</p>
           <h2>{{ modalTitle() }}</h2>
         </div>
 
-        <button type="button" class="selector-modal-close" aria-label="Close filter modal" (click)="closeSelector()">
-          Close
+        <button type="button" class="selector-modal-close" [attr.aria-label]="'filter.closeAria' | translate" (click)="closeSelector()">
+          {{ 'shared.close' | translate }}
         </button>
       </div>
 
       @if (activeModal === 'pokemon' || activeModal === 'inventory') {
         <label class="modal-search-field">
-          <span>{{ activeModal === 'pokemon' ? 'Search pokemon' : 'Search ingredients' }}</span>
+          <span>{{ activeModal === 'pokemon' ? ('shared.searchPokemon' | translate) : ('recipes.filters.searchIngredients' | translate) }}</span>
           <input
             type="search"
             [ngModel]="modalSearch"
             (ngModelChange)="updateModalSearch($event)"
-            [placeholder]="activeModal === 'pokemon' ? 'Find a pokemon' : 'Find an ingredient'"
+            [placeholder]="activeModal === 'pokemon' ? ('shared.findPokemon' | translate) : ('recipes.filters.findIngredient' | translate)"
           />
         </label>
       }
@@ -165,10 +165,10 @@
 
       <div class="selector-modal-actions">
         <button type="button" class="selector-modal-button selector-modal-button--secondary" (click)="closeSelector()">
-          Cancel
+          {{ 'shared.cancel' | translate }}
         </button>
         <button type="button" class="selector-modal-button selector-modal-button--primary" (click)="saveSelector()">
-          Save selection
+          {{ 'shared.saveSelection' | translate }}
         </button>
       </div>
     </section>

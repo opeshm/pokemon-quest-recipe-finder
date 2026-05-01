@@ -1,52 +1,52 @@
 <main class="page-shell">
   <section class="hero-panel">
-    <p class="eyebrow">Pokemon Quest Moves</p>
-    <h1>All Pokemon Quest moves in one place</h1>
+    <p class="eyebrow">{{ 'moves.hero.kicker' | translate }}</p>
+    <h1>{{ 'moves.hero.title' | translate }}</h1>
     <p class="intro">
-      Browse every move listed by
+      {{ 'moves.hero.copyPrefix' | translate }}
       <a href="https://www.serebii.net/quest/attacks.shtml" target="_blank" rel="noreferrer"
         >Serebii</a
-      >, including duplicate Transform rows and original naming quirks.
+      >{{ 'moves.hero.copySuffix' | translate }}
     </p>
 
-    <div class="hero-stats" aria-label="Move counts">
+    <div class="hero-stats" [attr.aria-label]="'moves.hero.statsAria' | translate">
       <div>
-        <span>Visible</span>
+        <span>{{ 'shared.visible' | translate }}</span>
         <strong>{{ filteredMoves().length }}</strong>
       </div>
       <div>
-        <span>Total</span>
+        <span>{{ 'shared.total' | translate }}</span>
         <strong>{{ moves.length }}</strong>
       </div>
       <div>
-        <span>Pokemon</span>
+        <span>{{ 'shared.pokemon' | translate }}</span>
         <strong>{{ visiblePokemonCount() }}</strong>
       </div>
     </div>
   </section>
 
-  <section class="filters-panel" aria-label="Move filters">
+  <section class="filters-panel" [attr.aria-label]="'moves.filters.aria' | translate">
     <div class="filter-grid">
       <label class="filter-field">
-        <span>Move name</span>
+        <span>{{ 'moves.filters.name' | translate }}</span>
         <input
           type="search"
           [value]="nameFilter()"
-          placeholder="Search moves"
+          [placeholder]="'moves.filters.searchPlaceholder' | translate"
           (input)="updateNameFilter($any($event.target).value)"
         />
       </label>
     </div>
 
     <div class="selector-grid">
-      <section class="selector-box selector-box--type" aria-label="Type filters">
+      <section class="selector-box selector-box--type" [attr.aria-label]="'recipes.filters.typeAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Types</h2>
-            <p>{{ selectedTypes().length }} selected</p>
+            <h2>{{ 'shared.types' | translate }}</h2>
+            <p>{{ selectedTypes().length }} {{ 'shared.selected' | translate }}</p>
           </div>
 
-          <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+          <button type="button" class="selector-trigger" (click)="openSelector('type')">{{ 'shared.addType' | translate }}</button>
         </div>
 
         <div class="selector-box-content" [class.selector-box-content--empty]="!selectedTypes().length">
@@ -55,20 +55,20 @@
               <img [src]="typeIconPath(type)" [alt]="type" width="28" height="28" />
             </span>
           } @empty {
-            <p class="selector-empty-copy">Filter by one or more move types.</p>
+            <p class="selector-empty-copy">{{ 'moves.filters.typeEmpty' | translate }}</p>
           }
         </div>
       </section>
 
-      <section class="selector-box selector-box--stone" aria-label="Stone filters">
+      <section class="selector-box selector-box--stone" [attr.aria-label]="'moves.filters.stonesAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Stones</h2>
-            <p>{{ selectedStones().length }} selected</p>
+            <h2>{{ 'moves.filters.stones' | translate }}</h2>
+            <p>{{ selectedStones().length }} {{ 'shared.selected' | translate }}</p>
           </div>
 
           <button type="button" class="selector-trigger" (click)="openSelector('stone')">
-            Add Stone
+            {{ 'moves.filters.addStone' | translate }}
           </button>
         </div>
 
@@ -78,20 +78,20 @@
               <img [src]="stoneIconPath(stone)" [alt]="stone" width="32" height="32" />
             </span>
           } @empty {
-            <p class="selector-empty-copy">Pick one or more stone synergies.</p>
+            <p class="selector-empty-copy">{{ 'moves.filters.stonesEmpty' | translate }}</p>
           }
         </div>
       </section>
 
-      <section class="selector-box selector-box--pokemon" aria-label="Pokemon filters">
+      <section class="selector-box selector-box--pokemon" [attr.aria-label]="'recipes.filters.pokemonAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Pokemon</h2>
-            <p>{{ selectedPokemon().length }} selected</p>
+            <h2>{{ 'shared.pokemon' | translate }}</h2>
+            <p>{{ selectedPokemon().length }} {{ 'shared.selected' | translate }}</p>
           </div>
 
           <button type="button" class="selector-trigger" (click)="openSelector('pokemon')">
-            Add Pokemon
+            {{ 'moves.filters.addPokemon' | translate }}
           </button>
         </div>
 
@@ -117,19 +117,19 @@
               }
             </span>
           } @empty {
-            <p class="selector-empty-copy">Limit the list to specific compatible Pokemon.</p>
+            <p class="selector-empty-copy">{{ 'moves.filters.pokemonEmpty' | translate }}</p>
           }
         </div>
       </section>
 
-      <section class="selector-box selector-box--sort" aria-label="Sorting options">
+      <section class="selector-box selector-box--sort" [attr.aria-label]="'moves.filters.sortAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Sort</h2>
-            <p>1 selected</p>
+            <h2>{{ 'shared.sort' | translate }}</h2>
+            <p>1 {{ 'shared.selected' | translate }}</p>
           </div>
 
-          <button type="button" class="selector-trigger" (click)="openSelector('sort')">Change Sort</button>
+          <button type="button" class="selector-trigger" (click)="openSelector('sort')">{{ 'shared.changeSort' | translate }}</button>
         </div>
 
         <div class="selector-box-content">
@@ -144,14 +144,14 @@
       [disabled]="!hasActiveFilters()"
       (click)="clearFilters()"
     >
-      Clear filters
+      {{ 'shared.clearFilters' | translate }}
     </button>
   </section>
 
   @if (modalKind(); as activeModal) {
     <app-filter-selector-modal
       [title]="modalTitle()"
-      [eyebrow]="'Move filter'"
+      [eyebrow]="'moves.filters.moveFilter' | translate"
       [options]="modalOptions()"
       [isOptionSelected]="isModalOptionSelected.bind(this)"
       [optionLabel]="modalOptionLabel.bind(this)"
@@ -162,8 +162,8 @@
       [leadingImageHeight]="modalLeadingImageHeight()"
       [showSearch]="activeModal === 'pokemon'"
       [searchValue]="modalSearch()"
-      [searchLabel]="'Search pokemon'"
-      [searchPlaceholder]="'Find a pokemon'"
+      [searchLabel]="'shared.searchPokemon' | translate"
+      [searchPlaceholder]="'shared.findPokemon' | translate"
       (close)="closeSelector()"
       (searchValueChange)="updateModalSearch($event)"
       (optionToggle)="toggleModalOption($event)"
@@ -171,7 +171,7 @@
     ></app-filter-selector-modal>
   }
 
-  <section class="results-grid" aria-label="Move list">
+  <section class="results-grid" [attr.aria-label]="'moves.results.aria' | translate">
     @for (move of filteredMoves(); track trackByMove($index, move)) {
       <article class="move-card">
         <div class="card-header">
@@ -188,11 +188,11 @@
 
           <dl class="stat-grid">
             <div>
-              <dt>Wait</dt>
+              <dt>{{ 'moves.card.wait' | translate }}</dt>
               <dd>{{ move.waitTime }}</dd>
             </div>
             <div>
-              <dt>Power</dt>
+              <dt>{{ 'moves.card.power' | translate }}</dt>
               <dd>{{ move.power }}</dd>
             </div>
           </dl>
@@ -201,8 +201,8 @@
         <p class="description">{{ move.description }}</p>
 
         <div class="detail-block">
-          <h3>Compatible stones</h3>
-          <div class="stone-icon-row" aria-label="Compatible stones">
+          <h3>{{ 'moves.card.compatibleStones' | translate }}</h3>
+          <div class="stone-icon-row" [attr.aria-label]="'moves.card.compatibleStones' | translate">
             @for (stone of move.stones; track trackByValue($index, stone)) {
               <span class="stone-icon-chip" [attr.title]="stone" [attr.aria-label]="stone">
                 <img class="stone-icon" [src]="stoneIconPath(stone)" [alt]="stone" width="40" height="40" />
@@ -212,8 +212,8 @@
         </div>
 
         <div class="detail-block">
-          <h3>Pokemon that can equip it</h3>
-          <div class="pokemon-avatar-row" aria-label="Compatible Pokemon">
+          <h3>{{ 'moves.card.compatiblePokemon' | translate }}</h3>
+          <div class="pokemon-avatar-row" [attr.aria-label]="'profile.compatiblePokemon' | translate">
             @for (pokemon of move.pokemon; track trackByValue($index, pokemon)) {
               <span class="pokemon-avatar-chip" [attr.title]="pokemon" [attr.aria-label]="pokemon" tabindex="0" (click)="openPokemonProfile(pokemon)" (keydown.enter)="openPokemonProfile(pokemon)" (keydown.space)="openPokemonProfile(pokemon); $event.preventDefault()">
                 @if (hasPokemonSprite(pokemon)) {
@@ -238,8 +238,8 @@
       </article>
     } @empty {
       <article class="empty-state">
-        <h2>No moves match those filters</h2>
-        <p>Try clearing one filter to bring more of the move list back into view.</p>
+        <h2>{{ 'moves.empty.title' | translate }}</h2>
+        <p>{{ 'moves.empty.copy' | translate }}</p>
       </article>
     }
   </section>

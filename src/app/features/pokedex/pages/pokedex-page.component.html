@@ -1,18 +1,18 @@
 <main class="page-shell">
   <section class="hero-panel">
-    <p class="eyebrow">Pokemon Quest Pokedex</p>
-    <h1>Every Pokemon available in Pokemon Quest</h1>
+    <p class="eyebrow">{{ 'pokedex.hero.kicker' | translate }}</p>
+    <h1>{{ 'pokedex.hero.title' | translate }}</h1>
     <p class="intro">
-      Browse the full roster and narrow it down by automatic style and elemental type.
+      {{ 'pokedex.hero.copy' | translate }}
     </p>
 
-    <div class="hero-stats" aria-label="Pokedex counts">
+    <div class="hero-stats" [attr.aria-label]="'pokedex.hero.statsAria' | translate">
       <div>
-        <span>Visible</span>
+        <span>{{ 'shared.visible' | translate }}</span>
         <strong>{{ filteredEntries().length }}</strong>
       </div>
       <div>
-        <span>Total</span>
+        <span>{{ 'shared.total' | translate }}</span>
         <strong>{{ entries.length }}</strong>
       </div>
     </div>
@@ -20,52 +20,52 @@
 
   @if (spriteWarning(); as warningMessage) {
     <section class="status-panel warning" aria-live="polite">
-      <h2>Sprite sheet unavailable</h2>
+      <h2>{{ 'pokedex.warning.title' | translate }}</h2>
       <p>{{ warningMessage }}</p>
     </section>
   }
 
-  <section class="filters-panel" aria-label="Pokedex filters">
+  <section class="filters-panel" [attr.aria-label]="'pokedex.filters.aria' | translate">
     <div class="filter-grid">
       <label class="filter-field">
-        <span>Pokemon name</span>
+        <span>{{ 'pokedex.filters.name' | translate }}</span>
         <input
           type="search"
           [value]="nameFilter()"
-          placeholder="Search Pokemon"
+          [placeholder]="'pokedex.filters.searchPlaceholder' | translate"
           (input)="updateNameFilter($any($event.target).value)"
         />
       </label>
     </div>
 
     <div class="selector-grid">
-      <section class="selector-box selector-box--style" aria-label="Style filters">
+      <section class="selector-box selector-box--style" [attr.aria-label]="'pokedex.filters.styleAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Style</h2>
-            <p>{{ selectedStyles().length }} selected</p>
+            <h2>{{ 'pokedex.filters.style' | translate }}</h2>
+            <p>{{ selectedStyles().length }} {{ 'shared.selected' | translate }}</p>
           </div>
 
-          <button type="button" class="selector-trigger" (click)="openSelector('style')">Add Style</button>
+          <button type="button" class="selector-trigger" (click)="openSelector('style')">{{ 'pokedex.filters.addStyle' | translate }}</button>
         </div>
 
         <div class="selector-box-content" [class.selector-box-content--empty]="!selectedStyles().length">
           @for (style of selectedStyles(); track style) {
             <span class="selected-text-chip" [attr.title]="style">{{ style }}</span>
           } @empty {
-            <p class="selector-empty-copy">Limit the roster to one or more combat styles.</p>
+            <p class="selector-empty-copy">{{ 'pokedex.filters.styleEmpty' | translate }}</p>
           }
         </div>
       </section>
 
-      <section class="selector-box selector-box--type" aria-label="Type filters">
+      <section class="selector-box selector-box--type" [attr.aria-label]="'recipes.filters.typeAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Type</h2>
-            <p>{{ selectedTypes().length }} selected</p>
+            <h2>{{ 'shared.type' | translate }}</h2>
+            <p>{{ selectedTypes().length }} {{ 'shared.selected' | translate }}</p>
           </div>
 
-          <button type="button" class="selector-trigger" (click)="openSelector('type')">Add Type</button>
+          <button type="button" class="selector-trigger" (click)="openSelector('type')">{{ 'pokedex.filters.addType' | translate }}</button>
         </div>
 
         <div class="selector-box-content" [class.selector-box-content--empty]="!selectedTypes().length">
@@ -74,19 +74,19 @@
               <img [src]="typeIconPath(type)" [alt]="type" width="28" height="28" />
             </span>
           } @empty {
-            <p class="selector-empty-copy">Filter Pokemon by one or more elemental types.</p>
+            <p class="selector-empty-copy">{{ 'pokedex.filters.typeEmpty' | translate }}</p>
           }
         </div>
       </section>
 
-      <section class="selector-box selector-box--sort" aria-label="Sorting options">
+      <section class="selector-box selector-box--sort" [attr.aria-label]="'moves.filters.sortAria' | translate">
         <div class="selector-box-header">
           <div>
-            <h2>Sort</h2>
-            <p>1 selected</p>
+            <h2>{{ 'shared.sort' | translate }}</h2>
+            <p>1 {{ 'shared.selected' | translate }}</p>
           </div>
 
-          <button type="button" class="selector-trigger" (click)="openSelector('sort')">Change Sort</button>
+          <button type="button" class="selector-trigger" (click)="openSelector('sort')">{{ 'shared.changeSort' | translate }}</button>
         </div>
 
         <div class="selector-box-content">
@@ -96,14 +96,14 @@
     </div>
 
     <button type="button" class="clear-button" [disabled]="!hasActiveFilters()" (click)="clearFilters()">
-      Clear filters
+      {{ 'shared.clearFilters' | translate }}
     </button>
   </section>
 
   @if (modalKind()) {
     <app-filter-selector-modal
       [title]="modalTitle()"
-      [eyebrow]="'Pokedex filter'"
+      [eyebrow]="'pokedex.filters.pokedexFilter' | translate"
       [options]="modalOptions()"
       [isOptionSelected]="isModalOptionSelected.bind(this)"
       [optionLabel]="modalOptionLabel.bind(this)"
@@ -116,7 +116,7 @@
     ></app-filter-selector-modal>
   }
 
-  <section class="results-grid" aria-label="Pokemon list">
+  <section class="results-grid" [attr.aria-label]="'pokedex.results.aria' | translate">
     @for (entry of filteredEntries(); track trackByNumber($index, entry)) {
       <article class="pokedex-card" tabindex="0" (click)="openPokemonProfile(entry.name)" (keydown.enter)="openPokemonProfile(entry.name)" (keydown.space)="openPokemonProfile(entry.name); $event.preventDefault()">
         <div class="card-header">
@@ -146,7 +146,7 @@
           <div class="card-copy">
             <h2>{{ entry.name }}</h2>
 
-            <div class="type-list" aria-label="Pokemon types">
+            <div class="type-list" [attr.aria-label]="'pokedex.results.typesAria' | translate">
               @for (type of entry.types; track type) {
                 <span class="type-pill">
                   <img [src]="typeIconPath(type)" alt="" width="16" height="16" aria-hidden="true" />
@@ -170,8 +170,8 @@
       </article>
     } @empty {
       <article class="empty-state">
-        <h2>No Pokemon match those filters</h2>
-        <p>Try clearing one filter to widen the roster again.</p>
+        <h2>{{ 'pokedex.empty.title' | translate }}</h2>
+        <p>{{ 'pokedex.empty.copy' | translate }}</p>
       </article>
     }
   </section>

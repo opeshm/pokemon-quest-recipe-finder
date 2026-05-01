@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RecipeAssetService } from '../../../core/assets/recipe-asset.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { PokemonProfileService } from '../../../shared/pokemon-profile/pokemon-profile.service';
 import { FilterSelectorModalComponent } from '../../../shared/ui/filter-selector-modal/filter-selector-modal.component';
 import { MovesFacade, MovesSortOption } from '../facade/moves.facade';
@@ -17,7 +18,7 @@ const STONE_ICON_BY_NAME: Record<string, string> = {
 
 @Component({
   selector: 'app-moves-page',
-  imports: [CommonModule, FilterSelectorModalComponent],
+  imports: [CommonModule, FilterSelectorModalComponent, TranslatePipe],
   templateUrl: './moves-page.component.html',
   styleUrl: './moves-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,7 +1,7 @@
 <article class="recipe-list-panel">
   <header>
-    <h2>Recipes</h2>
-    <p>{{ vm().cards.length }} matching probability groups</p>
+    <h2>{{ 'recipes.list.title' | translate }}</h2>
+    <p>{{ vm().cards.length }} {{ 'recipes.list.matchingGroups' | translate }}</p>
   </header>
 
   @if (vm().cards.length) {
@@ -24,7 +24,7 @@
             </div>
             <p>{{ card.recipe.typeName }}</p>
             <p>{{ card.ingredientSummary }}</p>
-            <div class="pokemon-mini-strip" aria-label="Top attracted Pokemon">
+            <div class="pokemon-mini-strip" [attr.aria-label]="'recipes.list.topPokemonAria' | translate">
               @for (pokemon of card.recipe.pokemonResults.slice(0, 6); track pokemon.name) {
                 <span
                   class="pokemon-icon mini"
@@ -39,14 +39,14 @@
               }
             </div>
             @if (card.firstVariant; as variant) {
-              <div class="ingredient-mini-strip" aria-label="Ingredient pattern example">
+              <div class="ingredient-mini-strip" [attr.aria-label]="'recipes.list.patternExampleAria' | translate">
                 @for (code of variant.ingredientPattern; track $index) {
                   <span class="ingredient-token">
                     <img [src]="assets().ingredientIconPath(code)" [alt]="assets().ingredientLabel(code)" loading="lazy" />
                   </span>
                 }
                 @if (card.visibleVariantCount > 1) {
-                  <span class="config-count-chip">+{{ card.visibleVariantCount - 1 }} more</span>
+                  <span class="config-count-chip">+{{ card.visibleVariantCount - 1 }} {{ 'recipes.list.more' | translate }}</span>
                 }
               </div>
             }
@@ -55,6 +55,6 @@
       }
     </ul>
   } @else {
-    <p class="empty-state">No recipes match the current filters.</p>
+    <p class="empty-state">{{ 'recipes.list.empty' | translate }}</p>
   }
 </article>

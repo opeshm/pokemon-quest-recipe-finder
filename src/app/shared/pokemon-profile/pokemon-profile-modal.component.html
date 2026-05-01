@@ -39,13 +39,13 @@
                 </div>
 
                 <div class="profile-copy">
-                  <p class="profile-kicker">Pokemon Profile</p>
+                  <p class="profile-kicker">{{ 'profile.pokemonKicker' | translate }}</p>
                   <div class="profile-title-row">
                     <h2>{{ pokemonProfile.entry.name }}</h2>
                     <span class="dex-number">#{{ pokemonProfile.entry.number.toString().padStart(3, '0') }}</span>
                   </div>
 
-                  <div class="type-list" aria-label="Pokemon types">
+                    <div class="type-list" [attr.aria-label]="'pokedex.results.typesAria' | translate">
                     @for (type of pokemonProfile.entry.types; track type) {
                       <span class="type-pill">
                         <img [src]="typeIconPath(type)" alt="" width="16" height="16" aria-hidden="true" />
@@ -56,7 +56,7 @@
 
                   <div class="meta-grid">
                     <div>
-                      <span>Style</span>
+                      <span>{{ 'pokedex.filters.style' | translate }}</span>
                       <strong>{{ pokemonProfile.entry.style }}</strong>
                     </div>
                     <div>
@@ -71,19 +71,19 @@
                 </div>
               </div>
 
-              <button type="button" class="close-button" aria-label="Close Pokemon profile" (click)="close()">
-                Close
+              <button type="button" class="close-button" [attr.aria-label]="'profile.closePokemonAria' | translate" (click)="close()">
+                {{ 'shared.close' | translate }}
               </button>
             </header>
 
             <section class="profile-section">
-              <h3>Obtaining Method</h3>
+              <h3>{{ 'profile.obtainingMethod' | translate }}</h3>
               <p>{{ pokemonProfile.entry.obtainingMethod }}</p>
             </section>
 
             <section class="profile-section">
-              <h3>Evolution Chain</h3>
-              <div class="evolution-chain" aria-label="Evolution chain">
+              <h3>{{ 'profile.evolutionChain' | translate }}</h3>
+              <div class="evolution-chain" [attr.aria-label]="'profile.evolutionChainAria' | translate">
                 @for (step of pokemonProfile.evolutionChain; track evolutionTrackBy($index, step); let stepIndex = $index) {
                   @if (stepIndex > 0) {
                     <div class="evolution-connector">
@@ -118,8 +118,8 @@
 
             <section class="profile-section">
               <div class="section-header">
-                <h3>Moves</h3>
-                <span>{{ pokemonProfile.moves.length }} available</span>
+                  <h3>{{ 'profile.moves' | translate }}</h3>
+                  <span>{{ pokemonProfile.moves.length }} {{ 'profile.available' | translate }}</span>
               </div>
 
               @if (pokemonProfile.moves.length) {
@@ -127,10 +127,10 @@
                   <table class="moves-table">
                     <thead>
                       <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Wait</th>
-                        <th>Power</th>
+                        <th>{{ 'profile.name' | translate }}</th>
+                        <th>{{ 'shared.type' | translate }}</th>
+                        <th>{{ 'moves.card.wait' | translate }}</th>
+                        <th>{{ 'moves.card.power' | translate }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -151,14 +151,14 @@
                   </table>
                 </div>
               } @else {
-                <p class="empty-copy">No move data is available for this Pokemon.</p>
+                <p class="empty-copy">{{ 'profile.noMoves' | translate }}</p>
               }
             </section>
 
             <section class="profile-section">
               <div class="section-header">
-                <h3>Recipes</h3>
-                <span>{{ pokemonProfile.recipes.length }} matched</span>
+                  <h3>{{ 'profile.recipes' | translate }}</h3>
+                  <span>{{ pokemonProfile.recipes.length }} {{ 'profile.matched' | translate }}</span>
               </div>
 
               @if (pokemonProfile.recipes.length) {
@@ -177,7 +177,7 @@
                   }
                 </ul>
               } @else {
-                <p class="empty-copy">This Pokemon does not appear in the current recipe dataset.</p>
+                <p class="empty-copy">{{ 'profile.notInDataset' | translate }}</p>
               }
             </section>
           }
@@ -189,7 +189,7 @@
               <div class="profile-identity">
                 <img class="move-hero-icon" [src]="move.iconPath" [alt]="move.name + ' icon'" width="88" height="88" />
                 <div class="profile-copy">
-                  <p class="profile-kicker">Move Detail</p>
+                  <p class="profile-kicker">{{ 'profile.moveKicker' | translate }}</p>
                   <div class="profile-title-row">
                     <h2>{{ move.name }}</h2>
                     <span class="type-pill">
@@ -199,31 +199,31 @@
                   </div>
                   <div class="meta-grid">
                     <div>
-                      <span>Wait</span>
+                      <span>{{ 'moves.card.wait' | translate }}</span>
                       <strong>{{ move.waitTime }}</strong>
                     </div>
                     <div>
-                      <span>Power</span>
+                      <span>{{ 'moves.card.power' | translate }}</span>
                       <strong>{{ move.power }}</strong>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <button type="button" class="close-button" aria-label="Close move detail" (click)="close()">Close</button>
+              <button type="button" class="close-button" [attr.aria-label]="'profile.closeMoveAria' | translate" (click)="close()">{{ 'shared.close' | translate }}</button>
             </header>
 
             <section class="profile-section">
-              <h3>Description</h3>
+              <h3>{{ 'profile.description' | translate }}</h3>
               <p>{{ move.description }}</p>
             </section>
 
             <section class="profile-section">
               <div class="section-header">
-                <h3>Compatible Pokemon</h3>
-                <span>{{ move.pokemon.length }} available</span>
+                <h3>{{ 'profile.compatiblePokemon' | translate }}</h3>
+                <span>{{ move.pokemon.length }} {{ 'profile.available' | translate }}</span>
               </div>
-              <div class="pokemon-icon-grid" aria-label="Compatible Pokemon">
+              <div class="pokemon-icon-grid" [attr.aria-label]="'profile.compatiblePokemon' | translate">
                 @for (pokemon of move.pokemon; track pokemon) {
                   <button type="button" class="pokemon-icon-chip" [attr.aria-label]="'View ' + pokemon" [attr.title]="pokemon" (click)="openPokemon(pokemon)">
                     @if (hasSprite(pokemon)) {
@@ -244,10 +244,10 @@
 
             <section class="profile-section">
               <div class="section-header">
-                <h3>Compatible Stones</h3>
-                <span>{{ move.stones.length }} listed</span>
+                <h3>{{ 'profile.compatibleStones' | translate }}</h3>
+                <span>{{ move.stones.length }} {{ 'profile.listed' | translate }}</span>
               </div>
-              <div class="stone-icon-list" aria-label="Compatible stones">
+              <div class="stone-icon-list" [attr.aria-label]="'profile.compatibleStones' | translate">
                 @for (stone of move.stones; track stone) {
                   <span class="stone-icon-chip" [attr.title]="stone" [attr.aria-label]="stone">
                     <img class="stone-icon" [src]="stoneIconPath(stone)" [alt]="stone" width="40" height="40" />
@@ -265,19 +265,19 @@
               <div class="profile-identity">
                 <span class="dish-icon dish-icon--hero" [ngStyle]="dishSpriteStyle(recipe.dishSlug, 120)" [attr.aria-label]="recipe.recipeName"></span>
                 <div class="profile-copy">
-                  <p class="profile-kicker">Recipe Detail</p>
+                  <p class="profile-kicker">{{ 'profile.recipeKicker' | translate }}</p>
                   <div class="profile-title-row">
                     <h2>{{ recipe.recipeName }}</h2>
                     <span class="dex-number">{{ recipe.quality }}</span>
                   </div>
                   <div class="meta-grid">
                     <div>
-                      <span>Type</span>
+                      <span>{{ 'shared.type' | translate }}</span>
                       <strong>{{ recipe.typeName }}</strong>
                     </div>
                     @if (recipeView.attractRate !== null) {
                       <div>
-                        <span>Attract</span>
+                        <span>{{ 'profile.attract' | translate }}</span>
                         <strong>{{ recipeView.attractRate.toFixed(2) }}%</strong>
                       </div>
                     }
@@ -285,12 +285,12 @@
                 </div>
               </div>
 
-              <button type="button" class="close-button" aria-label="Close recipe detail" (click)="close()">Close</button>
+              <button type="button" class="close-button" [attr.aria-label]="'profile.closeRecipeAria' | translate" (click)="close()">{{ 'shared.close' | translate }}</button>
             </header>
 
             <section class="profile-section">
-              <h3>Ingredients</h3>
-              <div class="ingredient-list" aria-label="Ingredients">
+              <h3>{{ 'profile.ingredients' | translate }}</h3>
+              <div class="ingredient-list" [attr.aria-label]="'profile.ingredientsAria' | translate">
                 @for (code of recipe.ingredientPattern; track $index) {
                   <span class="ingredient-token big" [attr.title]="ingredientLabel(code)">
                     <img [src]="ingredientIconPath(code)" [alt]="ingredientLabel(code)" loading="lazy" />
@@ -301,8 +301,8 @@
 
             <section class="profile-section">
               <div class="section-header">
-                <h3>Attracted Pokemon</h3>
-                <span>{{ recipe.pokemonResults.length }} matched</span>
+                <h3>{{ 'profile.attractedPokemon' | translate }}</h3>
+                <span>{{ recipe.pokemonResults.length }} {{ 'profile.matched' | translate }}</span>
               </div>
               <ul class="recipe-pokemon-list">
                 @for (pokemon of recipe.pokemonResults; track pokemon.name) {

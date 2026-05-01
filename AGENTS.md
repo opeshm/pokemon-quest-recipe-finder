@@ -14,7 +14,7 @@
 ## Architecture
 - This is a single Angular application, not a monorepo.
 - The app boots from `src/main.ts` via `bootstrapApplication(App, appConfig)`. Root component/config files are `src/app/app.ts` and `src/app/app.config.ts`, not the usual `app.component.ts` layout.
-- `src/app/app.routes.ts` lazy-loads three feature pages: recipe explorer at `/`, moves at `/moves`, and pokedex at `/pokedex`.
+- `src/app/app.routes.ts` lazy-loads four pages: recipe explorer at `/`, moves at `/moves`, pokedex at `/pokedex`, and privacy at `/privacy`.
 - The app is fully standalone; do not add NgModules.
 - Fetched recipe content comes from `public/data/recipes.json`; `src/app/core/data-access/recipe-data.service.ts` loads it via `GET data/recipes.json` and is exposed through `RECIPES_REPOSITORY`.
 - `src/app/features/recipe-explorer/facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
@@ -26,6 +26,7 @@
 - The Angular test builder defaults to `vitest` plus `jsdom` here. If you assume browser-only/Karma behavior, you'll likely write the wrong setup.
 - Existing signal/effect-heavy facade tests call `TestBed.flushEffects()` after state changes. Follow that pattern when asserting computed/effect-driven updates.
 - Service tests use `provideHttpClient()` plus `provideHttpClientTesting()` and expect requests to `data/recipes.json`.
+- `src/app/core/data-integrity.spec.ts` verifies recipe JSON, static moves/pokedex data, and asset files stay aligned; update/run it when touching names, types, moves, sprites, or dataset shape.
 
 ## Constraints And Conventions
 - TypeScript and Angular template checks are strict (`strict`, `noImplicitOverride`, `noImplicitReturns`, `strictTemplates`, etc.). Prefer fixing types cleanly instead of weakening config.

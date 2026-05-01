@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { TranslatePipe } from '../../../../core/i18n/translate.pipe';
 import { IngredientConfiguration, PokemonProfileTrigger, RecipeAssetBindings, RecipeDetailPanelViewModel } from '../../models/recipe-view.model';
 
 @Component({
   selector: 'app-recipe-detail-panel',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './recipe-detail-panel.component.html',
   styleUrl: './recipe-detail-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
