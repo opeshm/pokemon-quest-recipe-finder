@@ -27,6 +27,7 @@ export class LanguageService {
       return 'en';
     }
 
-    return localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'es' ? 'es' : 'en';
+    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    return stored === 'es' || stored === 'en' ? stored : 'en';
   }
 }

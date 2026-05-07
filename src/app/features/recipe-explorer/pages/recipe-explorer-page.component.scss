@@ -1,5 +1,5 @@
 .page-shell {
-  min-height: 100dvh;
+  flex: 1;
   padding: clamp(1rem, 1.5vw, 2rem);
   background:
     radial-gradient(circle at 14% 10%, var(--halo-primary) 0%, rgba(var(--brand-primary-rgb), 0) 28%),

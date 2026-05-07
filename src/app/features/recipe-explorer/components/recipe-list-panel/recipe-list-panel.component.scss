@@ -12,6 +12,10 @@
   flex-direction: column;
 }
 
+.recipe-list-panel--empty {
+  min-height: auto;
+}
+
 .recipe-list-panel header {
   padding: 1rem;
   border-bottom: 1px solid var(--border-subtle);

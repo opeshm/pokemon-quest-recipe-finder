@@ -1,4 +1,4 @@
-<article class="recipe-list-panel">
+<article class="recipe-list-panel" [class.recipe-list-panel--empty]="!vm().cards.length">
   <header>
     <h2>{{ 'recipes.list.title' | translate }}</h2>
     <p>{{ vm().cards.length }} {{ 'recipes.list.matchingGroups' | translate }}</p>

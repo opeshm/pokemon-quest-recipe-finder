@@ -4,8 +4,8 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./features/recipe-explorer/pages/recipe-explorer-page.component').then(
-        (module) => module.RecipeExplorerPageComponent
+      import('./features/pokedex/pages/pokedex-page.component').then(
+        (module) => module.PokedexPageComponent
       )
   },
   {
@@ -16,10 +16,10 @@ export const routes: Routes = [
       )
   },
   {
-    path: 'pokedex',
+    path: 'recipes',
     loadComponent: () =>
-      import('./features/pokedex/pages/pokedex-page.component').then(
-        (module) => module.PokedexPageComponent
+      import('./features/recipe-explorer/pages/recipe-explorer-page.component').then(
+        (module) => module.RecipeExplorerPageComponent
       )
   },
   {
