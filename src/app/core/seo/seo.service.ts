@@ -6,7 +6,7 @@ import { filter } from 'rxjs';
 
 const SITE_ORIGIN = 'https://pokequest.opeshm.net';
 const SITE_NAME = 'PokeQuest Studio';
-const DEFAULT_IMAGE = `${SITE_ORIGIN}/assets/social-preview.svg`;
+const DEFAULT_IMAGE = `${SITE_ORIGIN}/assets/social-preview.png`;
 
 export interface SeoRouteData {
   title: string;
@@ -54,6 +54,21 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:title', content: seo.title });
     this.meta.updateTag({ name: 'twitter:description', content: seo.description });
     this.meta.updateTag({ name: 'twitter:image', content: DEFAULT_IMAGE });
+    this.upsertJsonLd('website-json-ld', {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      url: `${SITE_ORIGIN}/`
+    });
+    this.upsertJsonLd('webapp-json-ld', {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: SITE_NAME,
+      url: `${SITE_ORIGIN}/`,
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+      description: DEFAULT_SEO.description
+    });
   }
 
   private findSeoData(route: ActivatedRouteSnapshot): SeoRouteData | null {
@@ -78,5 +93,18 @@ export class SeoService {
     }
 
     canonical.href = href;
+  }
+
+  private upsertJsonLd(id: string, data: unknown): void {
+    let script = this.document.querySelector<HTMLScriptElement>(`script#${id}`);
+
+    if (!script) {
+      script = this.document.createElement('script');
+      script.id = id;
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+
+    script.textContent = JSON.stringify(data);
   }
 }
