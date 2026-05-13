@@ -15,6 +15,7 @@
 - The app boots from `src/main.ts` via `bootstrapApplication(App, appConfig)`. Root component/config files are `src/app/app.ts` and `src/app/app.config.ts`, not the usual `app.component.ts` layout.
 - `src/app/app.routes.ts` is the route source of truth: pokedex is `/`, moves is `/moves`, recipes is `/recipes`, and privacy is `/privacy`.
 - The app is fully standalone; do not add NgModules.
+- Angular build uses `outputMode: "static"`; server routes in `src/app/app.routes.server.ts` prerender `**`.
 - Fetched recipe content comes from `public/data/recipes.json`; `RecipeDataService` loads `GET data/recipes.json` and `appConfig` exposes it through `RECIPES_REPOSITORY`.
 - `src/app/features/recipe-explorer/facade/recipe-explorer.facade.ts` owns filter state, derived recipe/grouping logic, selected recipe state, and query-param serialization.
 - `moves/` and `pokedex/` mostly render static TS datasets (`data/*.data.ts`) but still depend on recipe data plus `src/app/core/assets/recipe-asset.service.ts` for sprite metadata and image lookup.
@@ -36,5 +37,5 @@
 - `dist/` and `.angular/` are generated/cache outputs; do not treat them as source when investigating behavior.
 
 ## OpenCode
-- Project-level OpenCode config lives in `opencode.json` and also loads `docs/ai/architecture.md` and `docs/ai/testing.md`; if docs conflict with routes/scripts/source, trust the executable source first.
+- Project-level OpenCode config lives in `opencode.json` and also loads `docs/ai/architecture.md` and `docs/ai/testing.md`; those docs may lag source, so trust routes/scripts/config first.
 - Use `.opencode/agents/repo-docs.md` when the task is specifically about maintaining repo docs or agent reference files.
